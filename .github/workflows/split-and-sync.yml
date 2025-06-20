@@ -43,7 +43,7 @@ jobs:
 
               mv "$splitfile" "$tex_path"
 
-              pandoc "$tex_path" -f latex -t markdown -o temp_content.md
+             pandoc "$tex_path" --resource-path=. -f latex -t markdown -o temp_content.md
 
               {
                 echo "---"
