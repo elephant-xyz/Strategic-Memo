@@ -11,21 +11,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Cache Pandoc .deb file
-        id: cache-pandoc
-        uses: actions/cache@v4
-        with:
-          path: pandoc.deb
-          key: pandoc-deb-2.9.2
-
-      - name: Download Pandoc if not cached
-        if: steps.cache-pandoc.outputs.cache-hit != 'true'
-        run: |
-          wget https://github.com/jgm/pandoc/releases/download/2.9.2/pandoc-2.9.2-1-amd64.deb -O pandoc.deb
-
       - name: Install Pandoc
-        run: |
-          sudo dpkg -i pandoc.deb || sudo apt-get install -f -y
+        run: sudo apt-get update && sudo apt-get install -y pandoc
 
       - name: Set up output directory
         run: mkdir -p output
@@ -33,14 +20,13 @@ jobs:
       - name: Find preferred TeX files (prioritize _v2)
         id: find-tex
         run: |
-          all_files=$(find . -name "*.tex")
+          files=$(find . -name "*.tex" | sed 's|.*/||' | sort | uniq -w 1)
           filtered=()
-          for file in $all_files; do
-            base=$(basename "$file" .tex)
-            base_clean=$(echo "$base" | sed 's/_v2$//')
-            if [[ "$file" == *"_v2.tex" ]]; then
-              filtered+=("$file")
-            elif [[ ! " ${filtered[*]} " =~ "${base_clean}_v2.tex" ]]; then
+          for file in $files; do
+            base=$(echo "$file" | sed 's/_v2\.tex$//')
+            if [[ -f "${base}_v2.tex" ]]; then
+              filtered+=("${base}_v2.tex")
+            elif [[ "$file" != *_v2.tex ]]; then
               filtered+=("$file")
             fi
           done
@@ -53,6 +39,7 @@ jobs:
             base_name=$(basename "$tex_file" .tex)
             mkdir -p temp_md
 
+            # Extract chapter title and intro
             chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
             intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title"'/')
             slug=$(echo "$chapter_title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$//g')
@@ -69,8 +56,11 @@ jobs:
                 slugified=tolower(title)
                 gsub(/[^a-z0-9]+/, "-", slugified)
                 gsub(/^-|-$/, "", slugified)
+                parent_clean=tolower(parent)
+                gsub(/[^a-z0-9]+/, "-", parent_clean)
+                gsub(/^-|-$/, "", parent_clean)
                 outname="output/" base "_section_" filecount ".md"
-                print "---\ntitle: " title "\nslug: " slugified "\nparent_slug: " parent "\ntype: section\norder: " filecount "\n---\n\n## " title "\n" section_raw | "pandoc -f latex -t markdown_strict -o " outname
+                print "---\ntitle: " title "\nslug: " slugified "\nparent_slug: " parent_clean "\ntype: section\norder: " filecount "\n---\n\n## " title "\n" section_raw | "pandoc -f latex -t markdown_strict -o " outname
                 filecount++
               }
             ' "$tex_file"
@@ -83,7 +73,7 @@ jobs:
           mv output/tmp_combined.md output/Full_Doc.md
 
       - name: Upload converted Markdown files
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@4
         with:
           name: markdown-output
           path: output
