@@ -1,58 +1,46 @@
-# .github/workflows/split-and-sync.yml
-
-name: ✏️ Split and Convert .tex files to Markdown
+name: 📝 Split and Convert .tex files to Markdown
 
 on:
-  push:
-    paths:
-      - '**.tex'
   workflow_dispatch:
 
 jobs:
-  convert-and-sync:
+  convert:
     runs-on: ubuntu-latest
+    name: Convert LaTeX to Markdown with Frontmatter
     steps:
-      - name: ↓ Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout Repo
+        uses: actions/checkout@v3
 
-      - name: 🔧 Set up Pandoc
-        run: |
-          sudo apt-get update && sudo apt-get install pandoc -y
+      - name: Set up Pandoc
+        run: sudo apt-get install pandoc
 
-      - name: 🌍 Set output directory
-        run: |
-          mkdir -p output
+      - name: Create Output Folder
+        run: mkdir -p output
 
-      - name: ✏️ Split and Convert .tex Files with Frontmatter
+      - name: Convert .tex to .md
         run: |
           for tex_path in *.tex; do
             filename=$(basename "$tex_path" .tex)
-            md_path="output/$filename.md"
-            echo "Converting $tex_path to $md_path"
-            pandoc "$tex_path" -f latex -t markdown -o "$md_path" || echo "Warning: Pandoc failed on $tex_path"
-            if [ -f "$md_path" ]; then
-              # Generate a safe frontmatter title from filename
-              title=$(basename "$filename" | sed 's/_/ /g' | sed 's/\\//g')
-              echo "---" > temp.md
-              echo "title: \"$title\"" >> temp.md
-              echo "source_file: \"$tex_path\"" >> temp.md
-              echo "---" >> temp.md
-              echo "" >> temp.md
+            output_path="output/${filename}.md"
 
-              # Process the file content to remove excess line breaks and escape LaTeX
-              awk 'BEGIN{ORS=" "} {gsub(/\\\\/, "\\\\\\\\"); gsub(/\\&/, "&"); print}' "$md_path" >> temp.md
-              echo "" >> temp.md
-
-              mv temp.md "$md_path"
+            # Extract title from \chapter{...}, fallback to filename
+            title=$(grep -m 1 '\\chapter{' "$tex_path" | sed -E 's/.*\\chapter\{([^}]*)\}.*/\1/' | sed 's/"/'\''/g')
+            if [ -z "$title" ]; then
+              title=$(echo "$filename" | sed 's/_/ /g')
             fi
-          done
 
-      - name: 🔁 Commit and Push Output
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add output/*.md
-          git commit -m "✏️ Auto-converted LaTeX files to Markdown" || echo "No changes to commit."
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            # Convert LaTeX to raw markdown
+            pandoc "$tex_path" -f latex -t markdown_strict -o temp.md || continue
+
+            # Add YAML frontmatter
+            {
+              echo "---"
+              echo "title: \"$title\""
+              echo "source_file: \"$tex_path\""
+              echo "---"
+              echo ""
+              cat temp.md
+            } > "$output_path"
+
+            echo "✅ Converted $tex_path → $output_path"
+          done
