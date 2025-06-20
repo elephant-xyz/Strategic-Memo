@@ -1,0 +1,69 @@
+name: Split Chapters into Sections and Push to Framer
+
+on:
+  push:
+    paths:
+      - 'chapters/*.tex'
+
+jobs:
+  split:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Pandoc & jq
+        run: sudo apt-get update && sudo apt-get install pandoc jq -y
+
+      - name: Process Chapter Files
+        env:
+          FRAMER_API_TOKEN: ${{ secrets.FRAMER_API_TOKEN }}
+          COLLECTION_ID: ${{ secrets.FRAMER_COLLECTION_ID }}
+        run: |
+          mkdir -p output
+
+          for file in chapters/*.tex; do
+            chapter_file=$(basename "$file")
+            chapter_slug="${chapter_file%.tex}"
+
+            awk -v chapter="$chapter_slug" '
+              BEGIN { inside=0; section=""; }
+/^\\section\{.*\}/ {
+  section = gensub(/^\\section\{(.*)\}$/, "\\1", "g");
+  section_slug = tolower(section);
+  gsub(/[^a-z0-9]+/, "-", section_slug);
+  outfile = "output/" chapter "-" section_slug ".tex";
+  meta = "output/" chapter "-" section_slug ".meta";
+  print $0 > outfile;
+  printf("{\"title\":\"%s\",\"slug\":\"%s\",\"parent_slug\":\"%s\",\"type\":\"section\",\"order\":0,\"filename\":\"%s.md\"}\n", section, section_slug, chapter, chapter "-" section_slug) > meta;
+  next;
+}
+{
+  if (outfile) print $0 >> outfile;
+}
+            ' "$file"
+          done
+
+          for texfile in output/*.tex; do
+            pandoc "$texfile" -o "${texfile%.tex}.md"
+          done
+
+          for metafile in output/*.meta; do
+            metadata=$(cat "$metafile")
+            title=$(echo "$metadata" | jq -r .title)
+            slug=$(echo "$metadata" | jq -r .slug)
+            parent_slug=$(echo "$metadata" | jq -r .parent_slug)
+            type=$(echo "$metadata" | jq -r .type)
+            mdfile="output/$(echo "$metadata" | jq -r .filename)"
+            body=$(cat "$mdfile" | jq -Rs .)
+
+            curl -X POST https://api.framer.com/v1/collections/$COLLECTION_ID/items \
+              -H "Authorization: Bearer $FRAMER_API_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"title\": \"$title\",
+                \"slug\": \"$slug\",
+                \"parent_slug\": \"$parent_slug\",
+                \"type\": \"$type\",
+                \"body\": $body
+              }"
+          done
