@@ -1,56 +1,83 @@
-name: convert
+name: Convert LaTeX to Markdown and Split by Section
 
 on:
-  push:
-    paths:
-      - '**.tex'
   workflow_dispatch:
 
 jobs:
   convert:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up output folder
-        run: mkdir -p output
-
-      - name: Convert LaTeX to Markdown
+      - name: Set up output directory
         run: |
-          for base in $(ls *.tex | sed -E 's/(_v[0-9]+)?\.tex$//' | sort -u); do
-            versions=$(ls ${base}*.tex 2>/dev/null | sort -V)
-            latest=$(echo "$versions" | tail -n1)
-            prefix=$(echo "$base" | grep -o '^[0-9]\+')
-            parent_slug=$(echo "$base" | tr '[:upper:]' '[:lower:]' | tr '_' '-' | sed 's/[^a-z0-9-]//g')
+          mkdir -p output
 
-            awk -v parent_slug="$parent_slug" -v file_name="$latest" '
-              BEGIN { section = 0; outfile = "" }
-              /^\s*\\chapter\{/ {
-                chapter = gensub(/^.*\\chapter\{([^}]*)\}.*$/, "\\1", "g")
-                introfile = "output/" file_name "_intro.md"
-                print "---\ntitle: \"" chapter "\"\nslug: \"" tolower(parent_slug) "\"\nparent_slug: \"\"\ntype: \"page\"\norder: \"\"\nsource: \"" file_name "\"\n---\n" > introfile
-                next
-              }
-              /^\s*\\section\{/ {
-                if (outfile != "") close(outfile)
-                title = gensub(/^.*\\section\{([^}]*)\}.*$/, "\\1", "g")
-                slug = tolower(title)
-                gsub(/[[:space:]]+/, "-", slug)
-                gsub(/[^a-z0-9-]/, "", slug)
-                outfile = "output/" file_name "_" slug ".md"
-                print "---\ntitle: \"" title "\"\nslug: \"" slug "\"\nparent_slug: \"" parent_slug "\"\ntype: \"section\"\norder: \"\"\nsource: \"" file_name "\"\n---\n" > outfile
-                next
-              }
-              {
-                if (outfile != "") print $0 >> outfile
-                else print $0 >> introfile
-              }
-            ' "$latest"
+      - name: Find preferred TeX files (prioritize _v2)
+        id: find-tex
+        run: |
+          files=$(find . -name "*.tex" | sed 's|.*/||' | sort | uniq -w 1)
+          filtered=()
+          for file in $files; do
+            base=$(echo "$file" | sed 's/_v2\\.tex$//')
+            if [[ -f "${base}_v2.tex" ]]; then
+              filtered+=("${base}_v2.tex")
+            elif [[ "$file" != *_v2.tex ]]; then
+              filtered+=("$file")
+            fi
           done
+          printf "%s\n" "${filtered[@]}" > tex_list.txt
 
-      - name: Upload converted Markdown
+      - name: Convert TeX files to individual Markdown files with metadata
+        run: |
+          while IFS= read -r tex_file; do
+            echo "Processing $tex_file"
+            base_name=$(basename "$tex_file" .tex)
+            mkdir -p temp_md
+
+            # Extract \chapter and intro text
+            chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
+            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title"'/')
+            slug=$(echo "$chapter_title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$//g')
+
+            echo "---\ntitle: $chapter_title\nslug: $slug\ntype: chapter\norder: 0\n---" > "output/${base_name}_intro.md"
+            echo "$intro_lines" | pandoc -f latex -t markdown_strict >> "output/${base_name}_intro.md"
+
+            # Split \section{} blocks and convert to Markdown
+            awk -v base="$base_name" -v parent="$slug" '
+              BEGIN { RS = "\\\\section\\{"; ORS = ""; filecount=1 }
+              NR > 1 {
+                section_raw=substr($0, index($0,"}" )+1)
+                title=substr($0, 1, index($0,"}")-1)
+                gsub(/[[:space:]]+$/, "", title)
+                slugified=tolower(title)
+                gsub(/[^a-z0-9]+/, "-", slugified)
+                gsub(/^-|-$/, "", slugified)
+                outname="output/" base "_section_" filecount ".md"
+                print "---\ntitle: " title "\nslug: " slugified "\nparent_slug: " parent "\ntype: section\norder: " filecount "\n---\n\n## " title "\n" section_raw | "pandoc -f latex -t markdown_strict -o " outname
+                filecount++
+              }
+            ' "$tex_file"
+          done < tex_list.txt
+
+      - name: Combine all Markdown files into Full_Doc.md
+        run: |
+          echo "Combining all .md files into output/Full_Doc.md"
+          find output -name '*.md' ! -name 'Full_Doc.md' -exec cat {} + > output/tmp_combined.md
+          mv output/tmp_combined.md output/Full_Doc.md
+
+      - name: Upload converted Markdown files
         uses: actions/upload-artifact@v3
         with:
-          name: markdown-pages
-          path: output/
+          name: markdown-output
+          path: output
+
+      - name: Post-run diagnostic logging
+        if: always()
+        run: |
+          echo "== Directory Contents =="
+          ls -R output
+          echo "== tex_list.txt =="
+          cat tex_list.txt
