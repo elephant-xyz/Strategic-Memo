@@ -41,16 +41,6 @@ jobs:
 
           printf "%s\n" "${filtered[@]}" > tex_list.txt
 
-      - name: Verify TeX file list
-        run: |
-          if [[ ! -s tex_list.txt ]]; then
-            echo "❌ No valid .tex files found. Check your repo structure or file naming."
-            exit 1
-          fi
-
-          echo "✅ Found the following TeX files:"
-          cat tex_list.txt
-
       - name: Convert TeX files to individual Markdown files with metadata
         run: |
           while IFS= read -r tex_file; do
@@ -60,7 +50,6 @@ jobs:
             base_name=$(basename "$tex_file" .tex)
             mkdir -p temp_md
 
-            # Extract \chapter and intro text
             chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
             intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title"'/')
             slug=$(echo "$chapter_title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^\-\|\-$//g')
@@ -68,7 +57,6 @@ jobs:
             echo "---\ntitle: $chapter_title\nslug: $slug\ntype: chapter\norder: 0\n---" > "output/${base_name}_intro.md"
             echo "$intro_lines" | pandoc -f latex -t markdown_strict >> "output/${base_name}_intro.md"
 
-            # Split \section{} blocks and convert to Markdown
             awk -v base="$base_name" -v parent="$slug" '
               BEGIN { RS = "\\\\section\{"; ORS = ""; filecount=1 }
               NR > 1 {
@@ -97,10 +85,12 @@ jobs:
           name: markdown-output
           path: output
 
-      - name: Post-run diagnostic logging
-        if: always()
+      - name: Commit output to `converted-output` branch
         run: |
-          echo "== Directory Contents =="
-          ls -R output || echo "output directory not found"
-          echo "== tex_list.txt =="
-          cat tex_list.txt || echo "tex_list.txt not found"
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@users.noreply.github.com'
+          git checkout -B converted-output
+          cp -r output/* .
+          git add *.md || true
+          git commit -m "Add converted markdown files" || echo "No changes to commit"
+          git push origin converted-output --force
