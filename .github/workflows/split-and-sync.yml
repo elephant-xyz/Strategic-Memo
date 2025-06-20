@@ -1,72 +1,64 @@
-name: Split LaTeX Chapters and Convert to Markdown with Frontmatter
+name: convert
 
 on:
   push:
     paths:
-      - '*.tex'
+      - '**.tex'
   workflow_dispatch:
 
 jobs:
-  split-and-convert:
+  convert:
     runs-on: ubuntu-latest
-
     steps:
-      - name: 📥 Checkout Repository
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: 🧱 Install Dependencies
+      - name: Install pandoc
         run: |
           sudo apt-get update
-          sudo apt-get install -y pandoc texlive texlive-latex-base texlive-latex-recommended texlive-latex-extra
+          sudo apt-get install -y pandoc
 
-      - name: 🗂 Create Output Directory
+      - name: Create output directory
         run: mkdir -p output
 
-      - name: 🧪 Split and Convert LaTeX Files with Frontmatter
+      - name: Convert .tex files to Markdown with YAML frontmatter
         run: |
           for file in *.tex; do
-            chapter_file=$(basename "$file")
-            chapter_slug="${chapter_file%.tex}"
+            base=$(basename "$file" .tex)
+            
+            # Try to extract chapter or section title
+            raw_title=$(grep -m1 -E '\\chapter\{.*\}|\\section\{.*\}' "$file" | sed -E 's/\\(chapter|section)\{(.*)\}/\2/' | head -n1)
 
-            mkdir -p "output/$chapter_slug"
+            # Fallback to base filename if no title found
+            title="${raw_title:-$base}"
 
-            # Split by \section
-            csplit -s -f section_ "$file" '/\\section{.*/' '{*}' || true
+            # Slugify title (lowercase, replace spaces with hyphens, remove special chars)
+            slug=$(echo "$title" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/^-+|-+$//g')
 
-            order=1
-            for splitfile in section_*; do
-              section_title=$(grep -oP '\\section\{.*\}' "$splitfile" | head -n 1 | sed 's/\\section{//;s/}//')
-              section_slug=$(echo "$section_title" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-')
+            # Escape YAML-unfriendly characters in title
+            safe_title=$(echo "$title" | sed 's/["'\''\\]/ /g')
 
-              tex_path="output/$chapter_slug/$section_slug.tex"
-              md_path="output/$chapter_slug/$section_slug.md"
+            # Write frontmatter and convert .tex content
+            {
+              echo "---"
+              echo "title: \"$safe_title\""
+              echo "slug: \"$slug\""
+              echo "toc: true"
+              echo "---"
+              echo ""
+            } > "output/$base.md"
 
-              mv "$splitfile" "$tex_path"
-
-              pandoc "$tex_path" -f latex -t markdown -o temp_content.md
-
-              {
-                echo "---"
-                echo "title: \"$section_title\""
-                echo "slug: \"$section_slug\""
-                echo "parent_slug: \"$chapter_slug\""
-                echo "type: \"section\""
-                echo "order: $order"
-                echo "---"
-                echo ""
-                cat temp_content.md
-              } > "$md_path"
-
-              order=$((order + 1))
-            done
-
-            rm -f section_* temp_content.md
+            pandoc "$file" -f latex -t markdown --wrap=none >> "output/$base.md" || echo "❌ Failed to convert $file"
           done
 
-      - name: 🚀 Commit and Push Output
+      - name: Combine all .md files into one document
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git add output/
-          git commit -m "Update converted markdown with frontmatter" || echo "No changes to commit"
-          git push
+          mkdir -p output_tmp
+          find output -type f -name '*.md' ! -name 'Full_Doc.md' -exec cat {} + > output_tmp/Full_Doc.md
+          mv output_tmp/Full_Doc.md output/Full_Doc.md
+
+      - name: Upload converted markdown files
+        uses: actions/upload-artifact@v4
+        with:
+          name: converted-markdown
+          path: output/
