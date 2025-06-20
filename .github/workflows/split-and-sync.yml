@@ -20,14 +20,18 @@ jobs:
       - name: Find preferred TeX files (prioritize _v2)
         id: find-tex
         run: |
-          files=$(find . -name "*.tex" | sed 's|.*/||' | sort | uniq -w 1)
+          files=$(find . -name "*.tex")
           filtered=()
           for file in $files; do
-            base=$(echo "$file" | sed 's/_v2\.tex$//')
-            if [[ -f "${base}_v2.tex" ]]; then
-              filtered+=("${base}_v2.tex")
-            elif [[ "$file" != *_v2.tex ]]; then
-              filtered+=("$file")
+            base=$(basename "$file" .tex | sed 's/_v2$//')
+            match=$(find . -name "${base}_v2.tex" | head -1)
+            if [[ -n "$match" ]]; then
+              filtered+=("$match")
+            else
+              fallback=$(find . -name "${base}.tex" | head -1)
+              if [[ -n "$fallback" ]]; then
+                filtered+=("$fallback")
+              fi
             fi
           done
           printf "%s\n" "${filtered[@]}" > tex_list.txt
@@ -39,7 +43,6 @@ jobs:
             base_name=$(basename "$tex_file" .tex)
             mkdir -p temp_md
 
-            # Extract chapter title and intro
             chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
             intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title"'/')
             slug=$(echo "$chapter_title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$//g')
@@ -73,7 +76,7 @@ jobs:
           mv output/tmp_combined.md output/Full_Doc.md
 
       - name: Upload converted Markdown files
-        uses: actions/upload-artifact@v4.3.1
+        uses: actions/upload-artifact@v4
         with:
           name: markdown-output
           path: output
