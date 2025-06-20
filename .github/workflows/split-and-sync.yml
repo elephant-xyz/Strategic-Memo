@@ -1,52 +1,58 @@
-name: ✍️ Split and Convert .tex files to Markdown
+# .github/workflows/split-and-sync.yml
+
+name: ✏️ Split and Convert .tex files to Markdown
 
 on:
+  push:
+    paths:
+      - '**.tex'
   workflow_dispatch:
 
 jobs:
-  convert:
+  convert-and-sync:
     runs-on: ubuntu-latest
     steps:
-      - name: 📥 Checkout Repo
-        uses: actions/checkout@v3
+      - name: ↓ Checkout repository
+        uses: actions/checkout@v4
 
-      - name: 🛠️ Set Up Pandoc
-        run: sudo apt-get install -y pandoc
+      - name: 🔧 Set up Pandoc
+        run: |
+          sudo apt-get update && sudo apt-get install pandoc -y
 
-      - name: 📄 Create Output Folder
-        run: mkdir -p output
+      - name: 🌍 Set output directory
+        run: |
+          mkdir -p output
 
-      - name: ✍️ Split and Convert .tex files to Markdown
+      - name: ✏️ Split and Convert .tex Files with Frontmatter
         run: |
           for tex_path in *.tex; do
-            slug=$(basename "$tex_path" .tex | sed 's/ /-/g' | tr '[:upper:]' '[:lower:]')
-            title=$(head -n 1 "$tex_path" | sed 's/^% *//;s/"/\\"/g')
+            filename=$(basename "$tex_path" .tex)
+            md_path="output/$filename.md"
+            echo "Converting $tex_path to $md_path"
+            pandoc "$tex_path" -f latex -t markdown -o "$md_path" || echo "Warning: Pandoc failed on $tex_path"
+            if [ -f "$md_path" ]; then
+              # Generate a safe frontmatter title from filename
+              title=$(basename "$filename" | sed 's/_/ /g' | sed 's/\\//g')
+              echo "---" > temp.md
+              echo "title: \"$title\"" >> temp.md
+              echo "source_file: \"$tex_path\"" >> temp.md
+              echo "---" >> temp.md
+              echo "" >> temp.md
 
-            pandoc "$tex_path" \
-              -f latex -t markdown \
-              --wrap=preserve \
-              -o "output/$slug.md"
+              # Process the file content to remove excess line breaks and escape LaTeX
+              awk 'BEGIN{ORS=" "} {gsub(/\\\\/, "\\\\\\\\"); gsub(/\\&/, "&"); print}' "$md_path" >> temp.md
+              echo "" >> temp.md
 
-            # Remove mid-paragraph line breaks
-            sed -i ':a;N;$!ba;s/\([^\n]\)\n\([^\n]\)/\1 \2/g' "output/$slug.md"
-
-            # Add frontmatter
-            {
-              echo "---"
-              echo "title: \"$title\""
-              echo "slug: \"$slug\""
-              echo "---"
-              echo ""
-              cat "output/$slug.md"
-            } > "output/temp.md" && mv "output/temp.md" "output/$slug.md"
+              mv temp.md "$md_path"
+            fi
           done
 
-      - name: 🚀 Commit and Push Output
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 🔁 Commit and Push Output
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name github-actions
+          git config user.email github-actions@github.com
           git add output/*.md
-          git commit -m "📄 Convert .tex to markdown with formatting"
+          git commit -m "✏️ Auto-converted LaTeX files to Markdown" || echo "No changes to commit."
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
