@@ -1,10 +1,10 @@
-name: Split LaTeX Chapters and Convert to Markdown
+name: Split LaTeX Chapters and Convert to Markdown with Frontmatter
 
 on:
   push:
     paths:
       - '*.tex'
-  workflow_dispatch:  # ✅ allows manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   split-and-convert:
@@ -22,7 +22,7 @@ jobs:
       - name: 🗂 Create Output Directory
         run: mkdir -p output
 
-      - name: 🧪 Split and Convert LaTeX Files
+      - name: 🧪 Split and Convert LaTeX Files with Frontmatter
         run: |
           for file in *.tex; do
             chapter_file=$(basename "$file")
@@ -30,30 +30,13 @@ jobs:
 
             mkdir -p "output/$chapter_slug"
 
-            # Split at each \section{...}
+            # Split by \section
             csplit -s -f section_ "$file" '/\\section{.*/' '{*}' || true
 
+            order=1
             for splitfile in section_*; do
-              # Extract section title
               section_title=$(grep -oP '\\section\{.*\}' "$splitfile" | head -n 1 | sed 's/\\section{//;s/}//')
               section_slug=$(echo "$section_title" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-')
 
-              tex_out="output/$chapter_slug/$section_slug.tex"
-              md_out="output/$chapter_slug/$section_slug.md"
-
-              mv "$splitfile" "$tex_out"
-
-              # Convert to Markdown
-              pandoc "$tex_out" -f latex -t markdown -o "$md_out"
-            done
-
-            rm -f section_*
-          done
-
-      - name: 🚀 Commit and Push Output
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git add output/
-          git commit -m "Update converted markdown files" || echo "No changes to commit"
-          git push
+              tex_path="output/$chapter_slug/$section_slug.tex"
+              md_path="output/$chapter_slug/$sect
