@@ -17,6 +17,14 @@ jobs:
       - name: 🧰 Install pandoc
         run: sudo apt-get update && sudo apt-get install -y pandoc
 
+      - name: 🧪 Debug title extraction from .tex files
+        run: |
+          echo "📂 Listing .tex files:"
+          ls -l *.tex
+
+          echo "🔍 Extracting LaTeX titles (\\chapter{} or \\section{}):"
+          grep -Eo '\\(chapter|section)\{[^}]+\}' *.tex || echo "⚠️ No matches found"
+
       - name: 🔄 Split and Convert .tex Files
         run: |
           mkdir -p output
@@ -25,23 +33,22 @@ jobs:
             base_name=$(basename "$tex_path" .tex)
             output_file="output/${base_name}.md"
 
-            echo "🔍 Processing $tex_path"
+            echo "🔧 Converting $tex_path to $output_file"
 
-            # Extract only the content of the first \chapter{} or \section{} — no LaTeX
+            # Extract title from first \chapter{} or \section{} line
             raw_title=$(grep -Eo '\\(chapter|section)\{[^}]+\}' "$tex_path" | head -n 1 | sed -E 's/\\(chapter|section)\{//; s/}//')
 
-            # Fallback title
             if [ -z "$raw_title" ]; then
               raw_title="$base_name"
             fi
 
-            # Escape quotes, colons, ampersands
+            # Escape YAML-sensitive characters
             safe_title=$(printf '%s' "$raw_title" | sed 's/["&:]/\\&/g')
 
             # Convert LaTeX to Markdown
             pandoc "$tex_path" -f latex -t markdown_strict --wrap=preserve -o "$output_file"
 
-            # Prepend YAML frontmatter
+            # Add frontmatter
             tmp_file=$(mktemp)
             echo "---" > "$tmp_file"
             echo "title: \"$safe_title\"" >> "$tmp_file"
@@ -51,5 +58,5 @@ jobs:
             cat "$output_file" >> "$tmp_file"
             mv "$tmp_file" "$output_file"
 
-            echo "✅ Created: $output_file"
+            echo "✅ Done: $output_file"
           done
