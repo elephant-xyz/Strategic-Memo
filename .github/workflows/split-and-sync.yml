@@ -1,6 +1,9 @@
 name: Convert .tex to Markdown
 
 on:
+  push:
+    paths:
+      - '**.tex'
   workflow_dispatch:
 
 jobs:
@@ -15,35 +18,30 @@ jobs:
 
       - name: Debug title extraction from .tex files
         run: |
-          echo "📄 Listing .tex files:"
-          ls -l *.tex
-
-          echo "🔍 Extracting LaTeX titles (\\chapter{} or \\section{}):"
-          grep -H -E '\\(chapter|section)\{.*\}' *.tex || echo "No titles found"
+          echo "🧪 Listing .tex files:"
+          ls *.tex
+          echo "📦 Extracting LaTeX titles (\\chapter{} or \\section{}):"
+          grep -E '\\(chapter|section)\{.*\}' *.tex || true
 
       - name: Split and Convert .tex files to Markdown
         run: |
           mkdir -p output
           for file in *.tex; do
             base=$(basename "$file" .tex)
-            awk '
-              BEGIN {n=0; outfile="output/" n "_" FILENAME; print "📤 Converting " FILENAME " → " outfile > "/dev/stderr"}
-              /^\\(chapter|section)\{/ {
-                close(outfile)
-                n+=1
-                outfile=sprintf("output/%d_%s.md", n, FILENAME)
-              }
-              {
-                gsub(/\\/, "\\\\")  # Escape LaTeX backslashes for YAML safety
-                print > outfile
-              }
-            ' "$file"
+            title=$(grep -E '\\(chapter|section)\{.*\}' "$file" | head -n 1 | sed -E 's/.*\\(chapter|section)\{([^}]*)\}.*/\2/' || echo "$base")
+            echo -e "---\ntitle: |\n  \\${title}\n---\n" > "output/${base}.md"
+            pandoc "$file" -f latex -t markdown >> "output/${base}.md"
           done
 
       - name: Combine into Full Doc
         run: |
-          echo "🧩 Combining all .md files into output/Full Doc.md"
-          find output -name '*.md' ! -name 'Full Doc.md' -exec cat {} + > "output/Full Doc.md"
+          echo "Combining all .md files into output/Full_Doc.md"
+          mkdir -p output
+          find output -type f -name '*.md' ! -name 'Full_Doc.md' -exec cat {} + > output/tmp.md
+          mv output/tmp.md output/Full_Doc.md
 
-      - name: Post-run debug for markdown output
-        run: ls -lh output/
+      - name: Upload converted Markdown files
+        uses: actions/upload-artifact@v3
+        with:
+          name: converted-md
+          path: output/*.md
