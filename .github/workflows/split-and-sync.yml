@@ -4,7 +4,6 @@ on:
   push:
     paths:
       - '**.tex'
-  workflow_dispatch:
 
 jobs:
   convert:
@@ -13,52 +12,51 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install pandoc
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y pandoc
-
-      - name: Create output directory
+      - name: Set up output folder
         run: mkdir -p output
 
-      - name: Convert .tex files to Markdown with YAML frontmatter
+      - name: Convert LaTeX to Markdown
         run: |
-          for file in *.tex; do
-            base=$(basename "$file" .tex)
-            
-            # Try to extract chapter or section title
-            raw_title=$(grep -m1 -E '\\chapter\{.*\}|\\section\{.*\}' "$file" | sed -E 's/\\(chapter|section)\{(.*)\}/\2/' | head -n1)
+          # Get base names without versions
+          for base in $(ls *.tex | sed -E 's/(_v[0-9]+)?\.tex$//' | sort -u); do
+            # Find all versions of this base
+            versions=$(ls ${base}*.tex 2>/dev/null | sort -V)
 
-            # Fallback to base filename if no title found
-            title="${raw_title:-$base}"
+            # Get the highest version (including versionless as v1)
+            latest=$(echo "$versions" | tail -n1)
 
-            # Slugify title (lowercase, replace spaces with hyphens, remove special chars)
-            slug=$(echo "$title" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/^-+|-+$//g')
+            # Derive prefix and parent_slug
+            prefix=$(echo "$base" | grep -o '^[0-9]\+')
+            parent_slug=$(echo "$base" | tr '[:upper:]' '[:lower:]' | tr '_' '-' | sed 's/[^a-z0-9-]//g')
 
-            # Escape YAML-unfriendly characters in title
-            safe_title=$(echo "$title" | sed 's/["'\''\\]/ /g')
-
-            # Write frontmatter and convert .tex content
-            {
-              echo "---"
-              echo "title: \"$safe_title\""
-              echo "slug: \"$slug\""
-              echo "toc: true"
-              echo "---"
-              echo ""
-            } > "output/$base.md"
-
-            pandoc "$file" -f latex -t markdown --wrap=none >> "output/$base.md" || echo "❌ Failed to convert $file"
+            # Process the latest version only
+            awk -v parent_slug="$parent_slug" -v file_name="$latest" '
+              BEGIN { section = 0; outfile = "" }
+              /^\s*\\chapter\{/ {
+                chapter = gensub(/^.*\\chapter\{([^}]*)\}.*$/, "\\1", "g")
+                introfile = "output/" file_name "_intro.md"
+                print "---\ntitle: \"" chapter "\"\nslug: \"" tolower(parent_slug) "\"\nparent_slug: \"\"\ntype: \"page\"\norder: \"\"\nsource: \"" file_name "\"\n---\n" > introfile
+                next
+              }
+              /^\s*\\section\{/ {
+                if (outfile != "") close(outfile)
+                title = gensub(/^.*\\section\{([^}]*)\}.*$/, "\\1", "g")
+                slug = tolower(title)
+                gsub(/[[:space:]]+/, "-", slug)
+                gsub(/[^a-z0-9-]/, "", slug)
+                outfile = "output/" file_name "_" slug ".md"
+                print "---\ntitle: \"" title "\"\nslug: \"" slug "\"\nparent_slug: \"" parent_slug "\"\ntype: \"section\"\norder: \"\"\nsource: \"" file_name "\"\n---\n" > outfile
+                next
+              }
+              {
+                if (outfile != "") print $0 >> outfile
+                else print $0 >> introfile
+              }
+            ' "$latest"
           done
 
-      - name: Combine all .md files into one document
-        run: |
-          mkdir -p output_tmp
-          find output -type f -name '*.md' ! -name 'Full_Doc.md' -exec cat {} + > output_tmp/Full_Doc.md
-          mv output_tmp/Full_Doc.md output/Full_Doc.md
-
-      - name: Upload converted markdown files
-        uses: actions/upload-artifact@v4
+      - name: Upload converted Markdown
+        uses: actions/upload-artifact@4
         with:
-          name: converted-markdown
+          name: markdown-pages
           path: output/
