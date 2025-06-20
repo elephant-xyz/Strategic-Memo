@@ -73,7 +73,7 @@ jobs:
           mv output/tmp_combined.md output/Full_Doc.md
 
       - name: Upload converted Markdown files
-        uses: actions/upload-artifact@4
+        uses: actions/upload-artifact@v4.3.1
         with:
           name: markdown-output
           path: output
