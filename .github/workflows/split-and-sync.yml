@@ -1,41 +1,42 @@
-name: 📝 Split and Convert .tex files to Markdown
+name: ✏️ Split and Convert .tex files to Markdown
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - '*.tex'
 
 jobs:
   convert:
     runs-on: ubuntu-latest
-    name: Convert LaTeX to Markdown with Frontmatter
+
     steps:
-      - name: Checkout Repo
+      - name: 📥 Checkout Repo
         uses: actions/checkout@v3
 
-      - name: Set up Pandoc
-        run: sudo apt-get install pandoc
+      - name: 🔧 Set up Pandoc
+        run: sudo apt-get install -y pandoc
 
-      - name: Create Output Folder
-        run: mkdir -p output
-
-      - name: Convert .tex to .md
+      - name: 📄 Split and Convert .tex files to Markdown
         run: |
+          mkdir -p output
+
           for tex_path in *.tex; do
             filename=$(basename "$tex_path" .tex)
             output_path="output/${filename}.md"
 
-            # Extract title from \chapter{...}, fallback to filename
-            title=$(grep -m 1 '\\chapter{' "$tex_path" | sed -E 's/.*\\chapter\{([^}]*)\}.*/\1/' | sed 's/"/'\''/g')
-            if [ -z "$title" ]; then
-              title=$(echo "$filename" | sed 's/_/ /g')
-            fi
+            # Extract and sanitize LaTeX title
+            raw_title=$(grep -m 1 '\\chapter{' "$tex_path" | sed -E 's/.*\\chapter\{([^}]*)\}.*/\1/')
+            clean_title=$(echo "$raw_title" | sed 's/\\[a-zA-Z]*//g' | sed 's/"/'\''/g' | xargs)
+            [ -z "$clean_title" ] && clean_title=$(echo "$filename" | sed 's/_/ /g')
 
-            # Convert LaTeX to raw markdown
+            # Convert LaTeX to Markdown with Pandoc
             pandoc "$tex_path" -f latex -t markdown_strict -o temp.md || continue
 
-            # Add YAML frontmatter
+            # Prepend YAML frontmatter
             {
               echo "---"
-              echo "title: \"$title\""
+              echo "title: \"$clean_title\""
               echo "source_file: \"$tex_path\""
               echo "---"
               echo ""
