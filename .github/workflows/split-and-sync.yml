@@ -17,8 +17,10 @@ jobs:
       - name: Install Pandoc
         run: sudo apt-get update && sudo apt-get install -y pandoc
 
-      - name: Set up output directory
-        run: mkdir -p output
+      - name: Set up output directories
+        run: |
+          mkdir -p output
+          mkdir -p split_tex
 
       - name: Find preferred TeX files (prioritize _v2)
         id: find-tex
@@ -41,36 +43,59 @@ jobs:
 
           printf "%s\n" "${filtered[@]}" > tex_list.txt
 
+      - name: Verify TeX file list
+        run: |
+          if [[ ! -s tex_list.txt ]]; then
+            echo "❌ No valid .tex files found. Check your repo structure or file naming."
+            exit 1
+          fi
+
+          echo "✅ Found the following TeX files:"
+          cat tex_list.txt
+
       - name: Convert TeX files to individual Markdown files with metadata
         run: |
           while IFS= read -r tex_file; do
             [ ! -f "$tex_file" ] && echo "Skipping invalid file: $tex_file" && continue
-
             echo "Processing $tex_file"
-            base_name=$(basename "$tex_file" .tex)
-            mkdir -p temp_md
 
+            base_name=$(basename "$tex_file" .tex)
+            mkdir -p output
+
+            # Extract chapter title and intro
             chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
-            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title"'/')
             slug=$(echo "$chapter_title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^\-\|\-$//g')
 
+            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title"'/')
             echo "---\ntitle: $chapter_title\nslug: $slug\ntype: chapter\norder: 0\n---" > "output/${base_name}_intro.md"
             echo "$intro_lines" | pandoc -f latex -t markdown_strict >> "output/${base_name}_intro.md"
 
-            awk -v base="$base_name" -v parent="$slug" '
-              BEGIN { RS = "\\\\section\{"; ORS = ""; filecount=1 }
+            # Split section content into temp .tex files
+            awk -v base="$base_name" '
+              BEGIN { RS="\\\\section\\{"; ORS=""; count=1 }
               NR > 1 {
-                section_raw=substr($0, index($0,"}" )+1)
-                title=substr($0, 1, index($0,"}")-1)
+                title = substr($0, 1, index($0, "}") - 1)
+                content = substr($0, index($0, "}") + 1)
                 gsub(/[[:space:]]+$/, "", title)
-                slugified=tolower(title)
-                gsub(/[^a-z0-9]+/, "-", slugified)
-                gsub(/^-|-$/, "", slugified)
-                outname="output/" base "_section_" filecount ".md"
-                print "---\ntitle: " title "\nslug: " slugified "\nparent_slug: " parent "\ntype: section\norder: " filecount "\n---\n\n## " title "\n" section_raw | "pandoc -f latex -t markdown_strict -o " outname
-                filecount++
+                file = sprintf("split_tex/%s_section_%d.tex", base, count)
+                print "\\section{" title "}\n" content > file
+                close(file)
+                count++
               }
             ' "$tex_file"
+
+            # Convert each temp .tex file to markdown
+            for split_file in split_tex/${base_name}_section_*.tex; do
+              [ ! -f "$split_file" ] && continue
+              title=$(grep -oP '\\section\{.*?\}' "$split_file" | head -1 | sed 's/\\section{//;s/}//')
+              slugified=$(echo "$title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^\-\|\-$//g')
+              order=$(echo "$split_file" | grep -oP 'section_\K[0-9]+')
+              output_file="output/${base_name}_section_${order}.md"
+
+              echo "---\ntitle: $title\nslug: $slugified\nparent_slug: $slug\ntype: section\norder: $order\n---" > "$output_file"
+              pandoc -f latex -t markdown_strict "$split_file" >> "$output_file"
+            done
+
           done < tex_list.txt
 
       - name: Combine all Markdown files into Full_Doc.md
@@ -85,12 +110,10 @@ jobs:
           name: markdown-output
           path: output
 
-      - name: Commit output to `converted-output` branch
+      - name: Post-run diagnostic logging
+        if: always()
         run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@users.noreply.github.com'
-          git checkout -B converted-output
-          cp -r output/* .
-          git add *.md || true
-          git commit -m "Add converted markdown files" || echo "No changes to commit"
-          git push origin converted-output --force
+          echo "== Directory Contents =="
+          ls -R output || echo "output directory not found"
+          echo "== tex_list.txt =="
+          cat tex_list.txt || echo "tex_list.txt not found"
