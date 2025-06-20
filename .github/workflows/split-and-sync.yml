@@ -11,20 +11,36 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up output directory
+      - name: Cache Pandoc .deb file
+        id: cache-pandoc
+        uses: actions/cache@v4
+        with:
+          path: pandoc.deb
+          key: pandoc-deb-2.9.2
+
+      - name: Download Pandoc if not cached
+        if: steps.cache-pandoc.outputs.cache-hit != 'true'
         run: |
-          mkdir -p output
+          wget https://github.com/jgm/pandoc/releases/download/2.9.2/pandoc-2.9.2-1-amd64.deb -O pandoc.deb
+
+      - name: Install Pandoc
+        run: |
+          sudo dpkg -i pandoc.deb || sudo apt-get install -f -y
+
+      - name: Set up output directory
+        run: mkdir -p output
 
       - name: Find preferred TeX files (prioritize _v2)
         id: find-tex
         run: |
-          files=$(find . -name "*.tex" | sed 's|.*/||' | sort | uniq -w 1)
+          all_files=$(find . -name "*.tex")
           filtered=()
-          for file in $files; do
-            base=$(echo "$file" | sed 's/_v2\.tex$//')
-            if [[ -f "${base}_v2.tex" ]]; then
-              filtered+=("${base}_v2.tex")
-            elif [[ "$file" != *_v2.tex ]]; then
+          for file in $all_files; do
+            base=$(basename "$file" .tex)
+            base_clean=$(echo "$base" | sed 's/_v2$//')
+            if [[ "$file" == *"_v2.tex" ]]; then
+              filtered+=("$file")
+            elif [[ ! " ${filtered[*]} " =~ "${base_clean}_v2.tex" ]]; then
               filtered+=("$file")
             fi
           done
@@ -37,7 +53,6 @@ jobs:
             base_name=$(basename "$tex_file" .tex)
             mkdir -p temp_md
 
-            # Extract chapter title and intro content
             chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
             intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title"'/')
             slug=$(echo "$chapter_title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$//g')
@@ -45,11 +60,10 @@ jobs:
             echo "---\ntitle: $chapter_title\nslug: $slug\ntype: chapter\norder: 0\n---" > "output/${base_name}_intro.md"
             echo "$intro_lines" | pandoc -f latex -t markdown_strict >> "output/${base_name}_intro.md"
 
-            # Split sections and convert
             awk -v base="$base_name" -v parent="$slug" '
               BEGIN { RS = "\\\\section\\{"; ORS = ""; filecount=1 }
               NR > 1 {
-                section_raw=substr($0, index($0,"}" )+1)
+                section_raw=substr($0, index($0,"}")+1)
                 title=substr($0, 1, index($0,"}")-1)
                 gsub(/[[:space:]]+$/, "", title)
                 slugified=tolower(title)
@@ -69,7 +83,7 @@ jobs:
           mv output/tmp_combined.md output/Full_Doc.md
 
       - name: Upload converted Markdown files
-        uses: actions/upload-artifact@v4.3.1
+        uses: actions/upload-artifact@v4
         with:
           name: markdown-output
           path: output
