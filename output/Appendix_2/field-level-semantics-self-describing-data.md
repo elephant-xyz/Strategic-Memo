@@ -1,3 +1,11 @@
+---
+title: "Field-Level Semantics: Self-Describing Data"
+slug: "field-level-semantics-self-describing-data"
+parent_slug: "Appendix_2"
+type: "section"
+order: 6
+---
+
 # Field-Level Semantics: Self-Describing Data
 
 Every data field in Elephant carries explicit semantic metadata that

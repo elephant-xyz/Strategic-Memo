@@ -1,3 +1,11 @@
+---
+title: "Hierarchical Data Valuation"
+slug: "hierarchical-data-valuation"
+parent_slug: "4_ Tokenomics "
+type: "section"
+order: 8
+---
+
 # Hierarchical Data Valuation
 
 Not all property data carries equal weight in the Mahout economy. The

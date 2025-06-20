@@ -1,3 +1,11 @@
+---
+title: "Foundational Inefficiency"
+slug: "foundational-inefficiency"
+parent_slug: "2_Problem_Statement"
+type: "section"
+order: 2
+---
+
 # Foundational Inefficiency
 
 Real estate stands as the largest yet most inefficient consumer

@@ -1,3 +1,11 @@
+---
+title: "Intermediaries and Gatekeepers"
+slug: "intermediaries-and-gatekeepers"
+parent_slug: "2_Problem_Statement_v2 "
+type: "section"
+order: 2
+---
+
 # Intermediaries and Gatekeepers
 
 The principal-agent problem in real estate has metastasized into an

@@ -1,3 +1,11 @@
+---
+title: "Dual-Token Architecture"
+slug: "dual-token-architecture"
+parent_slug: "4_ Tokenomics "
+type: "section"
+order: 2
+---
+
 # Dual-Token Architecture
 
 The Elephant protocol introduces a sophisticated dual-token system that

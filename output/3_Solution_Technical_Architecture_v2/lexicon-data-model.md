@@ -1,3 +1,11 @@
+---
+title: "Lexicon Data Model"
+slug: "lexicon-data-model"
+parent_slug: "3_Solution_Technical_Architecture_v2"
+type: "section"
+order: 6
+---
+
 # Lexicon Data Model
 
 The Lexicon represents Elephant's answer to decades of data

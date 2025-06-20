@@ -1,3 +1,11 @@
+---
+title: "Privacy Architecture \& Data Sensitivity Phasing"
+slug: "privacy-architecture--data-sensitivity-phasing"
+parent_slug: "3_Solution_Technical_Architecture_v2"
+type: "section"
+order: 8
+---
+
 # Privacy Architecture & Data Sensitivity Phasing
 
 Elephant approaches privacy through careful phasing that builds trust

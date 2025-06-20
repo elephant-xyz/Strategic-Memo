@@ -1,3 +1,11 @@
+---
+title: "Solution Principles"
+slug: "solution-principles"
+parent_slug: "2_Problem_Statement_v2 "
+type: "section"
+order: 7
+---
+
 # Solution Principles
 
 The path forward demands recognizing that centralization is the problem

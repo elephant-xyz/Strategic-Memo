@@ -1,3 +1,11 @@
+---
+title: "Implementation Framework"
+slug: "implementation-framework"
+parent_slug: "Appendix_1"
+type: "section"
+order: 6
+---
+
 # Implementation Framework
 
 Implementing Bitstrapping requires careful balance between

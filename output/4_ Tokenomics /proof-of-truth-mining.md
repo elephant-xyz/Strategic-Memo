@@ -1,3 +1,11 @@
+---
+title: "Proof-of-Truth Mining"
+slug: "proof-of-truth-mining"
+parent_slug: "4_ Tokenomics "
+type: "section"
+order: 6
+---
+
 # Proof-of-Truth Mining
 
 Mahout enters circulation through a revolutionary Proof-of-Truth

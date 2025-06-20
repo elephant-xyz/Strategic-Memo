@@ -1,3 +1,11 @@
+---
+title: "dApp Deployment and Provider Switching"
+slug: "dapp-deployment-and-provider-switching"
+parent_slug: "6_Roadmap"
+type: "section"
+order: 4
+---
+
 # dApp Deployment and Provider Switching
 
 The initial service-specific dApps---title verification, property

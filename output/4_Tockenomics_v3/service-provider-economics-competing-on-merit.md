@@ -1,3 +1,11 @@
+---
+title: "Service Provider Economics: Competing on Merit"
+slug: "service-provider-economics-competing-on-merit"
+parent_slug: "4_Tockenomics_v3"
+type: "section"
+order: 4
+---
+
 # Service Provider Economics: Competing on Merit
 
 Real estate professionals face a fundamental shift in the Elephant

@@ -1,3 +1,11 @@
+---
+title: "Industry Memory \& Strategic Leverage"
+slug: "industry-memory--strategic-leverage"
+parent_slug: "3_Solution_Technical_Architecture_v2"
+type: "section"
+order: 9
+---
+
 # Industry Memory & Strategic Leverage
 
 Perhaps most revolutionary, Elephant creates persistent industry memory

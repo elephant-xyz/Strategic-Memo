@@ -1,3 +1,11 @@
+---
+title: "Oracle Economics: Mining Truth from Reality"
+slug: "oracle-economics-mining-truth-from-reality"
+parent_slug: "4_Tockenomics_v3"
+type: "section"
+order: 3
+---
+
 # Oracle Economics: Mining Truth from Reality
 
 Oracles form the backbone of Elephant's economy, transforming real-world

@@ -1,3 +1,11 @@
+---
+title: "Massive Economic Savings"
+slug: "massive-economic-savings"
+parent_slug: "5_Macro_Impact"
+type: "section"
+order: 2
+---
+
 # Massive Economic Savings
 
 The numbers tell a story of liberation from systematic extraction. Each

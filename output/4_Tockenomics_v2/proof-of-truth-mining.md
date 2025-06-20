@@ -1,3 +1,11 @@
+---
+title: "Proof of Truth Mining"
+slug: "proof-of-truth-mining"
+parent_slug: "4_Tockenomics_v2"
+type: "section"
+order: 4
+---
+
 # Proof of Truth Mining
 
 The Proof of Truth mechanism represents a fundamental departure from

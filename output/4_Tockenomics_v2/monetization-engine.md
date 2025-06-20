@@ -1,3 +1,11 @@
+---
+title: "Monetization Engine"
+slug: "monetization-engine"
+parent_slug: "4_Tockenomics_v2"
+type: "section"
+order: 6
+---
+
 # Monetization Engine
 
 Beyond truth verification rewards, the protocol creates sustainable

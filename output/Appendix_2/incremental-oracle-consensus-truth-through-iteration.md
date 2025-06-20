@@ -1,3 +1,11 @@
+---
+title: "Incremental Oracle Consensus: Truth Through Iteration"
+slug: "incremental-oracle-consensus-truth-through-iteration"
+parent_slug: "Appendix_2"
+type: "section"
+order: 5
+---
+
 # Incremental Oracle Consensus: Truth Through Iteration
 
 Oracle consensus in Elephant abandons the problematic requirement for

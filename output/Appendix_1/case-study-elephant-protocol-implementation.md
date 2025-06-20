@@ -1,3 +1,11 @@
+---
+title: "Case Study: Elephant Protocol Implementation"
+slug: "case-study-elephant-protocol-implementation"
+parent_slug: "Appendix_1"
+type: "section"
+order: 7
+---
+
 # Case Study: Elephant Protocol Implementation
 
 Elephant demonstrates Bitstrapping's practical application for

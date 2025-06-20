@@ -1,3 +1,11 @@
+---
+title: "Layer Synchronization with Cost Disaggregation"
+slug: "layer-synchronization-with-cost-disaggregation"
+parent_slug: "3_Solution_Technical_Architecture"
+type: "section"
+order: 4
+---
+
 # Layer Synchronization with Cost Disaggregation
 
 Traditional real estate transactions bundle costs in ways that obscure

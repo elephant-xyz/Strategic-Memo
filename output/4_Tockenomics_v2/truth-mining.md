@@ -1,3 +1,11 @@
+---
+title: "Truth Mining"
+slug: "truth-mining"
+parent_slug: "4_Tockenomics_v2"
+type: "section"
+order: 2
+---
+
 # Truth Mining
 
 At the core of Elephant's economic model lies Truth Mining, a consensus

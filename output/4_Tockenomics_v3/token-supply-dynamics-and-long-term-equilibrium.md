@@ -1,3 +1,11 @@
+---
+title: "Token Supply Dynamics and Long-Term Equilibrium"
+slug: "token-supply-dynamics-and-long-term-equilibrium"
+parent_slug: "4_Tockenomics_v3"
+type: "section"
+order: 8
+---
+
 # Token Supply Dynamics and Long-Term Equilibrium
 
 MAHOUT supply grows deterministically with real-world property

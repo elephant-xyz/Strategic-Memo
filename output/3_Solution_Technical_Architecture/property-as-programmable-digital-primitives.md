@@ -1,3 +1,11 @@
+---
+title: "Property as Programmable Digital Primitives"
+slug: "property-as-programmable-digital-primitives"
+parent_slug: "3_Solution_Technical_Architecture"
+type: "section"
+order: 3
+---
+
 # Property as Programmable Digital Primitives
 
 The transformation of real property into digital primitives represents

@@ -1,3 +1,11 @@
+---
+title: "Protocol Foundation: Layer 2 Infrastructure"
+slug: "protocol-foundation-layer-2-infrastructure"
+parent_slug: "3_Solution_Technical_Architecture_v2"
+type: "section"
+order: 2
+---
+
 # Protocol Foundation: Layer 2 Infrastructure
 
 Elephant's architectural foundation rests on proven Layer 2 technology,

@@ -1,3 +1,11 @@
+---
+title: "Data Fragmentation and Standardization Challenges"
+slug: "data-fragmentation-and-standardization-challenges"
+parent_slug: "2_Problem_Statement"
+type: "section"
+order: 4
+---
+
 # Data Fragmentation and Standardization Challenges
 
 Modern real estate transactions require coordination across seventeen

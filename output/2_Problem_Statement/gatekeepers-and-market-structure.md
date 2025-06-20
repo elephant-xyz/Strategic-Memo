@@ -1,3 +1,11 @@
+---
+title: "Gatekeepers and Market Structure"
+slug: "gatekeepers-and-market-structure"
+parent_slug: "2_Problem_Statement"
+type: "section"
+order: 6
+---
+
 # Gatekeepers and Market Structure
 
 The real estate industry's gatekeeping structure extracts \$339.3

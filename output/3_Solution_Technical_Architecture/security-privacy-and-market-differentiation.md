@@ -1,3 +1,11 @@
+---
+title: "Security, Privacy, and Market Differentiation"
+slug: "security-privacy-and-market-differentiation"
+parent_slug: "3_Solution_Technical_Architecture"
+type: "section"
+order: 8
+---
+
 # Security, Privacy, and Market Differentiation
 
 The complete end-to-end solution stands in stark contrast to fragmented

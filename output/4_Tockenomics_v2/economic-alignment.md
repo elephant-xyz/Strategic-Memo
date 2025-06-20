@@ -1,3 +1,11 @@
+---
+title: "Economic Alignment"
+slug: "economic-alignment"
+parent_slug: "4_Tockenomics_v2"
+type: "section"
+order: 9
+---
+
 # Economic Alignment
 
 The protocol's economic design aligns all participant incentives toward

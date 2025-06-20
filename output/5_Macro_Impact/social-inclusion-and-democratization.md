@@ -1,3 +1,11 @@
+---
+title: "Social Inclusion and Democratization"
+slug: "social-inclusion-and-democratization"
+parent_slug: "5_Macro_Impact"
+type: "section"
+order: 4
+---
+
 # Social Inclusion and Democratization
 
 The reduction from \$67,155 to \$7,145 per transaction doesn't affect

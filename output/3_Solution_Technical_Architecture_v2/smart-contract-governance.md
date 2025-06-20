@@ -1,3 +1,11 @@
+---
+title: "Smart Contract Governance"
+slug: "smart-contract-governance"
+parent_slug: "3_Solution_Technical_Architecture_v2"
+type: "section"
+order: 4
+---
+
 # Smart Contract Governance
 
 Elephant's smart contracts enforce closed-loop governance on data

@@ -1,3 +1,11 @@
+---
+title: "Globalized Data Model: Jurisdiction-Agnostic Architecture"
+slug: "globalized-data-model-jurisdiction-agnostic-architecture"
+parent_slug: "Appendix_2"
+type: "section"
+order: 8
+---
+
 # Globalized Data Model: Jurisdiction-Agnostic Architecture
 
 Elephant's data model achieves true global applicability by making no

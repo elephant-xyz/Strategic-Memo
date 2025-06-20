@@ -1,3 +1,11 @@
+---
+title: "Schema Governance: The Grammar of Property Rights"
+slug: "schema-governance-the-grammar-of-property-rights"
+parent_slug: "Appendix_2"
+type: "section"
+order: 3
+---
+
 # Schema Governance: The Grammar of Property Rights
 
 Schemas in Elephant function as the constitutional framework governing

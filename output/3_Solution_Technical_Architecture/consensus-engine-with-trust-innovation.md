@@ -1,3 +1,11 @@
+---
+title: "Consensus Engine with Trust Innovation"
+slug: "consensus-engine-with-trust-innovation"
+parent_slug: "3_Solution_Technical_Architecture"
+type: "section"
+order: 5
+---
+
 # Consensus Engine with Trust Innovation
 
 Trust traditionally emerges from institutional authority---a model that

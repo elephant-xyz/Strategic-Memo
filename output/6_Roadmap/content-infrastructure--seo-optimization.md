@@ -1,3 +1,11 @@
+---
+title: "Content Infrastructure & SEO Optimization"
+slug: "content-infrastructure--seo-optimization"
+parent_slug: "6_Roadmap"
+type: "section"
+order: 3
+---
+
 # Content Infrastructure & SEO Optimization
 
 The public property record explorer represents our primary assault on

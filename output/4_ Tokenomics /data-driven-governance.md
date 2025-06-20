@@ -1,3 +1,11 @@
+---
+title: "Data-Driven Governance"
+slug: "data-driven-governance"
+parent_slug: "4_ Tokenomics "
+type: "section"
+order: 3
+---
+
 # Data-Driven Governance
 
 Governance power in the Elephant protocol derives from data

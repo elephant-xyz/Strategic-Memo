@@ -1,3 +1,11 @@
+---
+title: "The Industry Memory Problem"
+slug: "the-industry-memory-problem"
+parent_slug: "2_Problem_Statement"
+type: "section"
+order: 5
+---
+
 # The Industry Memory Problem
 
 Real estate operates with designed obsolescence ensuring recurring

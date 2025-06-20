@@ -1,3 +1,11 @@
+---
+title: "Institutionalized Control"
+slug: "institutionalized-control"
+parent_slug: "2_Problem_Statement_v2 "
+type: "section"
+order: 4
+---
+
 # Institutionalized Control
 
 Centralized gatekeepers don't merely profit from the current

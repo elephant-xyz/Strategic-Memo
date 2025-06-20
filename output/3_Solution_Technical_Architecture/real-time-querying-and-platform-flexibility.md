@@ -1,3 +1,11 @@
+---
+title: "Real-Time Querying and Platform Flexibility"
+slug: "real-time-querying-and-platform-flexibility"
+parent_slug: "3_Solution_Technical_Architecture"
+type: "section"
+order: 7
+---
+
 # Real-Time Querying and Platform Flexibility
 
 Static systems create friction; dynamic systems enable flow. The

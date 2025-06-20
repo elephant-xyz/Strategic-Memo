@@ -1,3 +1,11 @@
+---
+title: "Query \& Discovery Interfaces"
+slug: "query--discovery-interfaces"
+parent_slug: "3_Solution_Technical_Architecture_v2"
+type: "section"
+order: 7
+---
+
 # Query & Discovery Interfaces
 
 Elephant generates SEO-optimized property fact sheets for every verified

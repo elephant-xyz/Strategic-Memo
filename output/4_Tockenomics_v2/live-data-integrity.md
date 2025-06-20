@@ -1,3 +1,11 @@
+---
+title: "Live Data Integrity"
+slug: "live-data-integrity"
+parent_slug: "4_Tockenomics_v2"
+type: "section"
+order: 3
+---
+
 # Live Data Integrity
 
 The protocol's economic model extends beyond initial data verification

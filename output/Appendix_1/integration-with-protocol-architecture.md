@@ -1,3 +1,11 @@
+---
+title: "Integration with Protocol Architecture"
+slug: "integration-with-protocol-architecture"
+parent_slug: "Appendix_1"
+type: "section"
+order: 4
+---
+
 # Integration with Protocol Architecture
 
 Bitstrapping integrates seamlessly with protocol design without

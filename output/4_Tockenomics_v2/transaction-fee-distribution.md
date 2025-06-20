@@ -1,3 +1,11 @@
+---
+title: "Transaction Fee Distribution"
+slug: "transaction-fee-distribution"
+parent_slug: "4_Tockenomics_v2"
+type: "section"
+order: 7
+---
+
 # Transaction Fee Distribution
 
 Every real estate transaction conducted through the Elephant platform

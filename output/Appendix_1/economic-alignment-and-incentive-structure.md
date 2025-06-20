@@ -1,3 +1,11 @@
+---
+title: "Economic Alignment and Incentive Structure"
+slug: "economic-alignment-and-incentive-structure"
+parent_slug: "Appendix_1"
+type: "section"
+order: 5
+---
+
 # Economic Alignment and Incentive Structure
 
 Bitstrapping creates incentive cascades where individual optimization

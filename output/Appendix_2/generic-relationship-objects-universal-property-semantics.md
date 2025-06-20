@@ -1,3 +1,11 @@
+---
+title: "Generic Relationship Objects: Universal Property Semantics"
+slug: "generic-relationship-objects-universal-property-semantics"
+parent_slug: "Appendix_2"
+type: "section"
+order: 4
+---
+
 # Generic Relationship Objects: Universal Property Semantics
 
 The Relationship class forms Elephant's core innovation---a polymorphic,

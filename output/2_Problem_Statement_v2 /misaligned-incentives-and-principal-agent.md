@@ -1,3 +1,11 @@
+---
+title: "Misaligned Incentives and Principal-Agent"
+slug: "misaligned-incentives-and-principal-agent"
+parent_slug: "2_Problem_Statement_v2 "
+type: "section"
+order: 3
+---
+
 # Misaligned Incentives and Principal-Agent
 
 Service providers in real estate have perfected the art of necessary

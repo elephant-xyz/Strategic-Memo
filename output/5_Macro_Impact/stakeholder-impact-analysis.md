@@ -1,3 +1,11 @@
+---
+title: "Stakeholder Impact Analysis"
+slug: "stakeholder-impact-analysis"
+parent_slug: "5_Macro_Impact"
+type: "section"
+order: 7
+---
+
 # Stakeholder Impact Analysis
 
 The transformation affects every real estate participant, creating clear

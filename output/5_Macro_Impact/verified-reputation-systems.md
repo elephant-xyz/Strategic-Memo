@@ -1,3 +1,11 @@
+---
+title: "Verified Reputation Systems"
+slug: "verified-reputation-systems"
+parent_slug: "5_Macro_Impact"
+type: "section"
+order: 6
+---
+
 # Verified Reputation Systems
 
 The Elephant protocol creates the first real estate market where

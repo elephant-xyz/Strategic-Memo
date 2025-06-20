@@ -1,3 +1,11 @@
+---
+title: "Oracle Network Bootstrapping"
+slug: "oracle-network-bootstrapping"
+parent_slug: "6_Roadmap"
+type: "section"
+order: 2
+---
+
 # Oracle Network Bootstrapping
 
 The protocol's heartbeat begins with verifier staking contracts that

@@ -1,3 +1,11 @@
+---
+title: "Unified System Design with Asset Tokenization"
+slug: "unified-system-design-with-asset-tokenization"
+parent_slug: "3_Solution_Technical_Architecture"
+type: "section"
+order: 2
+---
+
 # Unified System Design with Asset Tokenization
 
 Architecture is destiny. The Elephant protocol begins with a simple yet

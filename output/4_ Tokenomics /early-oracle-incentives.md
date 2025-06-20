@@ -1,3 +1,11 @@
+---
+title: "Early Oracle Incentives"
+slug: "early-oracle-incentives"
+parent_slug: "4_ Tokenomics "
+type: "section"
+order: 5
+---
+
 # Early Oracle Incentives
 
 The protocol recognizes that early data contributors take extraordinary

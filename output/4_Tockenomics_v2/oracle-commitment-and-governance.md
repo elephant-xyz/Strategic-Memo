@@ -1,3 +1,11 @@
+---
+title: "Oracle Commitment and Governance"
+slug: "oracle-commitment-and-governance"
+parent_slug: "4_Tockenomics_v2"
+type: "section"
+order: 5
+---
+
 # Oracle Commitment and Governance
 
 The protocol's governance model ties voting power directly to ongoing

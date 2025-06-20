@@ -1,3 +1,11 @@
+---
+title: "vMahout Dynamics"
+slug: "vmahout-dynamics"
+parent_slug: "4_ Tokenomics "
+type: "section"
+order: 9
+---
+
 # vMahout Dynamics
 
 vMahout operates unlike any governance token in the crypto ecosystem.

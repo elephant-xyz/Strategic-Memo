@@ -1,3 +1,11 @@
+---
+title: "Growth-Aligned Token Creation"
+slug: "growth-aligned-token-creation"
+parent_slug: "4_ Tokenomics "
+type: "section"
+order: 4
+---
+
 # Growth-Aligned Token Creation
 
 Mahout creation directly correlates with real-world network expansion

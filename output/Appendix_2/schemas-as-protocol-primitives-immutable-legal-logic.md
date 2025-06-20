@@ -1,3 +1,11 @@
+---
+title: "Schemas as Protocol Primitives: Immutable Legal Logic"
+slug: "schemas-as-protocol-primitives-immutable-legal-logic"
+parent_slug: "Appendix_2"
+type: "section"
+order: 7
+---
+
 # Schemas as Protocol Primitives: Immutable Legal Logic
 
 Schemas transcend mere data definitions to become protocol-level

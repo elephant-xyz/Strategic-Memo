@@ -1,3 +1,11 @@
+---
+title: "The Systemic Cost of Bureaucratic Design"
+slug: "the-systemic-cost-of-bureaucratic-design"
+parent_slug: "2_Problem_Statement"
+type: "section"
+order: 3
+---
+
 # The Systemic Cost of Bureaucratic Design
 
 The real estate industry's cost structure emerged from non-technical

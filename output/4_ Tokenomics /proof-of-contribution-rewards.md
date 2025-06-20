@@ -1,3 +1,11 @@
+---
+title: "Proof-of-Contribution Rewards"
+slug: "proof-of-contribution-rewards"
+parent_slug: "4_ Tokenomics "
+type: "section"
+order: 7
+---
+
 # Proof-of-Contribution Rewards
 
 Beyond mining new Mahout through Proof-of-Truth, the protocol implements

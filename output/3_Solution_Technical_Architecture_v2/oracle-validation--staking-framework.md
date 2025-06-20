@@ -1,3 +1,11 @@
+---
+title: "Oracle Validation \& Staking Framework"
+slug: "oracle-validation--staking-framework"
+parent_slug: "3_Solution_Technical_Architecture_v2"
+type: "section"
+order: 5
+---
+
 # Oracle Validation & Staking Framework
 
 Truth enters the Elephant network through a sophisticated oracle

@@ -1,3 +1,11 @@
+---
+title: "Decentralized Verifiability: Trust Through Mathematics"
+slug: "decentralized-verifiability-trust-through-mathematics"
+parent_slug: "Appendix_2"
+type: "section"
+order: 9
+---
+
 # Decentralized Verifiability: Trust Through Mathematics
 
 Every component in Elephant's relationship layer---entities,

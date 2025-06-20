@@ -1,3 +1,11 @@
+---
+title: "On-Chain Property Records"
+slug: "on-chain-property-records"
+parent_slug: "3_Solution_Technical_Architecture_v2"
+type: "section"
+order: 3
+---
+
 # On-Chain Property Records
 
 Properties exist in Elephant as minted digital data assets, not merely

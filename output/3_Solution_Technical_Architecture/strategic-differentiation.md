@@ -1,3 +1,11 @@
+---
+title: "Strategic Differentiation"
+slug: "strategic-differentiation"
+parent_slug: "3_Solution_Technical_Architecture"
+type: "section"
+order: 9
+---
+
 # Strategic Differentiation
 
 The convergence of technological capability, regulatory pressure, and

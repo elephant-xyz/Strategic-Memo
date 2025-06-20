@@ -1,3 +1,11 @@
+---
+title: "The Problem: Misaligned Incentives in Web3 Funding"
+slug: "the-problem-misaligned-incentives-in-web3-funding"
+parent_slug: "Appendix_1"
+type: "section"
+order: 2
+---
+
 # The Problem: Misaligned Incentives in Web3 Funding
 
 Traditional venture capital corrupts Web3's decentralization ethos from

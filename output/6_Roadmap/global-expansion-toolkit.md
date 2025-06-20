@@ -1,3 +1,11 @@
+---
+title: "Global Expansion Toolkit"
+slug: "global-expansion-toolkit"
+parent_slug: "6_Roadmap"
+type: "section"
+order: 5
+---
+
 # Global Expansion Toolkit
 
 The standardized deployment checklist transforms international expansion

@@ -1,3 +1,11 @@
+---
+title: "Supply Growth Dynamics"
+slug: "supply-growth-dynamics"
+parent_slug: "4_Tockenomics_v2"
+type: "section"
+order: 8
+---
+
 # Supply Growth Dynamics
 
 MAHOUT's supply growth is intrinsically tied to real-world asset

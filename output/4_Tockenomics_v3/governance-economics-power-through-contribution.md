@@ -1,3 +1,11 @@
+---
+title: "Governance Economics: Power Through Contribution"
+slug: "governance-economics-power-through-contribution"
+parent_slug: "4_Tockenomics_v3"
+type: "section"
+order: 6
+---
+
 # Governance Economics: Power Through Contribution
 
 Governance in the Elephant protocol flows exclusively to those who build

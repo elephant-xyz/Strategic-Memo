@@ -1,3 +1,11 @@
+---
+title: "Economic Mechanisms with Privacy Preservation"
+slug: "economic-mechanisms-with-privacy-preservation"
+parent_slug: "3_Solution_Technical_Architecture"
+type: "section"
+order: 6
+---
+
 # Economic Mechanisms with Privacy Preservation
 
 The protocol's economic design recognizes a fundamental tension:

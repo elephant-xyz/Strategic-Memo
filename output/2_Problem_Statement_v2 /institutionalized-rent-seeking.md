@@ -1,3 +1,11 @@
+---
+title: "Institutionalized Rent-Seeking"
+slug: "institutionalized-rent-seeking"
+parent_slug: "2_Problem_Statement_v2 "
+type: "section"
+order: 5
+---
+
 # Institutionalized Rent-Seeking
 
 The genius of real estate extraction lies in its careful design to

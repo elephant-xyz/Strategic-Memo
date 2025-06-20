@@ -1,3 +1,11 @@
+---
+title: "The Concept: Collateralized Protocol Bootstrapping"
+slug: "the-concept-collateralized-protocol-bootstrapping"
+parent_slug: "Appendix_1"
+type: "section"
+order: 3
+---
+
 # The Concept: Collateralized Protocol Bootstrapping
 
 Bitstrapping aligns incentives through elegant mechanism design where

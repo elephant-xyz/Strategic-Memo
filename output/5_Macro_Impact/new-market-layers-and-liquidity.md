@@ -1,3 +1,11 @@
+---
+title: "New Market Layers and Liquidity"
+slug: "new-market-layers-and-liquidity"
+parent_slug: "5_Macro_Impact"
+type: "section"
+order: 3
+---
+
 # New Market Layers and Liquidity
 
 Property tokenization through the Elephant protocol enables entirely new

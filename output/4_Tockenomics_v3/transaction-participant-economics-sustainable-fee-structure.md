@@ -1,3 +1,11 @@
+---
+title: "Transaction Participant Economics: Sustainable Fee Structure"
+slug: "transaction-participant-economics-sustainable-fee-structure"
+parent_slug: "4_Tockenomics_v3"
+type: "section"
+order: 5
+---
+
 # Transaction Participant Economics: Sustainable Fee Structure
 
 Every real estate transaction conducted through the Elephant platform

@@ -1,3 +1,11 @@
+---
+title: "Merkle Relationship Layer: Beyond Hash Trees"
+slug: "merkle-relationship-layer-beyond-hash-trees"
+parent_slug: "Appendix_2"
+type: "section"
+order: 2
+---
+
 # Merkle Relationship Layer: Beyond Hash Trees
 
 Merkle trees revolutionized blockchain by enabling efficient

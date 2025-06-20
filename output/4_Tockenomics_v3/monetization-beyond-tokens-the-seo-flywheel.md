@@ -1,3 +1,11 @@
+---
+title: "Monetization Beyond Tokens: The SEO Flywheel"
+slug: "monetization-beyond-tokens-the-seo-flywheel"
+parent_slug: "4_Tockenomics_v3"
+type: "section"
+order: 7
+---
+
 # Monetization Beyond Tokens: The SEO Flywheel
 
 The protocol's master stroke lies in creating value beyond token

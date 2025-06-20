@@ -1,3 +1,11 @@
+---
+title: "Building Systemic Trust"
+slug: "building-systemic-trust"
+parent_slug: "5_Macro_Impact"
+type: "section"
+order: 5
+---
+
 # Building Systemic Trust
 
 Trust in real estate currently depends on institutional reputation,

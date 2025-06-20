@@ -1,3 +1,11 @@
+---
+title: "Resulting Housing Unaffordability"
+slug: "resulting-housing-unaffordability"
+parent_slug: "2_Problem_Statement_v2 "
+type: "section"
+order: 6
+---
+
 # Resulting Housing Unaffordability
 
 Natural competitive market forces cannot operate when competition is
