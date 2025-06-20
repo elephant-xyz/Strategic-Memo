@@ -5,6 +5,7 @@ on:
     paths:
       - '**.tex'
       - '.github/workflows/convert-latex.yml'
+  workflow_dispatch:
 
 jobs:
   convert:
