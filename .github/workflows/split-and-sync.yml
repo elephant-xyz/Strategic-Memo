@@ -13,14 +13,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Pandoc
         run: sudo apt-get update && sudo apt-get install -y pandoc
 
-      - name: Set up output directories
-        run: |
-          mkdir -p output
-          mkdir -p split_tex
+      - name: Set up output directory
+        run: mkdir -p output
 
       - name: Find preferred TeX files (prioritize _v2)
         id: find-tex
@@ -46,10 +46,9 @@ jobs:
       - name: Verify TeX file list
         run: |
           if [[ ! -s tex_list.txt ]]; then
-            echo "❌ No valid .tex files found. Check your repo structure or file naming."
+            echo "❌ No valid .tex files found."
             exit 1
           fi
-
           echo "✅ Found the following TeX files:"
           cat tex_list.txt
 
@@ -57,45 +56,32 @@ jobs:
         run: |
           while IFS= read -r tex_file; do
             [ ! -f "$tex_file" ] && echo "Skipping invalid file: $tex_file" && continue
+
             echo "Processing $tex_file"
-
             base_name=$(basename "$tex_file" .tex)
-            mkdir -p output
+            mkdir -p temp_md
 
-            # Extract chapter title and intro
             chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
+            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title"'/')
             slug=$(echo "$chapter_title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^\-\|\-$//g')
 
-            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title"'/')
             echo "---\ntitle: $chapter_title\nslug: $slug\ntype: chapter\norder: 0\n---" > "output/${base_name}_intro.md"
             echo "$intro_lines" | pandoc -f latex -t markdown_strict >> "output/${base_name}_intro.md"
 
-            # Split section content into temp .tex files
-            awk -v base="$base_name" '
-              BEGIN { RS="\\\\section\\{"; ORS=""; count=1 }
+            awk -v base="$base_name" -v parent="$slug" '
+              BEGIN { RS = "\\\\section\{"; ORS = ""; filecount=1 }
               NR > 1 {
-                title = substr($0, 1, index($0, "}") - 1)
-                content = substr($0, index($0, "}") + 1)
+                section_raw=substr($0, index($0,"}")+1)
+                title=substr($0, 1, index($0,"}")-1)
                 gsub(/[[:space:]]+$/, "", title)
-                file = sprintf("split_tex/%s_section_%d.tex", base, count)
-                print "\\section{" title "}\n" content > file
-                close(file)
-                count++
+                slugified=tolower(title)
+                gsub(/[^a-z0-9]+/, "-", slugified)
+                gsub(/^-|-$/, "", slugified)
+                outname="output/" base "_section_" filecount ".md"
+                print "---\ntitle: " title "\nslug: " slugified "\nparent_slug: " parent "\ntype: section\norder: " filecount "\n---\n\n## " title "\n" section_raw | "pandoc -f latex -t markdown_strict -o " outname
+                filecount++
               }
             ' "$tex_file"
-
-            # Convert each temp .tex file to markdown
-            for split_file in split_tex/${base_name}_section_*.tex; do
-              [ ! -f "$split_file" ] && continue
-              title=$(grep -oP '\\section\{.*?\}' "$split_file" | head -1 | sed 's/\\section{//;s/}//')
-              slugified=$(echo "$title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^\-\|\-$//g')
-              order=$(echo "$split_file" | grep -oP 'section_\K[0-9]+')
-              output_file="output/${base_name}_section_${order}.md"
-
-              echo "---\ntitle: $title\nslug: $slugified\nparent_slug: $slug\ntype: section\norder: $order\n---" > "$output_file"
-              pandoc -f latex -t markdown_strict "$split_file" >> "$output_file"
-            done
-
           done < tex_list.txt
 
       - name: Combine all Markdown files into Full_Doc.md
@@ -103,6 +89,15 @@ jobs:
           echo "Combining all .md files into output/Full_Doc.md"
           find output -name '*.md' ! -name 'Full_Doc.md' -exec cat {} + > output/tmp_combined.md
           mv output/tmp_combined.md output/Full_Doc.md
+
+      - name: Commit and push output to repo
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add output
+          git diff --staged --quiet || git commit -m "Auto-generate markdown output from TeX"
+          git push
 
       - name: Upload converted Markdown files
         uses: actions/upload-artifact@v4
