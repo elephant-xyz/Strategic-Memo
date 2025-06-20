@@ -13,8 +13,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Pandoc
         run: sudo apt-get update && sudo apt-get install -y pandoc
@@ -46,9 +44,10 @@ jobs:
       - name: Verify TeX file list
         run: |
           if [[ ! -s tex_list.txt ]]; then
-            echo "❌ No valid .tex files found."
+            echo "❌ No valid .tex files found. Check your repo structure or file naming."
             exit 1
           fi
+
           echo "✅ Found the following TeX files:"
           cat tex_list.txt
 
@@ -59,26 +58,38 @@ jobs:
 
             echo "Processing $tex_file"
             base_name=$(basename "$tex_file" .tex)
-            mkdir -p temp_md
+            mkdir -p output
 
             chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
             intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title"'/')
             slug=$(echo "$chapter_title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^\-\|\-$//g')
 
-            echo "---\ntitle: $chapter_title\nslug: $slug\ntype: chapter\norder: 0\n---" > "output/${base_name}_intro.md"
+            echo "---" > "output/${base_name}_intro.md"
+            echo "title: \"$chapter_title\"" >> "output/${base_name}_intro.md"
+            echo "slug: \"$slug\"" >> "output/${base_name}_intro.md"
+            echo "type: \"chapter\"" >> "output/${base_name}_intro.md"
+            echo "order: 0" >> "output/${base_name}_intro.md"
+            echo "---" >> "output/${base_name}_intro.md"
+            echo "" >> "output/${base_name}_intro.md"
             echo "$intro_lines" | pandoc -f latex -t markdown_strict >> "output/${base_name}_intro.md"
 
             awk -v base="$base_name" -v parent="$slug" '
-              BEGIN { RS = "\\\\section\{"; ORS = ""; filecount=1 }
+              BEGIN { RS = "\\\section\{"; ORS = ""; filecount=1 }
               NR > 1 {
-                section_raw=substr($0, index($0,"}")+1)
+                section_raw=substr($0, index($0,"}" )+1)
                 title=substr($0, 1, index($0,"}")-1)
                 gsub(/[[:space:]]+$/, "", title)
                 slugified=tolower(title)
                 gsub(/[^a-z0-9]+/, "-", slugified)
                 gsub(/^-|-$/, "", slugified)
                 outname="output/" base "_section_" filecount ".md"
-                print "---\ntitle: " title "\nslug: " slugified "\nparent_slug: " parent "\ntype: section\norder: " filecount "\n---\n\n## " title "\n" section_raw | "pandoc -f latex -t markdown_strict -o " outname
+                print "---" > outname
+                print "title: \"" title "\"" >> outname
+                print "slug: \"" slugified "\"" >> outname
+                print "parent_slug: \"" parent "\"" >> outname
+                print "type: \"section\"" >> outname
+                print "order: " filecount >> outname
+                print "---\n\n## " title "\n" section_raw | "pandoc -f latex -t markdown_strict >> " outname
                 filecount++
               }
             ' "$tex_file"
@@ -89,15 +100,6 @@ jobs:
           echo "Combining all .md files into output/Full_Doc.md"
           find output -name '*.md' ! -name 'Full_Doc.md' -exec cat {} + > output/tmp_combined.md
           mv output/tmp_combined.md output/Full_Doc.md
-
-      - name: Commit and push output to repo
-        if: github.ref == 'refs/heads/main'
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add output
-          git diff --staged --quiet || git commit -m "Auto-generate markdown output from TeX"
-          git push
 
       - name: Upload converted Markdown files
         uses: actions/upload-artifact@v4
