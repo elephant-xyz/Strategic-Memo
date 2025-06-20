@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '**.tex'
+  workflow_dispatch:
 
 jobs:
   convert:
@@ -17,19 +18,12 @@ jobs:
 
       - name: Convert LaTeX to Markdown
         run: |
-          # Get base names without versions
           for base in $(ls *.tex | sed -E 's/(_v[0-9]+)?\.tex$//' | sort -u); do
-            # Find all versions of this base
             versions=$(ls ${base}*.tex 2>/dev/null | sort -V)
-
-            # Get the highest version (including versionless as v1)
             latest=$(echo "$versions" | tail -n1)
-
-            # Derive prefix and parent_slug
             prefix=$(echo "$base" | grep -o '^[0-9]\+')
             parent_slug=$(echo "$base" | tr '[:upper:]' '[:lower:]' | tr '_' '-' | sed 's/[^a-z0-9-]//g')
 
-            # Process the latest version only
             awk -v parent_slug="$parent_slug" -v file_name="$latest" '
               BEGIN { section = 0; outfile = "" }
               /^\s*\\chapter\{/ {
