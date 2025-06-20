@@ -1,0 +1,40 @@
+# Oracle Economics: Mining Truth from Reality
+
+Oracles form the backbone of Elephant's economy, transforming real-world
+property data into blockchain-verified truth. The protocol divides each
+property into 20 independent fact groups---ownership, mortgages, liens,
+permits, valuations, and others---each requiring verification from three
+independent oracles who must reach unanimous consensus. This granular
+approach prevents any single entity from controlling property records
+while ensuring thorough verification.
+
+The reward structure creates urgency without sacrificing accuracy. For
+each fact group successfully verified, exactly 1 MAHOUT token is minted
+and distributed: approximately 81% to the first oracle, 16% to the
+second, and 3% to the third. This exponential curve incentivizes rapid
+response while still rewarding confirmation. An oracle spotting a
+property sale can race to verify ownership changes, earning 0.81 MAHOUT
+if first, while validators earn smaller but still meaningful rewards.
+
+$$\text{Oracle Rewards per Fact Group} = \begin{cases}
+\text{First: } 0.81 \text{ MAHOUT} \\
+\text{Second: } 0.16 \text{ MAHOUT} \\
+\text{Third: } 0.03 \text{ MAHOUT} \\
+\text{Total: } 1.00 \text{ MAHOUT}
+\end{cases}$$
+
+But initial verification is just the beginning. Oracles must maintain
+their assigned fact groups in real-time, updating changes as they occur.
+If a property sells, gets renovated, or faces liens, the responsible
+oracle must submit updates immediately. Failure to maintain current data
+doesn't just forfeit future rewards---it strips vMAHOUT governance
+tokens from negligent oracles, transferring them to whoever submits the
+update. This creates an ecosystem of vigilant maintenance where data
+quality continuously improves.
+
+Oracle participation requires staking MAHOUT tokens, with higher stakes
+earning priority access to unverified properties entering the system.
+This stake faces slashing penalties for submitting false data, creating
+skin in the game that ensures dedication to accuracy. The economic model
+transforms data verification from a cost center---currently consuming
+\$8,600 per transaction---into a profit center for diligent oracles.
