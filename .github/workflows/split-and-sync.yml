@@ -1,27 +1,3 @@
-name: Split LaTeX Chapters and Convert to Markdown with Frontmatter
-
-on:
-  push:
-    paths:
-      - '*.tex'
-  workflow_dispatch:
-
-jobs:
-  split-and-convert:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: 📥 Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: 🧱 Install Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y pandoc texlive texlive-latex-base texlive-latex-recommended texlive-latex-extra
-
-      - name: 🗂 Create Output Directory
-        run: mkdir -p output
-
       - name: 🧪 Split and Convert LaTeX Files with Frontmatter
         run: |
           for file in *.tex; do
@@ -39,4 +15,27 @@ jobs:
               section_slug=$(echo "$section_title" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-')
 
               tex_path="output/$chapter_slug/$section_slug.tex"
-              md_path="output/$chapter_slug/$sect
+              md_path="output/$chapter_slug/$section_slug.md"
+
+              mv "$splitfile" "$tex_path"
+
+              # Convert to Markdown and add frontmatter
+              pandoc "$tex_path" -f latex -t markdown -o temp_content.md
+
+              {
+                echo "---"
+                echo "title: \"$section_title\""
+                echo "slug: \"$section_slug\""
+                echo "parent_slug: \"$chapter_slug\""
+                echo "type: \"section\""
+                echo "order: $order"
+                echo "---"
+                echo ""
+                cat temp_content.md
+              } > "$md_path"
+
+              order=$((order + 1))
+            done
+
+            rm -f section_* temp_content.md
+          done
