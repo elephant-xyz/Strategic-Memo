@@ -1,48 +1,49 @@
-name: Convert LaTeX to Markdown
+name: Convert .tex to Markdown
 
 on:
-  push:
-    paths:
-      - '**.tex'
-      - '.github/workflows/convert-latex.yml'
   workflow_dispatch:
 
 jobs:
   convert:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Install pandoc
-        run: |
-          sudo apt-get update && sudo apt-get install -y pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
 
       - name: Debug title extraction from .tex files
         run: |
           echo "📄 Listing .tex files:"
           ls -l *.tex
-          echo "📦 Extracting LaTeX titles (\\chapter{} or \\section{}):"
-          grep -Hn '\\chapter{\|\\section{' *.tex || true
 
-      - name: Convert .tex to Markdown
+          echo "🔍 Extracting LaTeX titles (\\chapter{} or \\section{}):"
+          grep -H -E '\\(chapter|section)\{.*\}' *.tex || echo "No titles found"
+
+      - name: Split and Convert .tex files to Markdown
         run: |
           mkdir -p output
           for file in *.tex; do
-            filename=$(basename "$file" .tex)
-            echo "Converting $file to output/${filename}.md"
-            pandoc "$file" -f latex -t markdown --wrap=preserve -o "output/${filename}.md" || true
+            base=$(basename "$file" .tex)
+            awk '
+              BEGIN {n=0; outfile="output/" n "_" FILENAME; print "📤 Converting " FILENAME " → " outfile > "/dev/stderr"}
+              /^\\(chapter|section)\{/ {
+                close(outfile)
+                n+=1
+                outfile=sprintf("output/%d_%s.md", n, FILENAME)
+              }
+              {
+                gsub(/\\/, "\\\\")  # Escape LaTeX backslashes for YAML safety
+                print > outfile
+              }
+            ' "$file"
           done
 
       - name: Combine into Full Doc
         run: |
-          echo "Combining all .md files into output/Full Doc.md"
-          cat output/*.md > output/"Full Doc.md"
+          echo "🧩 Combining all .md files into output/Full Doc.md"
+          find output -name '*.md' ! -name 'Full Doc.md' -exec cat {} + > "output/Full Doc.md"
 
       - name: Post-run debug for markdown output
-        run: |
-          echo "📂 Markdown Output Preview:"
-          ls -lh output/
-          echo "---"
-          head -n 20 output/*.md || true
+        run: ls -lh output/
