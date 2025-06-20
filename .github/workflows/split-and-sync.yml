@@ -1,4 +1,4 @@
-name: 📄 Split and Convert .tex files to Markdown
+name: 📄 Safe LaTeX to Markdown Conversion
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
       - name: 🧰 Install pandoc
         run: sudo apt-get update && sudo apt-get install -y pandoc
 
-      - name: 📝 Split and Convert .tex files with Frontmatter
+      - name: 🔄 Split and Convert .tex Files
         run: |
           mkdir -p output
 
@@ -25,31 +25,31 @@ jobs:
             base_name=$(basename "$tex_path" .tex)
             output_file="output/${base_name}.md"
 
-            echo "📦 Converting $tex_path → $output_file"
+            echo "🔍 Processing $tex_path"
 
-            # Extract plain text from \chapter{} or \section{} (remove LaTeX syntax)
-            raw_title=$(grep -Eo '\\(chapter|section)\{[^}]+\}' "$tex_path" | head -n 1 | sed -E 's/\\(chapter|section)\{([^}]*)\}/\2/')
+            # Extract only the content of the first \chapter{} or \section{} — no LaTeX
+            raw_title=$(grep -Eo '\\(chapter|section)\{[^}]+\}' "$tex_path" | head -n 1 | sed -E 's/\\(chapter|section)\{//; s/}//')
 
-            # Fallback title if none found
+            # Fallback title
             if [ -z "$raw_title" ]; then
               raw_title="$base_name"
             fi
 
-            # Escape YAML-sensitive characters
-            escaped_title=$(printf '%s' "$raw_title" | sed 's/"/\\"/g; s/&/\\&/g')
+            # Escape quotes, colons, ampersands
+            safe_title=$(printf '%s' "$raw_title" | sed 's/["&:]/\\&/g')
 
-            # Convert to Markdown using pandoc
+            # Convert LaTeX to Markdown
             pandoc "$tex_path" -f latex -t markdown_strict --wrap=preserve -o "$output_file"
 
-            # Add YAML frontmatter
+            # Prepend YAML frontmatter
             tmp_file=$(mktemp)
             echo "---" > "$tmp_file"
-            echo "title: \"$escaped_title\"" >> "$tmp_file"
+            echo "title: \"$safe_title\"" >> "$tmp_file"
             echo "source: \"$tex_path\"" >> "$tmp_file"
             echo "---" >> "$tmp_file"
             echo "" >> "$tmp_file"
             cat "$output_file" >> "$tmp_file"
             mv "$tmp_file" "$output_file"
 
-            echo "✅ Finished: $output_file"
+            echo "✅ Created: $output_file"
           done
