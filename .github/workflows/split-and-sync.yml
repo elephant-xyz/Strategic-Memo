@@ -3,25 +3,26 @@ name: Split LaTeX Chapters and Convert to Markdown
 on:
   push:
     paths:
-      - '*.tex'  # Watches root .tex files
+      - '*.tex'
+  workflow_dispatch:  # ✅ allows manual trigger from GitHub UI
 
 jobs:
   split-and-convert:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: 📥 Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Install dependencies
+      - name: 🧱 Install Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y pandoc texlive texlive-latex-base texlive-latex-recommended texlive-latex-extra
 
-      - name: Create output directory
+      - name: 🗂 Create Output Directory
         run: mkdir -p output
 
-      - name: Split and convert LaTeX chapters
+      - name: 🧪 Split and Convert LaTeX Files
         run: |
           for file in *.tex; do
             chapter_file=$(basename "$file")
@@ -29,33 +30,30 @@ jobs:
 
             mkdir -p "output/$chapter_slug"
 
-            # Split file into sections at each \section{...}
+            # Split at each \section{...}
             csplit -s -f section_ "$file" '/\\section{.*/' '{*}' || true
 
             for splitfile in section_*; do
-              # Extract the section title
+              # Extract section title
               section_title=$(grep -oP '\\section\{.*\}' "$splitfile" | head -n 1 | sed 's/\\section{//;s/}//')
-
-              # Generate a slug from the title
               section_slug=$(echo "$section_title" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-')
 
-              # Define file paths
               tex_out="output/$chapter_slug/$section_slug.tex"
               md_out="output/$chapter_slug/$section_slug.md"
 
-              # Move and convert
               mv "$splitfile" "$tex_out"
+
+              # Convert to Markdown
               pandoc "$tex_out" -f latex -t markdown -o "$md_out"
             done
 
             rm -f section_*
           done
 
-      - name: Commit output
+      - name: 🚀 Commit and Push Output
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add output/
-          git commit -m "Update split Markdown output" || echo "No changes to commit"
+          git commit -m "Update converted markdown files" || echo "No changes to commit"
           git push
-
