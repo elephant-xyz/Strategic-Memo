@@ -1,0 +1,36 @@
+— title: Service Provider Economics: Competing on Merit slug:
+service-provider-economics-competing-on-merit parent\_slug: tokenomics
+type: section order: 3 —
+
+\## Service Provider Economics: Competing on Merit
+
+Real estate professionals face a fundamental shift in the Elephant
+economy: from gatekeeping to genuine service competition. The protocol
+automatically generates SEO-optimized fact sheets for every verified
+property, designed to rank highly in search results and attract millions
+of property researchers. These fact sheets become premium advertising
+real estate where professionals compete for visibility.
+
+Service providers—agents, lenders, inspectors, attorneys—stake MAHOUT
+tokens to secure advertising positions on relevant fact sheets. Higher
+stakes win more prominent placement, creating a pure market for
+attention. But unlike traditional advertising where money alone
+determines position, the Elephant protocol incorporates performance
+metrics. Service providers who generate positive outcomes maintain their
+positions with lower stakes, while those with poor reviews require
+increasingly higher stakes to remain visible.
+
+This staking mechanism generates continuous demand for MAHOUT tokens
+while funding the oracles who maintain the underlying data. A portion of
+all staking fees flows back to the oracles responsible for each
+property’s fact groups, creating recursive incentives for data quality.
+Better data attracts more users, driving more advertising value,
+increasing staking competition, rewarding better oracles, who create
+better data.
+
+The economics fundamentally restructure professional incentives.
+Currently, agents optimize for transaction volume and commission
+maximization. In the Elephant economy, they optimize for client
+satisfaction and service quality, as positive outcomes reduce their
+advertising costs. This transforms marketing spend from pure expense to
+investment in reputation that compounds over time.
