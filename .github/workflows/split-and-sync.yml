@@ -21,7 +21,7 @@ jobs:
           files=$(find . -name "*.tex" | sed 's|.*/||' | sort | uniq -w 1)
           filtered=()
           for file in $files; do
-            base=$(echo "$file" | sed 's/_v2\\.tex$//')
+            base=$(echo "$file" | sed 's/_v2\.tex$//')
             if [[ -f "${base}_v2.tex" ]]; then
               filtered+=("${base}_v2.tex")
             elif [[ "$file" != *_v2.tex ]]; then
@@ -37,7 +37,7 @@ jobs:
             base_name=$(basename "$tex_file" .tex)
             mkdir -p temp_md
 
-            # Extract \chapter and intro text
+            # Extract chapter title and intro content
             chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
             intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title"'/')
             slug=$(echo "$chapter_title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$//g')
@@ -45,7 +45,7 @@ jobs:
             echo "---\ntitle: $chapter_title\nslug: $slug\ntype: chapter\norder: 0\n---" > "output/${base_name}_intro.md"
             echo "$intro_lines" | pandoc -f latex -t markdown_strict >> "output/${base_name}_intro.md"
 
-            # Split \section{} blocks and convert to Markdown
+            # Split sections and convert
             awk -v base="$base_name" -v parent="$slug" '
               BEGIN { RS = "\\\\section\\{"; ORS = ""; filecount=1 }
               NR > 1 {
@@ -69,7 +69,7 @@ jobs:
           mv output/tmp_combined.md output/Full_Doc.md
 
       - name: Upload converted Markdown files
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.3.1
         with:
           name: markdown-output
           path: output
