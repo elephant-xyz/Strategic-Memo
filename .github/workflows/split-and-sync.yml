@@ -1,69 +1,61 @@
-name: Split Chapters into Sections and Push to Framer
+name: Split LaTeX Chapters and Convert to Markdown
 
 on:
   push:
     paths:
-      - 'chapters/*.tex'
+      - '*.tex'  # Watches root .tex files
 
 jobs:
-  split:
+  split-and-convert:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Install Pandoc & jq
-        run: sudo apt-get update && sudo apt-get install pandoc jq -y
-
-      - name: Process Chapter Files
-        env:
-          FRAMER_API_TOKEN: ${{ secrets.FRAMER_API_TOKEN }}
-          COLLECTION_ID: ${{ secrets.FRAMER_COLLECTION_ID }}
+      - name: Install dependencies
         run: |
-          mkdir -p output
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive texlive-latex-base texlive-latex-recommended texlive-latex-extra
 
-          for file in chapters/*.tex; do
+      - name: Create output directory
+        run: mkdir -p output
+
+      - name: Split and convert LaTeX chapters
+        run: |
+          for file in *.tex; do
             chapter_file=$(basename "$file")
             chapter_slug="${chapter_file%.tex}"
 
-            awk -v chapter="$chapter_slug" '
-              BEGIN { inside=0; section=""; }
-/^\\section\{.*\}/ {
-  section = gensub(/^\\section\{(.*)\}$/, "\\1", "g");
-  section_slug = tolower(section);
-  gsub(/[^a-z0-9]+/, "-", section_slug);
-  outfile = "output/" chapter "-" section_slug ".tex";
-  meta = "output/" chapter "-" section_slug ".meta";
-  print $0 > outfile;
-  printf("{\"title\":\"%s\",\"slug\":\"%s\",\"parent_slug\":\"%s\",\"type\":\"section\",\"order\":0,\"filename\":\"%s.md\"}\n", section, section_slug, chapter, chapter "-" section_slug) > meta;
-  next;
-}
-{
-  if (outfile) print $0 >> outfile;
-}
-            ' "$file"
+            mkdir -p "output/$chapter_slug"
+
+            # Split file into sections at each \section{...}
+            csplit -s -f section_ "$file" '/\\section{.*/' '{*}' || true
+
+            for splitfile in section_*; do
+              # Extract the section title
+              section_title=$(grep -oP '\\section\{.*\}' "$splitfile" | head -n 1 | sed 's/\\section{//;s/}//')
+
+              # Generate a slug from the title
+              section_slug=$(echo "$section_title" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-')
+
+              # Define file paths
+              tex_out="output/$chapter_slug/$section_slug.tex"
+              md_out="output/$chapter_slug/$section_slug.md"
+
+              # Move and convert
+              mv "$splitfile" "$tex_out"
+              pandoc "$tex_out" -f latex -t markdown -o "$md_out"
+            done
+
+            rm -f section_*
           done
 
-          for texfile in output/*.tex; do
-            pandoc "$texfile" -o "${texfile%.tex}.md"
-          done
+      - name: Commit output
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add output/
+          git commit -m "Update split Markdown output" || echo "No changes to commit"
+          git push
 
-          for metafile in output/*.meta; do
-            metadata=$(cat "$metafile")
-            title=$(echo "$metadata" | jq -r .title)
-            slug=$(echo "$metadata" | jq -r .slug)
-            parent_slug=$(echo "$metadata" | jq -r .parent_slug)
-            type=$(echo "$metadata" | jq -r .type)
-            mdfile="output/$(echo "$metadata" | jq -r .filename)"
-            body=$(cat "$mdfile" | jq -Rs .)
-
-            curl -X POST https://api.framer.com/v1/collections/$COLLECTION_ID/items \
-              -H "Authorization: Bearer $FRAMER_API_TOKEN" \
-              -H "Content-Type: application/json" \
-              -d "{
-                \"title\": \"$title\",
-                \"slug\": \"$slug\",
-                \"parent_slug\": \"$parent_slug\",
-                \"type\": \"$type\",
-                \"body\": $body
-              }"
-          done
