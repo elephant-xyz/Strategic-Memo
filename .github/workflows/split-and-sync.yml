@@ -25,17 +25,23 @@ jobs:
             base_name=$(basename "$tex_path" .tex)
             output_file="output/${base_name}.md"
 
-            # Extract plain title from \chapter{} or \section{}
-            raw_title=$(grep -o '\\\(chapter\|section\){[^}]*}' "$tex_path" | head -n 1)
-            clean_title=$(echo "$raw_title" | sed -E 's/\\(chapter|section)//; s/[{}]//g')
+            echo "📦 Converting $tex_path → $output_file"
+
+            # Extract plain text from \chapter{} or \section{} (remove LaTeX syntax)
+            raw_title=$(grep -Eo '\\(chapter|section)\{[^}]+\}' "$tex_path" | head -n 1 | sed -E 's/\\(chapter|section)\{([^}]*)\}/\2/')
+
+            # Fallback title if none found
+            if [ -z "$raw_title" ]; then
+              raw_title="$base_name"
+            fi
 
             # Escape YAML-sensitive characters
-            escaped_title=$(printf '%s' "$clean_title" | sed 's/"/\\"/g; s/&/\\&/g')
+            escaped_title=$(printf '%s' "$raw_title" | sed 's/"/\\"/g; s/&/\\&/g')
 
-            # Convert to Markdown
-            pandoc "$tex_path" -o "$output_file" --wrap=preserve
+            # Convert to Markdown using pandoc
+            pandoc "$tex_path" -f latex -t markdown_strict --wrap=preserve -o "$output_file"
 
-            # Prepend YAML frontmatter
+            # Add YAML frontmatter
             tmp_file=$(mktemp)
             echo "---" > "$tmp_file"
             echo "title: \"$escaped_title\"" >> "$tmp_file"
@@ -45,5 +51,5 @@ jobs:
             cat "$output_file" >> "$tmp_file"
             mv "$tmp_file" "$output_file"
 
-            echo "✅ Converted $tex_path -> $output_file"
+            echo "✅ Finished: $output_file"
           done
