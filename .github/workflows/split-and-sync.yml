@@ -18,7 +18,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y pandoc
 
       - name: Set up output directory
-        run: mkdir -p output
+        run: rm -rf output && mkdir -p output
 
       - name: Find preferred TeX files (prioritize _v2)
         id: find-tex
@@ -61,11 +61,11 @@ jobs:
             mkdir -p output
 
             chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
-            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title"'/')
             slug=$(echo "$chapter_title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^\-\|\-$//g')
+            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title"'/')
 
             echo "---" > "output/${base_name}_intro.md"
-            echo "title: \"$chapter_title\"" >> "output/${base_name}_intro.md"
+            echo "title: \"$chapter_title\"" | sed 's/"/'\''/g' >> "output/${base_name}_intro.md"
             echo "slug: \"$slug\"" >> "output/${base_name}_intro.md"
             echo "type: \"chapter\"" >> "output/${base_name}_intro.md"
             echo "order: 0" >> "output/${base_name}_intro.md"
@@ -74,10 +74,12 @@ jobs:
             echo "$intro_lines" | pandoc -f latex -t markdown_strict >> "output/${base_name}_intro.md"
 
             awk -v base="$base_name" -v parent="$slug" '
-              BEGIN { RS = "\\\section\{"; ORS = ""; filecount=1 }
+              BEGIN { RS = "\\\\section\\{"; ORS = ""; filecount=1 }
               NR > 1 {
                 section_raw=substr($0, index($0,"}" )+1)
                 title=substr($0, 1, index($0,"}")-1)
+                gsub(/[\"”’]/, "'", title)
+                gsub(/[:]/, "-", title)
                 gsub(/[[:space:]]+$/, "", title)
                 slugified=tolower(title)
                 gsub(/[^a-z0-9]+/, "-", slugified)
