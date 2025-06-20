@@ -1,62 +1,47 @@
-name: 📄 Safe LaTeX to Markdown Conversion
+name: Convert LaTeX to Markdown
 
 on:
   push:
     paths:
       - '**.tex'
-      - '.github/workflows/split-and-sync.yml'
+      - '.github/workflows/convert-latex.yml'
 
 jobs:
   convert:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: 🧰 Install pandoc
-        run: sudo apt-get update && sudo apt-get install -y pandoc
-
-      - name: 🧪 Debug title extraction from .tex files
+      - name: Install pandoc
         run: |
-          echo "📂 Listing .tex files:"
+          sudo apt-get update && sudo apt-get install -y pandoc
+
+      - name: Debug title extraction from .tex files
+        run: |
+          echo "📄 Listing .tex files:"
           ls -l *.tex
+          echo "📦 Extracting LaTeX titles (\\chapter{} or \\section{}):"
+          grep -Hn '\\chapter{\|\\section{' *.tex || true
 
-          echo "🔍 Extracting LaTeX titles (\\chapter{} or \\section{}):"
-          grep -Eo '\\(chapter|section)\{[^}]+\}' *.tex || echo "⚠️ No matches found"
-
-      - name: 🔄 Split and Convert .tex Files
+      - name: Convert .tex to Markdown
         run: |
           mkdir -p output
-
-          for tex_path in *.tex; do
-            base_name=$(basename "$tex_path" .tex)
-            output_file="output/${base_name}.md"
-
-            echo "🔧 Converting $tex_path to $output_file"
-
-            # Extract title from first \chapter{} or \section{} line
-            raw_title=$(grep -Eo '\\(chapter|section)\{[^}]+\}' "$tex_path" | head -n 1 | sed -E 's/\\(chapter|section)\{//; s/}//')
-
-            if [ -z "$raw_title" ]; then
-              raw_title="$base_name"
-            fi
-
-            # Escape YAML-sensitive characters
-            safe_title=$(printf '%s' "$raw_title" | sed 's/["&:]/\\&/g')
-
-            # Convert LaTeX to Markdown
-            pandoc "$tex_path" -f latex -t markdown_strict --wrap=preserve -o "$output_file"
-
-            # Add frontmatter
-            tmp_file=$(mktemp)
-            echo "---" > "$tmp_file"
-            echo "title: \"$safe_title\"" >> "$tmp_file"
-            echo "source: \"$tex_path\"" >> "$tmp_file"
-            echo "---" >> "$tmp_file"
-            echo "" >> "$tmp_file"
-            cat "$output_file" >> "$tmp_file"
-            mv "$tmp_file" "$output_file"
-
-            echo "✅ Done: $output_file"
+          for file in *.tex; do
+            filename=$(basename "$file" .tex)
+            echo "Converting $file to output/${filename}.md"
+            pandoc "$file" -f latex -t markdown --wrap=preserve -o "output/${filename}.md" || true
           done
+
+      - name: Combine into Full Doc
+        run: |
+          echo "Combining all .md files into output/Full Doc.md"
+          cat output/*.md > output/"Full Doc.md"
+
+      - name: Post-run debug for markdown output
+        run: |
+          echo "📂 Markdown Output Preview:"
+          ls -lh output/
+          echo "---"
+          head -n 20 output/*.md || true
