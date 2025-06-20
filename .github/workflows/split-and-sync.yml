@@ -1,47 +1,56 @@
-name: ✏️ Split and Convert .tex files to Markdown
+name: 📝 Split and Convert .tex files to Markdown
 
 on:
-  workflow_dispatch:
   push:
     paths:
-      - '*.tex'
+      - '**.tex'
+      - '.github/workflows/split-and-sync.yml'
 
 jobs:
-  convert:
+  convert-and-sync:
     runs-on: ubuntu-latest
-
     steps:
-      - name: 📥 Checkout Repo
+      - name: 📥 Checkout repository
         uses: actions/checkout@v3
 
-      - name: 🔧 Set up Pandoc
-        run: sudo apt-get install -y pandoc
+      - name: 🧪 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-      - name: 📄 Split and Convert .tex files to Markdown
+      - name: 🛠️ Install Pandoc and pyyaml
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+          pip install pyyaml
+
+      - name: 📂 Split and Convert .tex files to Markdown
         run: |
           mkdir -p output
-
           for tex_path in *.tex; do
-            filename=$(basename "$tex_path" .tex)
-            output_path="output/${filename}.md"
+            filename=$(basename -- "$tex_path")
+            filename_noext="${filename%.*}"
+            output_file="output/${filename_noext}.md"
 
-            # Extract and sanitize LaTeX title
-            raw_title=$(grep -m 1 '\\chapter{' "$tex_path" | sed -E 's/.*\\chapter\{([^}]*)\}.*/\1/')
-            clean_title=$(echo "$raw_title" | sed 's/\\[a-zA-Z]*//g' | sed 's/"/'\''/g' | xargs)
-            [ -z "$clean_title" ] && clean_title=$(echo "$filename" | sed 's/_/ /g')
+            echo "Processing $tex_path → $output_file"
 
-            # Convert LaTeX to Markdown with Pandoc
-            pandoc "$tex_path" -f latex -t markdown_strict -o temp.md || continue
+            # Extract title from \\chapter{} or \\section{}, strip LaTeX formatting
+            title=$(grep -o '\\\\\(chapter\|section\){[^}]*}' "$tex_path" | head -n 1 | sed 's/\\\\\(chapter\|section\){//;s/}//')
+            title=$(echo "$title" | sed 's/\\\\/&/g' | sed 's/&/\\&/g')  # escape ampersands safely
 
-            # Prepend YAML frontmatter
-            {
-              echo "---"
-              echo "title: \"$clean_title\""
-              echo "source_file: \"$tex_path\""
-              echo "---"
-              echo ""
-              cat temp.md
-            } > "$output_path"
+            echo "---" > "$output_file"
+            echo "title: \"${title}\"" >> "$output_file"
+            echo "source: $tex_path" >> "$output_file"
+            echo "---" >> "$output_file"
 
-            echo "✅ Converted $tex_path → $output_path"
+            # Convert .tex to Markdown
+            pandoc "$tex_path" -f latex -t markdown_strict --wrap=none >> "$output_file" || echo "⚠️ Warning converting $tex_path"
           done
+
+      - name: 🚀 Commit and Push Output Files
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add output/*.md
+          git diff --cached --quiet || git commit -m "Auto-converted .tex files to Markdown with frontmatter"
+          git push
