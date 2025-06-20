@@ -41,6 +41,16 @@ jobs:
 
           printf "%s\n" "${filtered[@]}" > tex_list.txt
 
+      - name: Verify TeX file list
+        run: |
+          if [[ ! -s tex_list.txt ]]; then
+            echo "❌ No valid .tex files found. Check your repo structure or file naming."
+            exit 1
+          fi
+
+          echo "✅ Found the following TeX files:"
+          cat tex_list.txt
+
       - name: Convert TeX files to individual Markdown files with metadata
         run: |
           while IFS= read -r tex_file; do
@@ -60,7 +70,7 @@ jobs:
 
             # Split \section{} blocks and convert to Markdown
             awk -v base="$base_name" -v parent="$slug" '
-              BEGIN { RS = "\\\\section\\{"; ORS = ""; filecount=1 }
+              BEGIN { RS = "\\\\section\{"; ORS = ""; filecount=1 }
               NR > 1 {
                 section_raw=substr($0, index($0,"}" )+1)
                 title=substr($0, 1, index($0,"}")-1)
