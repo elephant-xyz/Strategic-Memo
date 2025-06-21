@@ -97,7 +97,7 @@ dichotomy, enabling property transactions that are simultaneously
 human-readable, machine-verifiable, and legally compliant across global
 jurisdictions.
 ---
-title: "Solution Architecture  Key Innovations"
+title: "Solution Architecture Key Innovations"
 slug: "solution-architecture-key-innovations"
 type: "chapter"
 order: "0"
@@ -528,7 +528,7 @@ provider migration, and scaling globally. Each phase builds irreversibly
 on the previous, creating momentum that compounds from early adopters to
 market dominance.
 ---
-title: "Appendix 1: Bitstrapping  A Bitcoin-Native Venture Architecture"
+title: "Appendix 1: Bitstrapping A Bitcoin-Native Venture Architecture"
 slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"
 type: "chapter"
 order: "0"

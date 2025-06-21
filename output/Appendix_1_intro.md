@@ -1,5 +1,5 @@
 ---
-title: "Appendix 1: Bitstrapping  A Bitcoin-Native Venture Architecture"
+title: "Appendix 1: Bitstrapping A Bitcoin-Native Venture Architecture"
 slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"
 type: "chapter"
 order: "0"

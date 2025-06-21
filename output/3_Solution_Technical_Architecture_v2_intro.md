@@ -1,5 +1,5 @@
 ---
-title: "Solution Architecture  Key Innovations"
+title: "Solution Architecture Key Innovations"
 slug: "solution-architecture-key-innovations"
 type: "chapter"
 order: "0"
