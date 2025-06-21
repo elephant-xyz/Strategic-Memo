@@ -27,46 +27,18 @@ jobs:
         run: |
           files=$(find . -name "*.tex" -print)
           filtered=()
-
           for path in $files; do
             filename=$(basename "$path")
             base="${filename%.tex}"
             base_no_v2="${base%_v2}"
             candidate="./${base_no_v2}_v2.tex"
-
             if [[ -f "$candidate" ]]; then
               filtered+=("$candidate")
             elif [[ "$filename" != *_v2.tex && "$filename" != Full.tex ]]; then
               filtered+=("$path")
             fi
           done
-
           printf "%s\n" "${filtered[@]}" > tex_list.txt
 
-      - name: Verify TeX file list
-        run: |
-          if [[ ! -s tex_list.txt ]]; then
-            echo "❌ No valid .tex files found. Check your repo structure or file naming."
-            exit 1
-          fi
-
-          echo "✅ Found the following TeX files:"
-          cat tex_list.txt
-
       - name: Convert TeX files to individual Markdown files with metadata
-        run: |
-          while IFS= read -r tex_file; do
-            [ ! -f "$tex_file" ] && echo "Skipping invalid file: $tex_file" && continue
-
-            echo "Processing $tex_file"
-            base_name=$(basename "$tex_file" .tex)
-
-            chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
-            chapter_title_clean=$(echo "$chapter_title" | tr -cd '[:alnum:] .:/-' | sed 's/[\"\\]/ /g')
-            slug=$(echo "$chapter_title_clean" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//' | sed 's/-$//')
-
-            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title_clean"'/')
-
-            {
-              echo "---"
-              echo "title: \"$chapter_title_clean\""
+        run:
