@@ -1,7 +1,4 @@
-— title: The Problem: Misaligned Incentives in Web3 Funding slug:
-the-problem-misaligned-incentives-in-web3-funding parent\_slug:
-appendix-1-bitstrapping-a-bitcoin-native-venture-architecture type:
-section order: 1 —
+---title: "The Problem: Misaligned Incentives in Web3 Funding"slug: "the-problem-misaligned-incentives-in-web3-funding"parent_slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"type: "section"order: 1—
 
 \## The Problem: Misaligned Incentives in Web3 Funding
 

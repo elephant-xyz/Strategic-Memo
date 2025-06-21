@@ -1,4 +1,10 @@
----\ntitle: Tokenomics\nslug: tokenomics\ntype: chapter\norder: 0\n---
+---
+title: "Tokenomics"
+slug: "tokenomics"
+type: "chapter"
+order: 0
+---
+
 \# Tokenomics
 
 The Elephant protocol introduces a work-based tokenomics model that

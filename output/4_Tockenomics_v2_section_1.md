@@ -1,5 +1,4 @@
-— title: Truth Mining slug: truth-mining parent\_slug: tokenomics type:
-section order: 1 —
+---title: "Truth Mining"slug: "truth-mining"parent_slug: "tokenomics"type: "section"order: 1—
 
 \## Truth Mining
 

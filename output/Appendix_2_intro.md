@@ -1,4 +1,10 @@
----\ntitle: Appendix: Elephant Framework Data Relationship Layer\nslug: appendix-elephant-framework-data-relationship-layer\ntype: chapter\norder: 0\n---
+---
+title: "Appendix: Elephant Framework Data Relationship Layer"
+slug: "appendix-elephant-framework-data-relationship-layer"
+type: "chapter"
+order: 0
+---
+
 \# Appendix: Elephant Framework Data Relationship Layer
 
 The Elephant protocol transcends simple property tokenization by

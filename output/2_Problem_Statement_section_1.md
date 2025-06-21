@@ -1,5 +1,4 @@
-— title: Foundational Inefficiency slug: foundational-inefficiency
-parent\_slug: problem-statement type: section order: 1 —
+---title: "Foundational Inefficiency"slug: "foundational-inefficiency"parent_slug: "problem-statement"type: "section"order: 1—
 
 \## Foundational Inefficiency
 

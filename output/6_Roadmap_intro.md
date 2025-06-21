@@ -1,4 +1,10 @@
----\ntitle: Permissionless Implementation\nslug: permissionless-implementation\ntype: chapter\norder: 0\n---
+---
+title: "Permissionless Implementation"
+slug: "permissionless-implementation"
+type: "chapter"
+order: 0
+---
+
 \# Permissionless Implementation
 
 The transformation of real estate from extractive monopoly to open

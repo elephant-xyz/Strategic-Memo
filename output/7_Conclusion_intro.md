@@ -1,4 +1,10 @@
----\ntitle: Conclusion\nslug: conclusion\ntype: chapter\norder: 0\n---
+---
+title: "Conclusion"
+slug: "conclusion"
+type: "chapter"
+order: 0
+---
+
 \# Conclusion
 
 Property rights have always been about one thing: proving who owns what.

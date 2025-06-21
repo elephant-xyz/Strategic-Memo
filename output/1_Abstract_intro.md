@@ -1,4 +1,10 @@
----\ntitle: Abstract\nslug: abstract\ntype: chapter\norder: 0\n---
+---
+title: "Abstract"
+slug: "abstract"
+type: "chapter"
+order: 0
+---
+
 \# Abstract
 
 American real estate transactions cost $234.8 billion annually—not to

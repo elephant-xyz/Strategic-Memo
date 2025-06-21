@@ -1,5 +1,11 @@
----\ntitle: Solution Architecture \& Key Innovations\nslug: solution-architecture-key-innovations\ntype: chapter\norder: 0\n---
-\# Solution Architecture & Key Innovations
+---
+title: "Solution Architecture  Key Innovations"
+slug: "solution-architecture-key-innovations"
+type: "chapter"
+order: 0
+---
+
+\# Solution Architecture Key Innovations
 
 The Elephant protocol deploys on Polygon’s Layer 2 infrastructure to
 achieve immediate scalability while maintaining sub-cent transaction

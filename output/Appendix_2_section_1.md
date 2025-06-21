@@ -1,7 +1,4 @@
-— title: Merkle Relationship Layer: Beyond Hash Trees slug:
-merkle-relationship-layer-beyond-hash-trees parent\_slug:
-appendix-elephant-framework-data-relationship-layer type: section order:
-1 —
+---title: "Merkle Relationship Layer: Beyond Hash Trees"slug: "merkle-relationship-layer-beyond-hash-trees"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 1—
 
 \## Merkle Relationship Layer: Beyond Hash Trees
 

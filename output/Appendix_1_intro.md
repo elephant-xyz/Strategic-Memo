@@ -1,5 +1,11 @@
----\ntitle: Appendix 1: Bitstrapping – A Bitcoin-Native Venture Architecture\nslug: appendix-1-bitstrapping-a-bitcoin-native-venture-architecture\ntype: chapter\norder: 0\n---
-\# Appendix 1: Bitstrapping – A Bitcoin-Native Venture Architecture
+---
+title: "Appendix 1: Bitstrapping  A Bitcoin-Native Venture Architecture"
+slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"
+type: "chapter"
+order: 0
+---
+
+\# Appendix 1: Bitstrapping A Bitcoin-Native Venture Architecture
 
 Bitstrapping introduces a revolutionary fundraising mechanism where
 startups lock Bitcoin collateral to mint protocol tokens, replacing

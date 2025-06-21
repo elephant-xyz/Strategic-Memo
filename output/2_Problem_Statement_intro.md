@@ -1,2 +1,8 @@
----\ntitle: Problem Statement\nslug: problem-statement\ntype: chapter\norder: 0\n---
+---
+title: "Problem Statement"
+slug: "problem-statement"
+type: "chapter"
+order: 0
+---
+
 \# Problem Statement

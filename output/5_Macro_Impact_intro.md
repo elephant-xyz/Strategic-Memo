@@ -1,4 +1,10 @@
----\ntitle: Macro Impact\nslug: macro-impact\ntype: chapter\norder: 0\n---
+---
+title: "Macro Impact"
+slug: "macro-impact"
+type: "chapter"
+order: 0
+---
+
 \# Macro Impact
 
 The transformation of real estate from an extractive industry consuming

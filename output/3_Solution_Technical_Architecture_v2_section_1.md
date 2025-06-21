@@ -1,6 +1,4 @@
-— title: Protocol Foundation: Layer 2 Infrastructure slug:
-protocol-foundation-layer-2-infrastructure parent\_slug:
-solution-architecture-key-innovations type: section order: 1 —
+---title: "Protocol Foundation: Layer 2 Infrastructure"slug: "protocol-foundation-layer-2-infrastructure"parent_slug: "solution-architecture-key-innovations"type: "section"order: 1—
 
 \## Protocol Foundation: Layer 2 Infrastructure
 
