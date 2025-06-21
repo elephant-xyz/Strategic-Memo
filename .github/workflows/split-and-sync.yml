@@ -60,7 +60,8 @@ jobs:
             base_name=$(basename "$tex_file" .tex)
             mkdir -p output
 
-            chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
+            raw_chapter=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
+            chapter_title=$(echo "$raw_chapter" | tr -d '\\' | sed 's/"/\\"/g')
             intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title"'/')
             slug=$(echo "$chapter_title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^\-\|\-$//g')
 
@@ -79,6 +80,7 @@ jobs:
                 section_raw=substr($0, index($0,"}" )+1)
                 title=substr($0, 1, index($0,"}")-1)
                 gsub(/[[:space:]]+$/, "", title)
+                gsub(/["\\]/, "", title)
                 slugified=tolower(title)
                 gsub(/[^a-z0-9]+/, "-", slugified)
                 gsub(/^-|-$/, "", slugified)
