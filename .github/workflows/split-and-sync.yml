@@ -80,7 +80,7 @@ jobs:
             } > "output/${base_name}_intro.md"
 
             awk -v base="$base_name" -v parent="$slug" '
-              BEGIN { RS = "\\\\section\\{"; ORS = ""; filecount = 1 }
+              BEGIN { RS = "\\\section\{"; ORS = ""; filecount = 1 }
               NR > 1 {
                 raw = $0
                 title = substr(raw, 1, index(raw,"}")-1)
@@ -124,28 +124,52 @@ jobs:
           echo "🔍 Validating frontmatter in output/*.md..."
           failed=false
           for file in output/*.md; do
-            if ! grep -qE '^---$' "$file"; then
+            echo "🔎 Checking $file"
+            if ! grep -Fxq "---" "$file"; then
               echo "❌ Missing frontmatter delimiters in $file"
               failed=true
-            elif ! grep -qE '^title: \".+\"' "$file"; then
-              echo "❌ Missing or invalid title in $file"
+              continue
+            fi
+
+            yaml_block=$(awk '/^---/{flag=!flag; next} flag' "$file")
+            if [[ -z "$yaml_block" ]]; then
+              echo "❌ No YAML frontmatter found in $file"
               failed=true
-            elif ! grep -qE '^slug: \".+\"' "$file"; then
-              echo "❌ Missing or invalid slug in $file"
+              continue
+            fi
+
+            echo "$yaml_block" > temp.yml
+            if ! yamllint -d "{extends: relaxed, rules: {line-length: disable}}" temp.yml; then
+              echo "❌ Invalid YAML syntax in $file"
               failed=true
-            elif ! grep -qE '^type: \".+\"' "$file"; then
-              echo "❌ Missing or invalid type in $file"
-              failed=true
-            elif ! grep -qE '^order: \"[0-9]+\"' "$file"; then
-              echo "❌ Missing or invalid order in $file"
+              continue
+            fi
+
+            title=$(echo "$yaml_block" | grep '^title:' | cut -d '"' -f2)
+            slug=$(echo "$yaml_block" | grep '^slug:' | cut -d '"' -f2)
+            type=$(echo "$yaml_block" | grep '^type:' | cut -d '"' -f2)
+            order=$(echo "$yaml_block" | grep '^order:' | cut -d '"' -f2)
+
+            if [[ -z "$title" || -z "$slug" || -z "$type" || -z "$order" ]]; then
+              echo "❌ Missing required field(s) in $file"
               failed=true
             fi
+
+            if [[ "$type" == "section" ]]; then
+              parent_slug=$(echo "$yaml_block" | grep '^parent_slug:' | cut -d '"' -f2)
+              if [[ -z "$parent_slug" ]]; then
+                echo "❌ Missing parent_slug for section in $file"
+                failed=true
+              fi
+            fi
           done
+          rm -f temp.yml
+
           if $failed; then
             echo "🚫 YAML validation failed. Aborting commit."
             exit 1
           else
-            echo "✅ YAML frontmatter looks good."
+            echo "✅ YAML frontmatter passed all checks."
           fi
 
       - name: Combine all Markdown files into Full_Doc.md
