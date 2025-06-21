@@ -1,4 +1,4 @@
-name: Convert LaTeX to Markdown and Split by Section
+name: Convert LaTeX to Markdown and Sync
 
 on:
   push:
@@ -11,60 +11,46 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Install Pandoc
         run: sudo apt-get update && sudo apt-get install -y pandoc
 
-      - name: Delete old Markdown output
+      - name: Clean previous Markdown output
         run: rm -rf output && mkdir -p output
 
-      - name: Find preferred TeX files (prioritize _v2)
+      - name: Select preferred TeX files (prefer *_v2)
         id: find-tex
         run: |
-          files=$(find . -name "*.tex" -print)
-          filtered=()
-
-          for path in $files; do
-            filename=$(basename "$path")
-            base="${filename%.tex}"
-            base_no_v2="${base%_v2}"
-            candidate="./${base_no_v2}_v2.tex"
-
-            if [[ -f "$candidate" ]]; then
-              filtered+=("$candidate")
-            elif [[ "$filename" != *_v2.tex ]]; then
-              filtered+=("$path")
-            fi
+          files=$(find . -name "*.tex")
+          declare -A base_map
+          for f in $files; do
+            base=$(basename "$f" .tex | sed 's/_v2$//')
+            [[ "${base_map[$base]}" =~ _v2\.tex$ ]] || base_map["$base"]="$f"
           done
+          printf "%s\n" "${base_map[@]}" > tex_list.txt
 
-          printf "%s\n" "${filtered[@]}" > tex_list.txt
-
-      - name: Verify TeX file list
+      - name: Validate TeX list
         run: |
           if [[ ! -s tex_list.txt ]]; then
-            echo "❌ No valid .tex files found. Check your repo structure or file naming."
+            echo "❌ No TeX files found"
             exit 1
           fi
+          echo "✅ TeX files:" && cat tex_list.txt
 
-          echo "✅ Found the following TeX files:"
-          cat tex_list.txt
-
-      - name: Convert TeX files to individual Markdown files with metadata
+      - name: Convert to Markdown
         run: |
           while IFS= read -r tex_file; do
-            [ ! -f "$tex_file" ] && echo "Skipping invalid file: $tex_file" && continue
-
             echo "Processing $tex_file"
-            base_name=$(basename "$tex_file" .tex)
+            base=$(basename "$tex_file" .tex)
 
             chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
             chapter_title_clean=$(echo "$chapter_title" | tr -cd '[:alnum:] .:\/-' | sed 's/["\\]/ /g')
             slug=$(echo "$chapter_title_clean" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$//g')
 
-            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title_clean"'/')
-
+            intro=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title_clean"'/')
+            
             {
               echo "---"
               echo "title: \"$chapter_title_clean\""
@@ -73,54 +59,51 @@ jobs:
               echo "order: 0"
               echo "---"
               echo ""
-              echo "$intro_lines" | pandoc -f latex -t markdown_strict
-            } > "output/${base_name}_intro.md"
+              echo "$intro" | pandoc -f latex -t markdown_strict
+            } > "output/${base}_intro.md"
 
-            awk -v base="$base_name" -v parent="$slug" '
-              BEGIN { RS = "\\\\section\\{"; ORS = ""; filecount = 1 }
+            awk -v base="$base" -v parent="$slug" '
+              BEGIN { RS="\\\\section\\{"; ORS=""; i=1 }
               NR > 1 {
-                section_raw = substr($0, index($0,"}" )+1)
-                title = substr($0, 1, index($0,"}")-1)
-                gsub(/[[:space:]]+$/, "", title)
-                gsub(/\\\\|\"/, "", title)
-                gsub(/[^[:alnum:] .:-]/, "", title)
+                title_raw = substr($0, 1, index($0,"}")-1)
+                gsub(/[^[:alnum:] .:-]/, "", title_raw)
+                title = title_raw
                 slugified = tolower(title)
                 gsub(/[^a-z0-9]+/, "-", slugified)
                 gsub(/^-|-$/, "", slugified)
-                outname = "output/" base "_section_" filecount ".md"
-                print "---" > outname
-                print "title: \"" title "\"" >> outname
-                print "slug: \"" slugified "\"" >> outname
-                print "parent_slug: \"" parent "\"" >> outname
-                print "type: \"section\"" >> outname
-                print "order: " filecount >> outname
-                print "---\n\n## " title "\n" section_raw > "temp_section.tex"
-                cmd = "pandoc -f latex -t markdown_strict temp_section.tex >> " outname
-                system(cmd)
-                system("rm temp_section.tex")
-                filecount++
+                file="output/" base "_section_" i ".md"
+
+                print "---" > file
+                print "title: \"" title "\"" >> file
+                print "slug: \"" slugified "\"" >> file
+                print "parent_slug: \"" parent "\"" >> file
+                print "type: \"section\"" >> file
+                print "order: " i >> file
+                print "---\n\n## " title "\n" > "temp.tex"
+                print substr($0, index($0,"}")+1) > "temp.tex"
+                system("pandoc -f latex -t markdown_strict temp.tex >> " file)
+                system("rm temp.tex")
+                i++
               }
             ' "$tex_file"
           done < tex_list.txt
 
-      - name: Combine all Markdown files into Full_Doc.md
+      - name: Combine all Markdown into Full_Doc.md
         run: |
-          echo "Combining all .md files into output/Full_Doc.md"
-          find output -name '*.md' ! -name 'Full_Doc.md' -exec cat {} + > output/tmp_combined.md
-          mv output/tmp_combined.md output/Full_Doc.md
+          echo "Combining into output/Full_Doc.md"
+          find output -name '*.md' ! -name 'Full_Doc.md' -exec cat {} + > output/Full_Doc.md
 
-      - name: Commit and push to repo
+      - name: Commit converted Markdown
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add output/*.md
-          git commit -m "Auto-converted LaTeX to Markdown" || echo "Nothing to commit"
+          git add output/
+          git diff --cached --quiet || git commit -m "Update converted Markdown"
           git push
 
-      - name: Post-run diagnostic logging
-        if: always()
+      - name: Debug output if failed
+        if: failure()
         run: |
-          echo "== Directory Contents =="
-          ls -R output || echo "output directory not found"
-          echo "== tex_list.txt =="
-          cat tex_list.txt || echo "tex_list.txt not found"
+          echo "Directory listing:"
+          ls -l output || echo "❌ No output directory"
+          cat tex_list.txt || echo "No tex_list.txt"
