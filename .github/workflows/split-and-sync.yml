@@ -60,7 +60,7 @@ jobs:
             base_name=$(basename "$tex_file" .tex)
 
             chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
-            chapter_title_clean=$(echo "$chapter_title" | tr -cd '[:alnum:] .:\/-' | sed 's/["\\]/ /g')
+            chapter_title_clean=$(echo "$chapter_title" | tr -cd '[:alnum:] .:/-' | sed 's/["\\]/ /g')
             slug=$(echo "$chapter_title_clean" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$/-/g')
 
             intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title_clean"'/')
@@ -70,7 +70,7 @@ jobs:
               echo "title: \"$chapter_title_clean\""
               echo "slug: \"$slug\""
               echo "type: \"chapter\""
-              echo "order: 0"
+              echo "order: \"0\""
               echo "---"
               echo ""
               echo "$intro_lines" | pandoc -f latex -t markdown_strict
@@ -92,8 +92,9 @@ jobs:
                 print "slug: \"" slugified "\"" >> outname
                 print "parent_slug: \"" parent "\"" >> outname
                 print "type: \"section\"" >> outname
-                print "order: " filecount >> outname
-                print "---\n\n## " title "\n" > "temp_section.tex"
+                print "order: \"" filecount "\"" >> outname
+                print "---\n" >> outname
+                print "\n## " title "\n" > "temp_section.tex"
                 print substr($0, index($0,"}")+1) >> "temp_section.tex"
                 if (system("test -s temp_section.tex") == 0) {
                   cmd = "pandoc -f latex -t markdown_strict temp_section.tex >> " outname
