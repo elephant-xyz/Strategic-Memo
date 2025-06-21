@@ -14,8 +14,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Pandoc
-        run: sudo apt-get update && sudo apt-get install -y pandoc
+      - name: Install Pandoc and yamllint
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc yamllint
 
       - name: Delete old Markdown output
         run: rm -rf output && mkdir -p output
@@ -77,7 +79,7 @@ jobs:
             } > "output/${base_name}_intro.md"
 
             awk -v base="$base_name" -v parent="$slug" '
-              BEGIN { RS = "\\\section\\{"; ORS = ""; filecount = 1 }
+              BEGIN { RS = "\\\\section\\{"; ORS = ""; filecount = 1 }
               NR > 1 {
                 title = substr($0, 1, index($0,"}")-1)
                 gsub(/[[:space:]]+$/, "", title)
@@ -112,6 +114,35 @@ jobs:
               }
             ' "$tex_file"
           done < tex_list.txt
+
+      - name: Validate YAML Frontmatter
+        run: |
+          echo "🔍 Validating frontmatter in output/*.md..."
+          failed=false
+          for file in output/*.md; do
+            if ! grep -qE '^---$' "$file"; then
+              echo "❌ Missing frontmatter delimiters in $file"
+              failed=true
+            elif ! grep -qE '^title: \".+\"' "$file"; then
+              echo "❌ Missing or invalid title in $file"
+              failed=true
+            elif ! grep -qE '^slug: \".+\"' "$file"; then
+              echo "❌ Missing or invalid slug in $file"
+              failed=true
+            elif ! grep -qE '^type: \".+\"' "$file"; then
+              echo "❌ Missing or invalid type in $file"
+              failed=true
+            elif ! grep -qE '^order: \"[0-9]+\"' "$file"; then
+              echo "❌ Missing or invalid order in $file"
+              failed=true
+            fi
+          done
+          if $failed; then
+            echo "🚫 YAML validation failed. Aborting commit."
+            exit 1
+          else
+            echo "✅ YAML frontmatter looks good."
+          fi
 
       - name: Combine all Markdown files into Full_Doc.md
         run: |
