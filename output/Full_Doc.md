@@ -1,5 +1,4 @@
----title: "Economic Architecture Overview"slug: "economic-architecture-overview"parent_slug: "tokenomics"type: "section"order: 1—
-
+---title: "Economic Architecture Overview"slug: "economic-architecture-overview"parent_slug: "tokenomics"type: "section"order: "1"---
 \## Economic Architecture Overview
 
 Three distinct participant roles drive the Elephant economy, each with
@@ -20,8 +19,7 @@ Service providers who deliver quality attract clients through prominent
 placement. Those who disappoint see their staked positions challenged by
 competitors. Every economic mechanism reinforces the core principle:
 value creation beats value extraction.
----title: "Merkle Relationship Layer: Beyond Hash Trees"slug: "merkle-relationship-layer-beyond-hash-trees"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 1—
-
+---title: "Merkle Relationship Layer: Beyond Hash Trees"slug: "merkle-relationship-layer-beyond-hash-trees"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: "1"---
 \## Merkle Relationship Layer: Beyond Hash Trees
 
 Merkle trees revolutionized blockchain by enabling efficient
@@ -74,7 +72,7 @@ transaction.
 title: "Appendix: Elephant Framework Data Relationship Layer"
 slug: "appendix-elephant-framework-data-relationship-layer"
 type: "chapter"
-order: 0
+order: "0"
 ---
 
 \# Appendix: Elephant Framework Data Relationship Layer
@@ -102,7 +100,7 @@ jurisdictions.
 title: "Solution Architecture  Key Innovations"
 slug: "solution-architecture-key-innovations"
 type: "chapter"
-order: 0
+order: "0"
 ---
 
 \# Solution Architecture Key Innovations
@@ -121,7 +119,7 @@ digital assets.
 title: "Abstract"
 slug: "abstract"
 type: "chapter"
-order: 0
+order: "0"
 ---
 
 \# Abstract
@@ -224,7 +222,7 @@ history.
 title: "Macro Impact"
 slug: "macro-impact"
 type: "chapter"
-order: 0
+order: "0"
 ---
 
 \# Macro Impact
@@ -238,8 +236,7 @@ household wealth, capital markets, and social mobility. This 89%
 reduction in transaction friction doesn’t merely save money; it
 reimagines property as a liquid, accessible, programmable asset class
 that serves humanity rather than gatekeepers.
----title: "Truth Mining"slug: "truth-mining"parent_slug: "tokenomics"type: "section"order: 1—
-
+---title: "Truth Mining"slug: "truth-mining"parent_slug: "tokenomics"type: "section"order: "1"---
 \## Truth Mining
 
 At the core of Elephant’s economic model lies Truth Mining, a consensus
@@ -272,8 +269,7 @@ $$\text{Reward Distribution} = \begin{cases}
 \text{Second Oracle: } 0.16 \text{ MAHOUT} \\
 \text{Third Oracle: } 0.03 \text{ MAHOUT}
 \end{cases}$$
----title: "Massive Economic Savings"slug: "massive-economic-savings"parent_slug: "macro-impact"type: "section"order: 1—
-
+---title: "Massive Economic Savings"slug: "massive-economic-savings"parent_slug: "macro-impact"type: "section"order: "1"---
 \## Massive Economic Savings
 
 The numbers tell a story of liberation from systematic extraction. Each
@@ -318,8 +314,7 @@ homeownership. This drops to $1,021 under Elephant, freeing $8,573
 yearly for savings, investment, or consumption. Compounded over decades,
 this difference transforms middle-class wealth trajectories from
 stagnation to accumulation.
----title: "Oracle Network Bootstrapping"slug: "oracle-network-bootstrapping"parent_slug: "permissionless-implementation"type: "section"order: 1—
-
+---title: "Oracle Network Bootstrapping"slug: "oracle-network-bootstrapping"parent_slug: "permissionless-implementation"type: "section"order: "1"---
 \## Oracle Network Bootstrapping
 
 The protocol’s heartbeat begins with verifier staking contracts that
@@ -371,7 +366,7 @@ centralized oversight.
 title: "Conclusion"
 slug: "conclusion"
 type: "chapter"
-order: 0
+order: "0"
 ---
 
 \# Conclusion
@@ -433,7 +428,7 @@ less time, 100% more accessible.
 title: "Tokenomics"
 slug: "tokenomics"
 type: "chapter"
-order: 0
+order: "0"
 ---
 
 \# Tokenomics
@@ -448,8 +443,7 @@ improve the network’s core asset: accurate, real-time property data. The
 economic model transforms real estate’s current extraction
 paradigm—where gatekeepers profit from friction—into a contribution
 paradigm where participants profit from reducing friction.
----title: "Foundational Inefficiency"slug: "foundational-inefficiency"parent_slug: "problem-statement"type: "section"order: 1—
-
+---title: "Foundational Inefficiency"slug: "foundational-inefficiency"parent_slug: "problem-statement"type: "section"order: "1"---
 \## Foundational Inefficiency
 
 Real estate stands as the largest yet most inefficient consumer
@@ -477,8 +471,7 @@ regulatory capture—controlling access to data that should flow freely in
 competitive markets. The $40,100 in labor costs per transaction reflects
 not the complexity of matching buyers with sellers, but the inefficiency
 of systems designed before digital communication existed.
----title: "The Problem: Misaligned Incentives in Web3 Funding"slug: "the-problem-misaligned-incentives-in-web3-funding"parent_slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"type: "section"order: 1—
-
+---title: "The Problem: Misaligned Incentives in Web3 Funding"slug: "the-problem-misaligned-incentives-in-web3-funding"parent_slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"type: "section"order: "1"---
 \## The Problem: Misaligned Incentives in Web3 Funding
 
 Traditional venture capital corrupts Web3’s decentralization ethos from
@@ -520,7 +513,7 @@ as a protocol design problem rather than a legal structuring exercise.
 title: "Permissionless Implementation"
 slug: "permissionless-implementation"
 type: "chapter"
-order: 0
+order: "0"
 ---
 
 \# Permissionless Implementation
@@ -538,7 +531,7 @@ market dominance.
 title: "Appendix 1: Bitstrapping  A Bitcoin-Native Venture Architecture"
 slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"
 type: "chapter"
-order: 0
+order: "0"
 ---
 
 \# Appendix 1: Bitstrapping A Bitcoin-Native Venture Architecture
@@ -566,7 +559,7 @@ institutional gatekeeping.
 title: "Tokenomics"
 slug: "tokenomics"
 type: "chapter"
-order: 0
+order: "0"
 ---
 
 \# Tokenomics
@@ -583,12 +576,11 @@ where value accumulation directly correlates with value creation.
 title: "Problem Statement"
 slug: "problem-statement"
 type: "chapter"
-order: 0
+order: "0"
 ---
 
 \# Problem Statement
----title: "Protocol Foundation: Layer 2 Infrastructure"slug: "protocol-foundation-layer-2-infrastructure"parent_slug: "solution-architecture-key-innovations"type: "section"order: 1—
-
+---title: "Protocol Foundation: Layer 2 Infrastructure"slug: "protocol-foundation-layer-2-infrastructure"parent_slug: "solution-architecture-key-innovations"type: "section"order: "1"---
 \## Protocol Foundation: Layer 2 Infrastructure
 
 Elephant’s architectural foundation rests on proven Layer 2 technology,

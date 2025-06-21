@@ -2,7 +2,7 @@
 title: "Abstract"
 slug: "abstract"
 type: "chapter"
-order: 0
+order: "0"
 ---
 
 \# Abstract

@@ -1,5 +1,4 @@
----title: "Economic Architecture Overview"slug: "economic-architecture-overview"parent_slug: "tokenomics"type: "section"order: 1—
-
+---title: "Economic Architecture Overview"slug: "economic-architecture-overview"parent_slug: "tokenomics"type: "section"order: "1"---
 \## Economic Architecture Overview
 
 Three distinct participant roles drive the Elephant economy, each with

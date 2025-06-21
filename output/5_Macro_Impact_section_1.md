@@ -1,5 +1,4 @@
----title: "Massive Economic Savings"slug: "massive-economic-savings"parent_slug: "macro-impact"type: "section"order: 1—
-
+---title: "Massive Economic Savings"slug: "massive-economic-savings"parent_slug: "macro-impact"type: "section"order: "1"---
 \## Massive Economic Savings
 
 The numbers tell a story of liberation from systematic extraction. Each

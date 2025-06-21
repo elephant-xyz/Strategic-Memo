@@ -2,7 +2,7 @@
 title: "Tokenomics"
 slug: "tokenomics"
 type: "chapter"
-order: 0
+order: "0"
 ---
 
 \# Tokenomics

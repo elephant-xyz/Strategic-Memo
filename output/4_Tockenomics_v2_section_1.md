@@ -1,5 +1,4 @@
----title: "Truth Mining"slug: "truth-mining"parent_slug: "tokenomics"type: "section"order: 1—
-
+---title: "Truth Mining"slug: "truth-mining"parent_slug: "tokenomics"type: "section"order: "1"---
 \## Truth Mining
 
 At the core of Elephant’s economic model lies Truth Mining, a consensus

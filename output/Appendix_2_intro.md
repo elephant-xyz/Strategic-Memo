@@ -2,7 +2,7 @@
 title: "Appendix: Elephant Framework Data Relationship Layer"
 slug: "appendix-elephant-framework-data-relationship-layer"
 type: "chapter"
-order: 0
+order: "0"
 ---
 
 \# Appendix: Elephant Framework Data Relationship Layer

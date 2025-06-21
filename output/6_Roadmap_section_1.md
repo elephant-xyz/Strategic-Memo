@@ -1,5 +1,4 @@
----title: "Oracle Network Bootstrapping"slug: "oracle-network-bootstrapping"parent_slug: "permissionless-implementation"type: "section"order: 1—
-
+---title: "Oracle Network Bootstrapping"slug: "oracle-network-bootstrapping"parent_slug: "permissionless-implementation"type: "section"order: "1"---
 \## Oracle Network Bootstrapping
 
 The protocol’s heartbeat begins with verifier staking contracts that

@@ -2,7 +2,7 @@
 title: "Macro Impact"
 slug: "macro-impact"
 type: "chapter"
-order: 0
+order: "0"
 ---
 
 \# Macro Impact

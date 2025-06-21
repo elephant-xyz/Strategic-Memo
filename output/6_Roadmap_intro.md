@@ -2,7 +2,7 @@
 title: "Permissionless Implementation"
 slug: "permissionless-implementation"
 type: "chapter"
-order: 0
+order: "0"
 ---
 
 \# Permissionless Implementation

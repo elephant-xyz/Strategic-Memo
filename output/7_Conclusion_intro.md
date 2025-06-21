@@ -2,7 +2,7 @@
 title: "Conclusion"
 slug: "conclusion"
 type: "chapter"
-order: 0
+order: "0"
 ---
 
 \# Conclusion

@@ -2,7 +2,7 @@
 title: "Solution Architecture  Key Innovations"
 slug: "solution-architecture-key-innovations"
 type: "chapter"
-order: 0
+order: "0"
 ---
 
 \# Solution Architecture Key Innovations
