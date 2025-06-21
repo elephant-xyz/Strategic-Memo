@@ -41,4 +41,107 @@ jobs:
           printf "%s\n" "${filtered[@]}" > tex_list.txt
 
       - name: Convert TeX files to individual Markdown files with metadata
-        run:
+        run: |
+          while IFS= read -r tex_file; do
+            [ ! -f "$tex_file" ] && echo "Skipping invalid file: $tex_file" && continue
+            echo "Processing $tex_file"
+            base_name=$(basename "$tex_file" .tex)
+
+            chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
+            chapter_title_clean=$(echo "$chapter_title" | tr -cd '[:alnum:] .:/-' | sed 's/["\\]/ /g')
+            slug=$(echo "$chapter_title_clean" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//;s/-$//')
+
+            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title_clean"'/')
+
+            {
+              echo "---"
+              echo "title: \"$chapter_title_clean\""
+              echo "slug: \"$slug\""
+              echo "type: \"chapter\""
+              echo "order: \"0\""
+              echo "---"
+              echo ""
+              echo "$intro_lines" | pandoc -f latex -t markdown_strict
+            } > "output/${base_name}_intro.md"
+
+            awk -v base="$base_name" -v parent="$slug" '
+              BEGIN { RS = "\\\\section\\{"; ORS = ""; filecount = 1 }
+              NR > 1 {
+                title = substr($0, 1, index($0,"}")-1)
+                gsub(/[[:space:]]+$/, "", title)
+                gsub(/["\\]/, "", title)
+                gsub(/[^[:alnum:] .:-]/, "", title)
+                slugified = tolower(title)
+                gsub(/[^a-z0-9]+/, "-", slugified)
+                gsub(/^-|-$/, "", slugified)
+
+                outname = "output/" base "_section_" filecount ".md"
+                order = (filecount > 0) ? filecount : 1
+
+                print "---" > outname
+                print "title: \"" title "\"" >> outname
+                print "slug: \"" slugified "\"" >> outname
+                print "parent_slug: \"" parent "\"" >> outname
+                print "type: \"section\"" >> outname
+                print "order: \"" order "\"" >> outname
+                print "---\n" >> outname
+
+                print "\n## " title "\n" > "temp_section.tex"
+                print substr($0, index($0,"}")+1) >> "temp_section.tex"
+                if (system("test -s temp_section.tex") == 0) {
+                  cmd = "pandoc -f latex -t markdown_strict temp_section.tex >> " outname
+                  system(cmd)
+                } else {
+                  print "⚠️ Skipping empty section for: " title
+                  system("rm -f " outname)
+                }
+                system("rm -f temp_section.tex")
+                filecount++
+              }
+            ' "$tex_file"
+          done < tex_list.txt
+
+      - name: Validate YAML Frontmatter
+        run: |
+          echo "🔍 Validating frontmatter in output/*.md..."
+          failed=false
+          for file in output/*.md; do
+            if ! grep -qE '^---$' "$file"; then
+              echo "❌ Missing frontmatter delimiters in $file"
+              failed=true
+              continue
+            fi
+            block=$(awk '/^---$/{i++} i==2{exit} i==1' "$file")
+            echo "$block" | grep -qE '^title: ".*"$' || { echo "❌ Invalid title in $file"; failed=true; }
+            echo "$block" | grep -qE '^slug: ".*"$' || { echo "❌ Invalid slug in $file"; failed=true; }
+            echo "$block" | grep -qE '^type: ".*"$' || { echo "❌ Invalid type in $file"; failed=true; }
+            echo "$block" | grep -qE '^order: "[0-9]+"$' || { echo "❌ Invalid order in $file"; failed=true; }
+          done
+          if $failed; then
+            echo "🚫 YAML validation failed. Aborting commit."
+            exit 1
+          else
+            echo "✅ YAML frontmatter looks good."
+          fi
+
+      - name: Combine all Markdown files into Full_Doc.md
+        run: |
+          echo "Combining all .md files into output/Full_Doc.md"
+          find output -name '*.md' ! -name 'Full_Doc.md' -exec cat {} + > output/tmp_combined.md
+          mv output/tmp_combined.md output/Full_Doc.md
+
+      - name: Commit and push to repo
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add output/*.md
+          git commit -m "Auto-converted LaTeX to Markdown" || echo "Nothing to commit"
+          git push
+
+      - name: Post-run diagnostic logging
+        if: always()
+        run: |
+          echo "== Directory Contents =="
+          ls -R output || echo "output directory not found"
+          echo "== tex_list.txt =="
+          cat tex_list.txt || echo "tex_list.txt not found"
