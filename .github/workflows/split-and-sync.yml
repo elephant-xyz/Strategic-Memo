@@ -41,33 +41,29 @@ jobs:
 
           printf "%s\n" "${filtered[@]}" > tex_list.txt
 
-      - name: Verify TeX file list
+      - name: Fail if no TeX files found
         run: |
           if [[ ! -s tex_list.txt ]]; then
-            echo "❌ No valid .tex files found. Check your repo structure or file naming."
+            echo "❌ No valid .tex files found"
             exit 1
           fi
 
-          echo "✅ Found the following TeX files:"
-          cat tex_list.txt
-
-      - name: Convert TeX files to individual Markdown files with metadata
+      - name: Convert TeX to Markdown with clean metadata
         run: |
           while IFS= read -r tex_file; do
-            [ ! -f "$tex_file" ] && echo "Skipping invalid file: $tex_file" && continue
-
+            [ ! -f "$tex_file" ] && echo "Skipping: $tex_file" && continue
             echo "Processing $tex_file"
             base_name=$(basename "$tex_file" .tex)
 
             chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
-            chapter_title_clean=$(echo "$chapter_title" | tr -cd '[:alnum:] .:/-' | sed 's/["\\]/ /g')
-            slug=$(echo "$chapter_title_clean" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$/-/g')
+            chapter_title_clean=$(echo "$chapter_title" | tr -cd '[:alnum:] .:/_-' | sed 's/["\\]/ /g' | xargs)
+            slug=$(echo "$chapter_title_clean" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//;s/-$//')
 
             intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title_clean"'/')
 
             {
               echo "---"
-              echo "title: \"$chapter_title_clean\""
+              echo "title: \"${chapter_title_clean//\"/\\\"}\""
               echo "slug: \"$slug\""
               echo "type: \"chapter\""
               echo "order: \"0\""
@@ -77,45 +73,46 @@ jobs:
             } > "output/${base_name}_intro.md"
 
             awk -v base="$base_name" -v parent="$slug" '
-              BEGIN { RS = "\\\\section\\{"; ORS = ""; filecount = 1 }
+              BEGIN { RS = "\\\\section\\{"; ORS = ""; count = 1 }
               NR > 1 {
                 title = substr($0, 1, index($0,"}")-1)
                 gsub(/[[:space:]]+$/, "", title)
-                gsub(/\\\\|\"/, "", title)
+                gsub(/\\+|"/, "", title)
                 gsub(/[^[:alnum:] .:-]/, "", title)
                 slugified = tolower(title)
                 gsub(/[^a-z0-9]+/, "-", slugified)
                 gsub(/^-|-$/, "", slugified)
-                outname = "output/" base "_section_" filecount ".md"
-                print "---" > outname
-                print "title: \"" title "\"" >> outname
-                print "slug: \"" slugified "\"" >> outname
-                print "parent_slug: \"" parent "\"" >> outname
-                print "type: \"section\"" >> outname
-                print "order: \"" filecount "\"" >> outname
-                print "---\n" >> outname
+
+                out="output/" base "_section_" count ".md"
+                print "---" > out
+                print "title: \"" title "\"" >> out
+                print "slug: \"" slugified "\"" >> out
+                print "parent_slug: \"" parent "\"" >> out
+                print "type: \"section\"" >> out
+                print "order: \"" count "\"" >> out
+                print "---\n" >> out
+
                 print "\n## " title "\n" > "temp_section.tex"
                 print substr($0, index($0,"}")+1) >> "temp_section.tex"
+
                 if (system("test -s temp_section.tex") == 0) {
-                  cmd = "pandoc -f latex -t markdown_strict temp_section.tex >> " outname
-                  system(cmd)
+                  system("pandoc -f latex -t markdown_strict temp_section.tex >> " out)
                 } else {
-                  print "⚠️ Skipping empty section for: " title
-                  system("rm -f " outname)
+                  system("rm -f " out)
                 }
                 system("rm -f temp_section.tex")
-                filecount++
+                count++
               }
             ' "$tex_file"
           done < tex_list.txt
 
       - name: Combine all Markdown files into Full_Doc.md
         run: |
-          echo "Combining all .md files into output/Full_Doc.md"
+          echo "Combining .md files into output/Full_Doc.md"
           find output -name '*.md' ! -name 'Full_Doc.md' -exec cat {} + > output/tmp_combined.md
           mv output/tmp_combined.md output/Full_Doc.md
 
-      - name: Commit and push to repo
+      - name: Commit and push converted Markdown
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
@@ -123,10 +120,10 @@ jobs:
           git commit -m "Auto-converted LaTeX to Markdown" || echo "Nothing to commit"
           git push
 
-      - name: Post-run diagnostic logging
+      - name: Diagnostic Logging
         if: always()
         run: |
-          echo "== Directory Contents =="
-          ls -R output || echo "output directory not found"
-          echo "== tex_list.txt =="
-          cat tex_list.txt || echo "tex_list.txt not found"
+          echo "== Output Directory Contents =="
+          ls -lh output || echo "No output directory"
+          echo "== Markdown Preview (head) =="
+          head -n 20 output/*.md || echo "No markdown files found"
