@@ -1,4 +1,4 @@
----title: "Oracle Commitment and Governance"slug: "oracle-commitment-and-governance"parent_slug: "tokenomics"type: "section"order: 4---title: "Token Supply Dynamics and Long-Term Equilibrium"slug: "token-supply-dynamics-and-long-term-equilibrium"parent_slug: "tokenomics"type: "section"order: 7---title: "Decentralized Verifiability: Trust Through Mathematics"slug: "decentralized-verifiability-trust-through-mathematics"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 8---title: "The Systemic Cost of Bureaucratic Design"slug: "the-systemic-cost-of-bureaucratic-design"parent_slug: "problem-statement"type: "section"order: 2---title: "Economic Architecture Overview"slug: "economic-architecture-overview"parent_slug: "tokenomics"type: "section"order: 1—
+---title: "Economic Architecture Overview"slug: "economic-architecture-overview"parent_slug: "tokenomics"type: "section"order: 1—
 
 \## Economic Architecture Overview
 
@@ -20,7 +20,7 @@ Service providers who deliver quality attract clients through prominent
 placement. Those who disappoint see their staked positions challenged by
 competitors. Every economic mechanism reinforces the core principle:
 value creation beats value extraction.
----title: "Global Expansion Toolkit"slug: "global-expansion-toolkit"parent_slug: "permissionless-implementation"type: "section"order: 4---title: "Merkle Relationship Layer: Beyond Hash Trees"slug: "merkle-relationship-layer-beyond-hash-trees"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 1—
+---title: "Merkle Relationship Layer: Beyond Hash Trees"slug: "merkle-relationship-layer-beyond-hash-trees"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 1—
 
 \## Merkle Relationship Layer: Beyond Hash Trees
 
@@ -70,7 +70,7 @@ absence of certain relationships (liens, disputes) through sparse Merkle
 tree techniques. This selective disclosure enables privacy-preserving
 verification—parties see only relationships relevant to their
 transaction.
----title: "dApp Deployment and Provider Switching"slug: "dapp-deployment-and-provider-switching"parent_slug: "permissionless-implementation"type: "section"order: 3---
+---
 title: "Appendix: Elephant Framework Data Relationship Layer"
 slug: "appendix-elephant-framework-data-relationship-layer"
 type: "chapter"
@@ -98,7 +98,7 @@ verification. Elephant’s relationship layer eliminates this false
 dichotomy, enabling property transactions that are simultaneously
 human-readable, machine-verifiable, and legally compliant across global
 jurisdictions.
----title: "Oracle Validation  Staking Framework"slug: "oracle-validation-staking-framework"parent_slug: "solution-architecture-key-innovations"type: "section"order: 4---
+---
 title: "Solution Architecture  Key Innovations"
 slug: "solution-architecture-key-innovations"
 type: "chapter"
@@ -220,7 +220,7 @@ ownership that serves humanity rather than intermediaries. The
 revolution is encoded in smart contracts and verified by mathematics,
 waiting only for adoption to transform the largest asset class in human
 history.
----title: "Schema Governance: The Grammar of Property Rights"slug: "schema-governance-the-grammar-of-property-rights"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 2---
+---
 title: "Macro Impact"
 slug: "macro-impact"
 type: "chapter"
@@ -238,7 +238,7 @@ household wealth, capital markets, and social mobility. This 89%
 reduction in transaction friction doesn’t merely save money; it
 reimagines property as a liquid, accessible, programmable asset class
 that serves humanity rather than gatekeepers.
----title: "Integration with Protocol Architecture"slug: "integration-with-protocol-architecture"parent_slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"type: "section"order: 3---title: "Live Data Integrity"slug: "live-data-integrity"parent_slug: "tokenomics"type: "section"order: 2---title: "Query  Discovery Interfaces"slug: "query-discovery-interfaces"parent_slug: "solution-architecture-key-innovations"type: "section"order: 6---title: "Incremental Oracle Consensus: Truth Through Iteration"slug: "incremental-oracle-consensus-truth-through-iteration"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 4---title: "Lexicon Data Model"slug: "lexicon-data-model"parent_slug: "solution-architecture-key-innovations"type: "section"order: 5---title: "Monetization Beyond Tokens: The SEO Flywheel"slug: "monetization-beyond-tokens-the-seo-flywheel"parent_slug: "tokenomics"type: "section"order: 6---title: "New Market Layers and Liquidity"slug: "new-market-layers-and-liquidity"parent_slug: "macro-impact"type: "section"order: 2---title: "Generic Relationship Objects: Universal Property Semantics"slug: "generic-relationship-objects-universal-property-semantics"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 3---title: "Truth Mining"slug: "truth-mining"parent_slug: "tokenomics"type: "section"order: 1—
+---title: "Truth Mining"slug: "truth-mining"parent_slug: "tokenomics"type: "section"order: 1—
 
 \## Truth Mining
 
@@ -318,7 +318,7 @@ homeownership. This drops to $1,021 under Elephant, freeing $8,573
 yearly for savings, investment, or consumption. Compounded over decades,
 this difference transforms middle-class wealth trajectories from
 stagnation to accumulation.
----title: "Data Fragmentation and Standardization Challenges"slug: "data-fragmentation-and-standardization-challenges"parent_slug: "problem-statement"type: "section"order: 3---title: "Monetization Engine"slug: "monetization-engine"parent_slug: "tokenomics"type: "section"order: 5---title: "The Industry Memory Problem"slug: "the-industry-memory-problem"parent_slug: "problem-statement"type: "section"order: 4---title: "Industry Memory  Strategic Leverage"slug: "industry-memory-strategic-leverage"parent_slug: "solution-architecture-key-innovations"type: "section"order: 8---title: "Oracle Network Bootstrapping"slug: "oracle-network-bootstrapping"parent_slug: "permissionless-implementation"type: "section"order: 1—
+---title: "Oracle Network Bootstrapping"slug: "oracle-network-bootstrapping"parent_slug: "permissionless-implementation"type: "section"order: 1—
 
 \## Oracle Network Bootstrapping
 
@@ -367,7 +367,7 @@ truth. Slashing isn’t punitive but protective—bad actors lose stakes
 while good actors gain increased reputation and earnings. The system
 self-cleans through economic incentives, maintaining quality without
 centralized oversight.
----title: "Gatekeepers and Market Structure"slug: "gatekeepers-and-market-structure"parent_slug: "problem-statement"type: "section"order: 5---
+---
 title: "Conclusion"
 slug: "conclusion"
 type: "chapter"
@@ -429,7 +429,7 @@ transaction by transaction until the old system becomes a
 memory—expensive, slow, and ultimately replaceable. The future of
 property isn’t about grand visions but simple math: 89% less cost, 90%
 less time, 100% more accessible.
----title: "Smart Contract Governance"slug: "smart-contract-governance"parent_slug: "solution-architecture-key-innovations"type: "section"order: 3---
+---
 title: "Tokenomics"
 slug: "tokenomics"
 type: "chapter"
@@ -448,7 +448,7 @@ improve the network’s core asset: accurate, real-time property data. The
 economic model transforms real estate’s current extraction
 paradigm—where gatekeepers profit from friction—into a contribution
 paradigm where participants profit from reducing friction.
----title: "Social Inclusion and Democratization"slug: "social-inclusion-and-democratization"parent_slug: "macro-impact"type: "section"order: 3---title: "The Concept: Collateralized Protocol Bootstrapping"slug: "the-concept-collateralized-protocol-bootstrapping"parent_slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"type: "section"order: 2---title: "Implementation Framework"slug: "implementation-framework"parent_slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"type: "section"order: 5---title: "Governance Economics: Power Through Contribution"slug: "governance-economics-power-through-contribution"parent_slug: "tokenomics"type: "section"order: 5---title: "Schemas as Protocol Primitives: Immutable Legal Logic"slug: "schemas-as-protocol-primitives-immutable-legal-logic"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 6---title: "Case Study: Elephant Protocol Implementation"slug: "case-study-elephant-protocol-implementation"parent_slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"type: "section"order: 6---title: "On-Chain Property Records"slug: "on-chain-property-records"parent_slug: "solution-architecture-key-innovations"type: "section"order: 2---title: "Proof of Truth Mining"slug: "proof-of-truth-mining"parent_slug: "tokenomics"type: "section"order: 3---title: "Service Provider Economics: Competing on Merit"slug: "service-provider-economics-competing-on-merit"parent_slug: "tokenomics"type: "section"order: 3---title: "Globalized Data Model: Jurisdiction-Agnostic Architecture"slug: "globalized-data-model-jurisdiction-agnostic-architecture"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 7---title: "Foundational Inefficiency"slug: "foundational-inefficiency"parent_slug: "problem-statement"type: "section"order: 1—
+---title: "Foundational Inefficiency"slug: "foundational-inefficiency"parent_slug: "problem-statement"type: "section"order: 1—
 
 \## Foundational Inefficiency
 
@@ -477,7 +477,7 @@ regulatory capture—controlling access to data that should flow freely in
 competitive markets. The $40,100 in labor costs per transaction reflects
 not the complexity of matching buyers with sellers, but the inefficiency
 of systems designed before digital communication existed.
----title: "Stakeholder Impact Analysis"slug: "stakeholder-impact-analysis"parent_slug: "macro-impact"type: "section"order: 6---title: "The Problem: Misaligned Incentives in Web3 Funding"slug: "the-problem-misaligned-incentives-in-web3-funding"parent_slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"type: "section"order: 1—
+---title: "The Problem: Misaligned Incentives in Web3 Funding"slug: "the-problem-misaligned-incentives-in-web3-funding"parent_slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"type: "section"order: 1—
 
 \## The Problem: Misaligned Incentives in Web3 Funding
 
@@ -516,7 +516,7 @@ corrupt protocol design, users suffer from misaligned incentives, and
 regulators react to obvious manipulation. Breaking this cycle requires
 rethinking fundraising from first principles—treating capital formation
 as a protocol design problem rather than a legal structuring exercise.
----title: "Economic Alignment"slug: "economic-alignment"parent_slug: "tokenomics"type: "section"order: 8---title: "Building Systemic Trust"slug: "building-systemic-trust"parent_slug: "macro-impact"type: "section"order: 4---title: "Future Evolution and Ecosystem Impact"slug: "future-evolution-and-ecosystem-impact"parent_slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"type: "section"order: 7---title: "Field-Level Semantics: Self-Describing Data"slug: "field-level-semantics-self-describing-data"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 5---
+---
 title: "Permissionless Implementation"
 slug: "permissionless-implementation"
 type: "chapter"
@@ -534,7 +534,7 @@ oracle network, dominating search through verified content, facilitating
 provider migration, and scaling globally. Each phase builds irreversibly
 on the previous, creating momentum that compounds from early adopters to
 market dominance.
----title: "Privacy Architecture  Data Sensitivity Phasing"slug: "privacy-architecture-data-sensitivity-phasing"parent_slug: "solution-architecture-key-innovations"type: "section"order: 7---
+---
 title: "Appendix 1: Bitstrapping  A Bitcoin-Native Venture Architecture"
 slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"
 type: "chapter"
@@ -562,7 +562,7 @@ value from actual utility rather than speculation. Elephant and MAHOUT
 serve as the first implementation, demonstrating how protocols can
 bootstrap ecosystems through cryptographic trust rather than
 institutional gatekeeping.
----title: "Economic Alignment and Incentive Structure"slug: "economic-alignment-and-incentive-structure"parent_slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"type: "section"order: 4---title: "Transaction Fee Distribution"slug: "transaction-fee-distribution"parent_slug: "tokenomics"type: "section"order: 6---
+---
 title: "Tokenomics"
 slug: "tokenomics"
 type: "chapter"
@@ -579,7 +579,7 @@ rewards those who contribute verified truth to the network. Every token
 is earned through meaningful work—there are no pre-sales, no insider
 allocations, and no passive farming mechanisms. This creates an economy
 where value accumulation directly correlates with value creation.
----title: "Content Infrastructure  SEO Optimization"slug: "content-infrastructure-seo-optimization"parent_slug: "permissionless-implementation"type: "section"order: 2---
+---
 title: "Problem Statement"
 slug: "problem-statement"
 type: "chapter"
@@ -587,7 +587,7 @@ order: 0
 ---
 
 \# Problem Statement
----title: "Transaction Participant Economics: Sustainable Fee Structure"slug: "transaction-participant-economics-sustainable-fee-structure"parent_slug: "tokenomics"type: "section"order: 4---title: "Verified Reputation Systems"slug: "verified-reputation-systems"parent_slug: "macro-impact"type: "section"order: 5---title: "Supply Growth Dynamics"slug: "supply-growth-dynamics"parent_slug: "tokenomics"type: "section"order: 7---title: "Oracle Economics: Mining Truth from Reality"slug: "oracle-economics-mining-truth-from-reality"parent_slug: "tokenomics"type: "section"order: 2---title: "Protocol Foundation: Layer 2 Infrastructure"slug: "protocol-foundation-layer-2-infrastructure"parent_slug: "solution-architecture-key-innovations"type: "section"order: 1—
+---title: "Protocol Foundation: Layer 2 Infrastructure"slug: "protocol-foundation-layer-2-infrastructure"parent_slug: "solution-architecture-key-innovations"type: "section"order: 1—
 
 \## Protocol Foundation: Layer 2 Infrastructure
 
