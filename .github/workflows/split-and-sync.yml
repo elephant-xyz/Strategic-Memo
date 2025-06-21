@@ -17,8 +17,8 @@ jobs:
       - name: Install Pandoc
         run: sudo apt-get update && sudo apt-get install -y pandoc
 
-      - name: Set up output directory
-        run: mkdir -p output
+      - name: Delete old Markdown output
+        run: rm -rf output && mkdir -p output
 
       - name: Find preferred TeX files (prioritize _v2)
         id: find-tex
@@ -58,33 +58,36 @@ jobs:
 
             echo "Processing $tex_file"
             base_name=$(basename "$tex_file" .tex)
-            mkdir -p output
 
-            raw_chapter=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
-            chapter_title=$(echo "$raw_chapter" | tr -d '\\' | sed 's/"/\\"/g')
-            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title"'/')
-            slug=$(echo "$chapter_title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^\-\|\-$//g')
+            chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
+            chapter_title_clean=$(echo "$chapter_title" | tr -cd '[:alnum:] .:\/-' | sed 's/["\\]/ /g')
+            slug=$(echo "$chapter_title_clean" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$//g')
 
-            echo "---" > "output/${base_name}_intro.md"
-            echo "title: \"$chapter_title\"" >> "output/${base_name}_intro.md"
-            echo "slug: \"$slug\"" >> "output/${base_name}_intro.md"
-            echo "type: \"chapter\"" >> "output/${base_name}_intro.md"
-            echo "order: 0" >> "output/${base_name}_intro.md"
-            echo "---" >> "output/${base_name}_intro.md"
-            echo "" >> "output/${base_name}_intro.md"
-            echo "$intro_lines" | pandoc -f latex -t markdown_strict >> "output/${base_name}_intro.md"
+            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title_clean"'/')
+
+            {
+              echo "---"
+              echo "title: \"$chapter_title_clean\""
+              echo "slug: \"$slug\""
+              echo "type: \"chapter\""
+              echo "order: 0"
+              echo "---"
+              echo ""
+              echo "$intro_lines" | pandoc -f latex -t markdown_strict
+            } > "output/${base_name}_intro.md"
 
             awk -v base="$base_name" -v parent="$slug" '
-              BEGIN { RS = "\\\\section\\{"; ORS = ""; filecount=1 }
+              BEGIN { RS = "\\\\section\\{"; ORS = ""; filecount = 1 }
               NR > 1 {
-                section_raw=substr($0, index($0,"}" )+1)
-                title=substr($0, 1, index($0,"}")-1)
+                section_raw = substr($0, index($0,"}" )+1)
+                title = substr($0, 1, index($0,"}")-1)
                 gsub(/[[:space:]]+$/, "", title)
-                gsub(/["\\]/, "", title)
-                slugified=tolower(title)
+                gsub(/\\\\|\"/, "", title)
+                gsub(/[^[:alnum:] .:-]/, "", title)
+                slugified = tolower(title)
                 gsub(/[^a-z0-9]+/, "-", slugified)
                 gsub(/^-|-$/, "", slugified)
-                outname="output/" base "_section_" filecount ".md"
+                outname = "output/" base "_section_" filecount ".md"
                 print "---" > outname
                 print "title: \"" title "\"" >> outname
                 print "slug: \"" slugified "\"" >> outname
@@ -106,11 +109,13 @@ jobs:
           find output -name '*.md' ! -name 'Full_Doc.md' -exec cat {} + > output/tmp_combined.md
           mv output/tmp_combined.md output/Full_Doc.md
 
-      - name: Upload converted Markdown files
-        uses: actions/upload-artifact@v4
-        with:
-          name: markdown-output
-          path: output
+      - name: Commit and push to repo
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add output/*.md
+          git commit -m "Auto-converted LaTeX to Markdown" || echo "Nothing to commit"
+          git push
 
       - name: Post-run diagnostic logging
         if: always()
