@@ -80,7 +80,7 @@ jobs:
             } > "output/${base_name}_intro.md"
 
             awk -v base="$base_name" -v parent="$slug" '
-              BEGIN { RS = "\\\section\{"; ORS = ""; filecount = 1 }
+              BEGIN { RS = "\\\\section\\{"; ORS = ""; filecount = 1 }
               NR > 1 {
                 raw = $0
                 title = substr(raw, 1, index(raw,"}")-1)
@@ -125,7 +125,8 @@ jobs:
           failed=false
           for file in output/*.md; do
             echo "🔎 Checking $file"
-            if ! grep -Fxq "---" "$file"; then
+            frontmatter_count=$(grep -c '^---$' "$file")
+            if [[ "$frontmatter_count" -lt 2 ]]; then
               echo "❌ Missing frontmatter delimiters in $file"
               failed=true
               continue
