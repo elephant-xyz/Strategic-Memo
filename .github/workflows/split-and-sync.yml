@@ -80,7 +80,9 @@ jobs:
             } > "output/${base_name}_intro.md"
 
             awk -v base="$base_name" -v parent="$slug" '
-              BEGIN { RS = "\\\\section\\{"; ORS = ""; filecount = 1 }
+              BEGIN {
+                RS = "\\\\section\\{"; ORS = ""; filecount = 1
+              }
               NR > 1 {
                 raw = $0
                 title = substr(raw, 1, index(raw,"}")-1)
@@ -93,28 +95,24 @@ jobs:
                 gsub(/[^a-z0-9]+/, "-", slugified)
                 gsub(/^-|-$/, "", slugified)
 
-                temp_file = "temp_section.tex"
                 outname = "output/" base "_section_" filecount ".md"
-                print "\n## " title "\n" > temp_file
-                print content >> temp_file
+                print "---" > outname
+                print "title: \"" title "\"" >> outname
+                print "slug: \"" slugified "\"" >> outname
+                print "parent_slug: \"" parent "\"" >> outname
+                print "type: \"section\"" >> outname
+                print "order: \"" filecount "\"" >> outname
+                print "---\n" >> outname
 
-                if (system("test -s " temp_file) == 0) {
-                  print "---" > outname
-                  print "title: \"" title "\"" >> outname
-                  print "slug: \"" slugified "\"" >> outname
-                  print "parent_slug: \"" parent "\"" >> outname
-                  print "type: \"section\"" >> outname
-                  print "order: \"" filecount "\"" >> outname
-                  print "---\n" >> outname
-
-                  cmd = "pandoc -f latex -t markdown_strict " temp_file " >> " outname
-                  system(cmd)
-                  filecount++
+                if (length(content) > 0) {
+                  print "## " title "\n" content > "temp_section.tex"
+                  system("pandoc -f latex -t markdown_strict temp_section.tex >> " outname)
+                  system("rm -f temp_section.tex")
                 } else {
-                  print "⚠️ Skipping empty section for: " title
+                  print "⚠️ Skipping empty content, but frontmatter written for: " title
                 }
 
-                system("rm -f " temp_file)
+                filecount++
               }
             ' "$tex_file"
           done < tex_list.txt
