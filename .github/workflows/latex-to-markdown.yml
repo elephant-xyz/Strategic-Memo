@@ -1,0 +1,23 @@
+name: Convert LaTeX to Framer Markdown
+
+on:
+  push:
+    paths:
+      - '**.tex'
+  workflow_dispatch:
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install Pandoc
+      run: sudo apt-get update && sudo apt-get install -y pandoc
+
+    - name: Run LaTeX to Markdown converter
+      run: |
+        chmod +x .github/scripts/convert.sh
+        .github/scripts/convert.sh
