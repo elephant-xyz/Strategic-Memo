@@ -36,7 +36,7 @@ jobs:
 
             if [[ -f "$candidate" ]]; then
               filtered+=("$candidate")
-            elif [[ "$filename" != *_v2.tex && "$filename" != Full.tex ]]; then
+            elif [[ "$filename" != *_v2.tex && "$filename" != "Full Doc.tex" ]]; then
               filtered+=("$path")
             fi
           done
@@ -60,7 +60,7 @@ jobs:
             echo "Processing $tex_file"
             base_name=$(basename "$tex_file" .tex)
 
-            chapter_title=$(grep -oP '\\chapter\{.*?\}' "$tex_file" | head -1 | sed 's/\\chapter{//;s/}//')
+            chapter_title=$(grep '\\chapter{' "$tex_file" | head -1 | sed 's/.*\\chapter{//;s/}.*//')
             chapter_title_clean=$(echo "$chapter_title" | tr -cd '[:alnum:] .:/-' | sed 's/["\\]/ /g')
             slug=$(echo "$chapter_title_clean" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$/-/g')
 
@@ -77,41 +77,79 @@ jobs:
               echo "$intro_lines" | pandoc -f latex -t markdown_strict
             } > "output/${base_name}_intro.md"
 
+            # Extract sections using a more robust approach
             awk -v base="$base_name" -v parent="$slug" '
-              BEGIN { RS = "\\\\section\\{"; ORS = ""; filecount = 1 }
-              NR > 1 {
-                raw = $0
-                title = substr(raw, 1, index(raw,"}")-1)
-                content = substr(raw, index(raw,"}")+1)
-
-                gsub(/[[:space:]]+$/, "", title)
-                gsub(/\\\\|\"/, "", title)
-                gsub(/[^[:alnum:] .:-]/, "", title)
-                slugified = tolower(title)
+              BEGIN { 
+                filecount = 1
+                in_section = 0
+                section_title = ""
+                section_content = ""
+              }
+              
+              /^\\section\{/ {
+                # Save previous section if exists
+                if (in_section && section_title != "") {
+                  save_section()
+                }
+                
+                # Start new section
+                in_section = 1
+                section_title = substr($0, 10)  # Remove \section{
+                section_title = substr(section_title, 1, index(section_title, "}") - 1)
+                section_content = ""
+                next
+              }
+              
+              in_section {
+                section_content = section_content "\n" $0
+              }
+              
+              END {
+                # Save last section
+                if (in_section && section_title != "") {
+                  save_section()
+                }
+              }
+              
+              function save_section() {
+                # Clean title
+                gsub(/[[:space:]]+$/, "", section_title)
+                gsub(/\\\\/, "", section_title)
+                gsub(/[^[:alnum:] .:-]/, "", section_title)
+                
+                # Create slug
+                slugified = tolower(section_title)
                 gsub(/[^a-z0-9]+/, "-", slugified)
                 gsub(/^-|-$/, "", slugified)
-
-                temp_file = "temp_section.tex"
+                
+                # Create output file
                 outname = "output/" base "_section_" filecount ".md"
-                print "\n## " title "\n" > temp_file
-                print content >> temp_file
-
+                temp_file = "temp_section_" filecount ".tex"
+                
+                # Write content to temp file
+                print "## " section_title > temp_file
+                print section_content >> temp_file
+                
+                # Check if temp file has content
                 if (system("test -s " temp_file) == 0) {
+                  # Write frontmatter
                   print "---" > outname
-                  print "title: \"" title "\"" >> outname
+                  print "title: \"" section_title "\"" >> outname
                   print "slug: \"" slugified "\"" >> outname
                   print "parent_slug: \"" parent "\"" >> outname
                   print "type: \"section\"" >> outname
                   print "order: \"" filecount "\"" >> outname
                   print "---\n" >> outname
-
+                  
+                  # Convert with pandoc
                   cmd = "pandoc -f latex -t markdown_strict " temp_file " >> " outname
                   system(cmd)
                   filecount++
                 } else {
-                  print "⚠️ Skipping empty section for: " title
+                  print "⚠️ Skipping empty section for: " section_title > "/dev/stderr"
                 }
-
+                
+                # Clean up temp file
                 system("rm -f " temp_file)
               }
             ' "$tex_file"
