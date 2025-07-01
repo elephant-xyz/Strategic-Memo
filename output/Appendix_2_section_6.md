@@ -1,0 +1,1 @@
+---title: "Schemas as Protocol Primitives: Immutable Legal Logic"slug: "schemas-as-protocol-primitives-immutable-legal-logic"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 6

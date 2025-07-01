@@ -1,0 +1,1 @@
+---title: "Integration with Protocol Architecture"slug: "integration-with-protocol-architecture"parent_slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"type: "section"order: 3

@@ -1,0 +1,1 @@
+---title: "Economic Alignment"slug: "economic-alignment"parent_slug: "tokenomics"type: "section"order: 8

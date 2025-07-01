@@ -1,0 +1,1 @@
+---title: "Query  Discovery Interfaces"slug: "query-discovery-interfaces"parent_slug: "solution-architecture-key-innovations"type: "section"order: 6

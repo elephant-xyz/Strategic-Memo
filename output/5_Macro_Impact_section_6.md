@@ -1,0 +1,1 @@
+---title: "Stakeholder Impact Analysis"slug: "stakeholder-impact-analysis"parent_slug: "macro-impact"type: "section"order: 6

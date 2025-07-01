@@ -1,0 +1,1 @@
+---title: "Globalized Data Model: Jurisdiction-Agnostic Architecture"slug: "globalized-data-model-jurisdiction-agnostic-architecture"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 7

@@ -1,0 +1,1 @@
+---title: "The Industry Memory Problem"slug: "the-industry-memory-problem"parent_slug: "problem-statement"type: "section"order: 4

@@ -1,0 +1,1 @@
+---title: "Social Inclusion and Democratization"slug: "social-inclusion-and-democratization"parent_slug: "macro-impact"type: "section"order: 3

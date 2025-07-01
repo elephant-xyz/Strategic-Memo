@@ -1,0 +1,1 @@
+---title: "Oracle Commitment and Governance"slug: "oracle-commitment-and-governance"parent_slug: "tokenomics"type: "section"order: 4
