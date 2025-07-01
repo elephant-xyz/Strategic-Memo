@@ -1,1 +1,0 @@
----title: "Transaction Participant Economics: Sustainable Fee Structure"slug: "transaction-participant-economics-sustainable-fee-structure"parent_slug: "tokenomics"type: "section"order: 4

@@ -79,7 +79,13 @@ jobs:
                 section_content = ""
                 next
               }
-              in_section { section_content = section_content "\n" $0 }
+              in_section { 
+                if (section_content == "") {
+                  section_content = $0
+                } else {
+                  section_content = section_content "\n" $0
+                }
+              }
               END { if (in_section && section_title != "") { save_section() } }
               function save_section() {
                 gsub(/[[:space:]]+$/, "", section_title)
@@ -100,7 +106,8 @@ jobs:
                   print "parent_slug: \"" parent "\"" >> outname
                   print "type: \"section\"" >> outname
                   print "order: \"" filecount "\"" >> outname
-                  print "---\n" >> outname
+                  print "---" >> outname
+                  print "" >> outname
                   cmd = "pandoc -f latex -t markdown_strict " temp_file " >> " outname
                   system(cmd)
                   filecount++

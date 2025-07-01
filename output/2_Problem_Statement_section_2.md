@@ -1,1 +1,0 @@
----title: "The Systemic Cost of Bureaucratic Design"slug: "the-systemic-cost-of-bureaucratic-design"parent_slug: "problem-statement"type: "section"order: 2

@@ -1,1 +1,0 @@
----title: "Service Provider Economics: Competing on Merit"slug: "service-provider-economics-competing-on-merit"parent_slug: "tokenomics"type: "section"order: 3

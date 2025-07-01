@@ -1,1 +1,0 @@
----title: "Future Evolution and Ecosystem Impact"slug: "future-evolution-and-ecosystem-impact"parent_slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"type: "section"order: 7

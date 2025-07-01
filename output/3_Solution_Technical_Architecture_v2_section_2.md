@@ -1,1 +1,0 @@
----title: "On-Chain Property Records"slug: "on-chain-property-records"parent_slug: "solution-architecture-key-innovations"type: "section"order: 2

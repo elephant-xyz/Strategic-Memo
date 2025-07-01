@@ -1,1 +1,0 @@
----title: "Case Study: Elephant Protocol Implementation"slug: "case-study-elephant-protocol-implementation"parent_slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"type: "section"order: 6

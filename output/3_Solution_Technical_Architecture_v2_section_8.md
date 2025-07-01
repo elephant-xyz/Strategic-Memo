@@ -1,1 +1,0 @@
----title: "Industry Memory  Strategic Leverage"slug: "industry-memory-strategic-leverage"parent_slug: "solution-architecture-key-innovations"type: "section"order: 8

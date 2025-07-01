@@ -1,1 +1,0 @@
----title: "Schema Governance: The Grammar of Property Rights"slug: "schema-governance-the-grammar-of-property-rights"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 2

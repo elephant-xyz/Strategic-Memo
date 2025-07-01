@@ -1,1 +1,0 @@
----title: "The Concept: Collateralized Protocol Bootstrapping"slug: "the-concept-collateralized-protocol-bootstrapping"parent_slug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"type: "section"order: 2

@@ -1,1 +1,0 @@
----title: "Incremental Oracle Consensus: Truth Through Iteration"slug: "incremental-oracle-consensus-truth-through-iteration"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 4

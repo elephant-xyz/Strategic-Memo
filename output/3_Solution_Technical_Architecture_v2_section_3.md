@@ -1,1 +1,0 @@
----title: "Smart Contract Governance"slug: "smart-contract-governance"parent_slug: "solution-architecture-key-innovations"type: "section"order: 3

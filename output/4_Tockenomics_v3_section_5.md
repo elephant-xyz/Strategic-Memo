@@ -1,1 +1,0 @@
----title: "Governance Economics: Power Through Contribution"slug: "governance-economics-power-through-contribution"parent_slug: "tokenomics"type: "section"order: 5

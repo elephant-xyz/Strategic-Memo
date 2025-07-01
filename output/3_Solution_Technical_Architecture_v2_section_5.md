@@ -1,1 +1,0 @@
----title: "Lexicon Data Model"slug: "lexicon-data-model"parent_slug: "solution-architecture-key-innovations"type: "section"order: 5
