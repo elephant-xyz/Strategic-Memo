@@ -33,8 +33,8 @@ jobs:
 
             # Get chapter title
             chapter_title=$(grep '\\chapter{' "$tex_file" | head -1 | sed 's/.*\\chapter{//;s/}.*//')
-            chapter_title_clean=$(echo "$chapter_title" | tr -cd '[:alnum:] .:/-' | sed 's/["\\]/ /g')
-            slug=$(echo "$chapter_title_clean" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$/-/g')
+            chapter_title_clean=$(echo "$chapter_title" | tr -cd '[:alnum:] .:/-' | sed 's/[\"\\\\]/ /g')
+            slug=$(echo "$chapter_title_clean" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\\|-$/-/g')
 
             # Create intro file
             intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title_clean"'/')
@@ -93,7 +93,7 @@ jobs:
                   system(cmd)
                   filecount++
                 } else {
-                  print "⚠️ Skipping empty section for: " section_title > "/dev/stderr"
+                  print "⚠️ Skipping empty section for: " section_title > \"/dev/stderr\"
                 }
                 system("rm -f " temp_file)
               }
@@ -102,11 +102,3 @@ jobs:
 
       - name: List output files
         run: ls -la output/ || echo "No output directory found"
-
-    - name: Commit and push results
-      run: |
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git add output/*.md
-        git commit -m "Auto-convert LaTeX to Markdown" || echo "Nothing to commit"
-        git push
