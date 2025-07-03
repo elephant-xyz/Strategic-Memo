@@ -1,1 +1,0 @@
----title: "Transaction Fee Distribution"slug: "transaction-fee-distribution"parent_slug: "tokenomics"type: "section"order: 6

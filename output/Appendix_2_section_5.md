@@ -1,1 +1,0 @@
----title: "Field-Level Semantics: Self-Describing Data"slug: "field-level-semantics-self-describing-data"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 5

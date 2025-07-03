@@ -1,1 +1,0 @@
----title: "Decentralized Verifiability: Trust Through Mathematics"slug: "decentralized-verifiability-trust-through-mathematics"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 8

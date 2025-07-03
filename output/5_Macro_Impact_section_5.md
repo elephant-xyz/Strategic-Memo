@@ -1,1 +1,0 @@
----title: "Verified Reputation Systems"slug: "verified-reputation-systems"parent_slug: "macro-impact"type: "section"order: 5

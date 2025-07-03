@@ -1,1 +1,0 @@
----title: "Generic Relationship Objects: Universal Property Semantics"slug: "generic-relationship-objects-universal-property-semantics"parent_slug: "appendix-elephant-framework-data-relationship-layer"type: "section"order: 3

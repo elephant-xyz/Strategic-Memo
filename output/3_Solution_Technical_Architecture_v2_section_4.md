@@ -1,1 +1,0 @@
----title: "Oracle Validation  Staking Framework"slug: "oracle-validation-staking-framework"parent_slug: "solution-architecture-key-innovations"type: "section"order: 4
