@@ -93,7 +93,7 @@ jobs:
                   system(cmd)
                   filecount++
                 } else {
-                  print "⚠️ Skipping empty section for: " section_title > \"/dev/stderr\"
+                  print "⚠️ Skipping empty section for: " section_title > "/dev/stderr"
                 }
                 system("rm -f " temp_file)
               }
