@@ -116,3 +116,11 @@ jobs:
 
       - name: List output files
         run: ls -la output/ || echo "No output directory found"
+
+      - name: Commit and push results
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add output/*.md
+          git commit -m "Auto-convert LaTeX to Markdown and split by section" || echo "Nothing to commit"
+          git push
