@@ -1,4 +1,4 @@
-name: Convert LaTeX to Markdown
+name: Convert LaTeX to Markdown and Split by Section
 
 on:
   push:
@@ -11,21 +11,98 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Install Pandoc
-      run: sudo apt-get update && sudo apt-get install -y pandoc
+      - name: Install Pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
 
-    - name: Run LaTeX to Markdown converter
-      run: |
-        chmod +x .github/scripts/convert.sh
-        .github/scripts/convert.sh
+      - name: Delete old Markdown output
+        run: rm -rf output && mkdir -p output
 
-    - name: List output files
-      run: |
-        echo "Generated Markdown files:"
-        ls -la output/ || echo "No output directory found"
+      - name: Find TeX files
+        run: |
+          find . -maxdepth 1 -name "*.tex" -not -name "Full Doc.tex" > tex_list.txt
+          cat tex_list.txt
+
+      - name: Convert TeX files to Markdown and split by section
+        run: |
+          while IFS= read -r tex_file; do
+            [ ! -f "$tex_file" ] && echo "Skipping invalid file: $tex_file" && continue
+            echo "Processing $tex_file"
+            base_name=$(basename "$tex_file" .tex)
+
+            # Get chapter title
+            chapter_title=$(grep '\\chapter{' "$tex_file" | head -1 | sed 's/.*\\chapter{//;s/}.*//')
+            chapter_title_clean=$(echo "$chapter_title" | tr -cd '[:alnum:] .:/-' | sed 's/["\\]/ /g')
+            slug=$(echo "$chapter_title_clean" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$/-/g')
+
+            # Create intro file
+            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title_clean"'/')
+            {
+              echo "---"
+              echo "title: \"$chapter_title_clean\""
+              echo "slug: \"$slug\""
+              echo "type: \"chapter\""
+              echo "order: \"0\""
+              echo "---"
+              echo ""
+              echo "$intro_lines" | pandoc -f latex -t markdown_strict
+            } > "output/${base_name}_intro.md"
+
+            # Split sections
+            awk -v base="$base_name" -v parent="$slug" '
+              BEGIN { filecount = 1; in_section = 0; section_title = ""; section_content = "" }
+              /^\\section\{/ {
+                if (in_section && section_title != "") { save_section() }
+                in_section = 1
+                section_title = substr($0, 10)
+                section_title = substr(section_title, 1, index(section_title, "}") - 1)
+                section_content = ""
+                next
+              }
+              in_section {
+                if (section_content == "") {
+                  section_content = $0
+                } else {
+                  section_content = section_content "\n" $0
+                }
+              }
+              END { if (in_section && section_title != "") { save_section() } }
+              function save_section() {
+                gsub(/[[:space:]]+$/, "", section_title)
+                gsub(/\\\\/, "", section_title)
+                gsub(/"/, "", section_title)
+                gsub(/[^[:alnum:] .:-]/, "", section_title)
+                slugified = tolower(section_title)
+                gsub(/[^a-z0-9]+/, "-", slugified)
+                gsub(/^-|-$/, "", slugified)
+                outname = "output/" base "_section_" filecount ".md"
+                temp_file = "temp_section_" filecount ".tex"
+                print "## " section_title > temp_file
+                print section_content >> temp_file
+                if (system("test -s " temp_file) == 0) {
+                  print "---" > outname
+                  print "title: \"" section_title "\"" >> outname
+                  print "slug: \"" slugified "\"" >> outname
+                  print "parent_slug: \"" parent "\"" >> outname
+                  print "type: \"section\"" >> outname
+                  print "order: \"" filecount "\"" >> outname
+                  print "---" >> outname
+                  print "" >> outname
+                  cmd = "pandoc -f latex -t markdown_strict " temp_file " >> " outname
+                  system(cmd)
+                  filecount++
+                } else {
+                  print "⚠️ Skipping empty section for: " section_title > "/dev/stderr"
+                }
+                system("rm -f " temp_file)
+              }
+            ' "$tex_file"
+          done < tex_list.txt
+
+      - name: List output files
+        run: ls -la output/ || echo "No output directory found"
 
     - name: Commit and push results
       run: |
