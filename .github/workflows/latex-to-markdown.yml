@@ -44,7 +44,7 @@ jobs:
             echo "Converting full document: $tex_file"
             
             # Convert to markdown using improved pandoc options
-            pandoc -f latex -t markdown --wrap=auto --columns=80 --markdown-headings=atx --standalone "$tex_file" -o "output/${base_name}.md"
+            pandoc -f latex -t markdown --wrap=none --markdown-headings=atx --standalone "$tex_file" -o "output/${base_name}.md"
             
             if [ $? -eq 0 ]; then
               # Clean up the generated markdown to remove headers
@@ -104,7 +104,7 @@ jobs:
               echo "draft: false"
               echo "---"
               echo ""
-              echo "$intro_lines" | pandoc -f latex -t markdown --wrap=auto --columns=80 --markdown-headings=atx --standalone
+              echo "$intro_lines" | pandoc -f latex -t markdown --wrap=none --markdown-headings=atx --standalone
             } > "output/${base_name}_intro.md"
             clean_markdown "output/${base_name}_intro.md"
             echo "[INFO] Created intro: output/${base_name}_intro.md"
@@ -153,7 +153,7 @@ jobs:
                   print "draft: false" >> outname
                   print "---" >> outname
                   print "" >> outname
-                  cmd = "pandoc -f latex -t markdown --wrap=auto --columns=80 --markdown-headings=atx --standalone " temp_file " >> " outname
+                  cmd = "pandoc -f latex -t markdown --wrap=none --markdown-headings=atx --standalone " temp_file " >> " outname
                   system(cmd)
                   print "[INFO] Created section: " outname > "/dev/stderr"
                   filecount++
