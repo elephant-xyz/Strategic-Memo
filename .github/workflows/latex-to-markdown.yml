@@ -27,6 +27,24 @@ jobs:
       - name: Convert TeX files to Markdown and split by section
         run: |
           today=$(date +%F)
+          
+          # Function to clean up LaTeX artifacts
+          clean_markdown() {
+            local file="$1"
+            # Remove escaped backslashes from headers
+            sed -i 's/\\#/#/g' "$file"
+            sed -i 's/\\\*/*/g' "$file"
+            sed -i 's/\\_/_/g' "$file"
+            # Remove any remaining chapter or section titles from content
+            sed -i '/^# .*$/d' "$file"
+            sed -i '/^## .*$/d' "$file"
+            # Fix double spaces and improve paragraph spacing
+            sed -i 's/  \+/ /g' "$file"
+            sed -i 's/\n\n\n\+/\n\n/g' "$file"
+            # Remove leading/trailing whitespace
+            sed -i 's/^[[:space:]]*//' "$file"
+            sed -i 's/[[:space:]]*$//' "$file"
+          }
           while IFS= read -r tex_file; do
             [ ! -f "$tex_file" ] && echo "Skipping invalid file: $tex_file" && continue
             echo "Processing $tex_file"
@@ -38,7 +56,7 @@ jobs:
             slug=$(echo "$chapter_title_clean" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$/-/g')
 
             # Create intro file
-            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}/# '"$chapter_title_clean"'/')
+            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}//')
             {
               echo "---"
               echo "title: \"$chapter_title_clean\""
@@ -53,8 +71,9 @@ jobs:
               echo "draft: false"
               echo "---"
               echo ""
-              echo "$intro_lines" | pandoc -f latex -t markdown_strict
+              echo "$intro_lines" | pandoc -f latex -t markdown --wrap=auto --columns=80 --markdown-headings=atx --standalone
             } > "output/${base_name}_intro.md"
+            clean_markdown "output/${base_name}_intro.md"
             echo "[INFO] Created intro: output/${base_name}_intro.md"
 
             # Split sections
@@ -86,8 +105,7 @@ jobs:
                 gsub(/^-|-$/, "", slugified)
                 outname = "output/" base "_section_" filecount ".md"
                 temp_file = "temp_section_" filecount ".tex"
-                print "## " section_title > temp_file
-                print section_content >> temp_file
+                print section_content > temp_file
                 if (system("test -s " temp_file) == 0) {
                   print "---" > outname
                   print "title: \"" section_title "\"" >> outname
@@ -102,7 +120,7 @@ jobs:
                   print "draft: false" >> outname
                   print "---" >> outname
                   print "" >> outname
-                  cmd = "pandoc -f latex -t markdown_strict " temp_file " >> " outname
+                  cmd = "pandoc -f latex -t markdown --wrap=auto --columns=80 --markdown-headings=atx --standalone " temp_file " >> " outname
                   system(cmd)
                   print "[INFO] Created section: " outname > "/dev/stderr"
                   filecount++
@@ -113,6 +131,15 @@ jobs:
               }
             ' "$tex_file"
           done < tex_list.txt
+          
+          # Clean up all generated markdown files
+          echo "Cleaning up markdown files..."
+          for file in output/*.md; do
+            if [ -f "$file" ]; then
+              clean_markdown "$file"
+              echo "Cleaned: $file"
+            fi
+          done
 
       - name: List output files
         run: ls -la output/ || echo "No output directory found"
