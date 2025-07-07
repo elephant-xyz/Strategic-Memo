@@ -30,7 +30,7 @@ find . -name "*.tex" -not -name "Full Doc.tex" -not -name "title.tex" | while re
     base_name=$(basename "$tex_file" .tex)
     
     # Convert to markdown using improved pandoc options
-    pandoc -f latex -t markdown --wrap=auto --columns=80 --markdown-headings=atx --standalone "$tex_file" -o "output/${base_name}.md"
+    pandoc -f latex -t markdown --wrap=none --markdown-headings=atx --standalone "$tex_file" -o "output/${base_name}.md"
     
     if [ $? -eq 0 ]; then
         # Clean up the generated markdown
