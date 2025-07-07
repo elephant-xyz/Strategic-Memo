@@ -35,9 +35,21 @@ jobs:
             sed -i 's/\\#/#/g' "$file"
             sed -i 's/\\\*/*/g' "$file"
             sed -i 's/\\_/_/g' "$file"
-            # Remove any remaining chapter or section titles from content
+            # Remove any remaining chapter or section titles from content (more thorough)
             sed -i '/^# .*$/d' "$file"
             sed -i '/^## .*$/d' "$file"
+            sed -i '/^### .*$/d' "$file"
+            sed -i '/^#### .*$/d' "$file"
+            sed -i '/^##### .*$/d' "$file"
+            sed -i '/^###### .*$/d' "$file"
+            # Remove any lines that start with # followed by the chapter title
+            sed -i '/^#.*Abstract$/d' "$file"
+            sed -i '/^#.*Problem Statement$/d' "$file"
+            sed -i '/^#.*Solution Architecture$/d' "$file"
+            sed -i '/^#.*Token Economy$/d' "$file"
+            sed -i '/^#.*Macro Impact$/d' "$file"
+            sed -i '/^#.*Roadmap$/d' "$file"
+            sed -i '/^#.*Conclusion$/d' "$file"
             # Fix double spaces and improve paragraph spacing
             sed -i 's/  \+/ /g' "$file"
             sed -i 's/\n\n\n\+/\n\n/g' "$file"
@@ -56,7 +68,7 @@ jobs:
             slug=$(echo "$chapter_title_clean" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$/-/g')
 
             # Create intro file
-            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}//')
+            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}//' | sed 's/^[[:space:]]*//')
             {
               echo "---"
               echo "title: \"$chapter_title_clean\""
