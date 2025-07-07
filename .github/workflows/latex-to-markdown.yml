@@ -19,6 +19,40 @@ jobs:
       - name: Delete old Markdown output
         run: rm -rf output && mkdir -p output
 
+      - name: Convert full documents to clean Markdown
+        run: |
+          # Function to clean up LaTeX artifacts
+          clean_markdown() {
+            local file="$1"
+            # Remove escaped backslashes from headers
+            sed -i 's/\\#/#/g' "$file"
+            sed -i 's/\\\*/*/g' "$file"
+            sed -i 's/\\_/_/g' "$file"
+            # Remove any lines that start with # (all headers)
+            sed -i '/^#.*$/d' "$file"
+            # Fix double spaces and improve paragraph spacing
+            sed -i 's/  \+/ /g' "$file"
+            sed -i 's/\n\n\n\+/\n\n/g' "$file"
+            # Remove leading/trailing whitespace
+            sed -i 's/^[[:space:]]*//' "$file"
+            sed -i 's/[[:space:]]*$//' "$file"
+          }
+          
+          # Convert full documents to clean Markdown (without headers)
+          find . -maxdepth 1 -name "*.tex" -not -name "Full Doc.tex" | while read -r tex_file; do
+            base_name=$(basename "$tex_file" .tex)
+            echo "Converting full document: $tex_file"
+            
+            # Convert to markdown using improved pandoc options
+            pandoc -f latex -t markdown --wrap=auto --columns=80 --markdown-headings=atx --standalone "$tex_file" -o "output/${base_name}.md"
+            
+            if [ $? -eq 0 ]; then
+              # Clean up the generated markdown to remove headers
+              clean_markdown "output/${base_name}.md"
+              echo "Created clean full document: output/${base_name}.md"
+            fi
+          done
+
       - name: Find TeX files
         run: |
           find . -maxdepth 1 -name "*.tex" -not -name "Full Doc.tex" > tex_list.txt
@@ -35,21 +69,8 @@ jobs:
             sed -i 's/\\#/#/g' "$file"
             sed -i 's/\\\*/*/g' "$file"
             sed -i 's/\\_/_/g' "$file"
-            # Remove any remaining chapter or section titles from content (more thorough)
-            sed -i '/^# .*$/d' "$file"
-            sed -i '/^## .*$/d' "$file"
-            sed -i '/^### .*$/d' "$file"
-            sed -i '/^#### .*$/d' "$file"
-            sed -i '/^##### .*$/d' "$file"
-            sed -i '/^###### .*$/d' "$file"
-            # Remove any lines that start with # followed by the chapter title
-            sed -i '/^#.*Abstract$/d' "$file"
-            sed -i '/^#.*Problem Statement$/d' "$file"
-            sed -i '/^#.*Solution Architecture$/d' "$file"
-            sed -i '/^#.*Token Economy$/d' "$file"
-            sed -i '/^#.*Macro Impact$/d' "$file"
-            sed -i '/^#.*Roadmap$/d' "$file"
-            sed -i '/^#.*Conclusion$/d' "$file"
+            # Remove any lines that start with # (all headers)
+            sed -i '/^#.*$/d' "$file"
             # Fix double spaces and improve paragraph spacing
             sed -i 's/  \+/ /g' "$file"
             sed -i 's/\n\n\n\+/\n\n/g' "$file"
