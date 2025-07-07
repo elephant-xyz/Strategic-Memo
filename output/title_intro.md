@@ -1,7 +1,7 @@
 ---
 title: ""
 slug: ""
-publishDate: "2025-07-03"
+publishDate: "2025-07-07"
 chapter: ""
 section: ""
 parentSlug: ""
@@ -11,10 +11,12 @@ description: ""
 draft: false
 ---
 
+::: titlepage
 **The Elephant Protocol:**
 
 Decentralized Infrastructure for Real Estate Truth
 
 White Paper
 
-2025-07-03
+2025-07-07
+:::
