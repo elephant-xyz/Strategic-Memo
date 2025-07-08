@@ -21,52 +21,25 @@ jobs:
 
       - name: Convert full documents to clean Markdown
         run: |
-          # Function to clean up LaTeX artifacts
           clean_markdown() {
             local file="$1"
-            
-            # Remove escaped backslashes from headers
             sed -i 's/\\#/#/g' "$file"
             sed -i 's/\\\*/*/g' "$file"
             sed -i 's/\/_/_/g' "$file"
-            
-            # Remove any lines that start with # (all headers)
             sed -i '/^#.*$/d' "$file"
-            
-            # Convert footnotes to proper numbered format like in the example
-            # First, convert footnote markers in text to superscript numbers
             sed -i 's/\\footnote{[^}]*}/¹/g' "$file"
-            
-            # Convert orphaned footnote content to proper footnote format
-            # This handles any line starting with ": " (which is how Pandoc formats broken footnotes)
             sed -i 's/^: /¹/g' "$file"
-            
-            # Fix appendix references - remove links, keep just the reference
             sed -i 's/\[Appendix \([A-Z0-9]\)\]([^)]*)/Appendix \1/g' "$file"
             sed -i 's/\[Appendix \([A-Z0-9]\)\]/Appendix \1/g' "$file"
-            
-            # Clean up broken table formatting
-            # Remove extra escaping from table content
             sed -i 's/\\\$/$/g' "$file"
             sed -i 's/\\,/,/g' "$file"
-            
-            # Remove HTML div wrappers around tables
             sed -i 's/<div class="center">//g' "$file"
             sed -i 's/<\/div>//g' "$file"
-            
-            # Fix malformed table structure
-            # Remove empty table rows and fix pipe alignment
             sed -i '/^|[[:space:]]*|[[:space:]]*|[[:space:]]*|[[:space:]]*|$/d' "$file"
-            
-            # Fix double spaces and improve paragraph spacing
             sed -i 's/  \+/ /g' "$file"
             sed -i 's/\n\n\n\+/\n\n/g' "$file"
-            
-            # Remove leading/trailing whitespace
             sed -i 's/^[[:space:]]*//' "$file"
             sed -i 's/[[:space:]]*$//' "$file"
-            
-            # Clean up any remaining LaTeX commands
             sed -i 's/\\begin{[^}]*}//g' "$file"
             sed -i 's/\\end{[^}]*}//g' "$file"
             sed -i 's/\\center//g' "$file"
@@ -74,74 +47,59 @@ jobs:
             sed -i 's/\\hline//g' "$file"
           }
           
-          # Convert full documents to clean Markdown (without headers)
           find . -maxdepth 1 -name "*.tex" -not -name "Full Doc.tex" | while read -r tex_file; do
             base_name=$(basename "$tex_file" .tex)
             echo "Converting full document: $tex_file"
             
-            # Convert to markdown using improved pandoc options with better table handling
-            pandoc -f latex -t gfm \
-                   --wrap=auto \
-                   --columns=120 \
-                   --markdown-headings=atx \
-                   --standalone \
-                   --preserve-tabs \
-                   "$tex_file" -o "output/${base_name}.md"
+            pandoc -f latex -t gfm --wrap=auto --columns=120 --markdown-headings=atx --standalone --preserve-tabs "$tex_file" -o "output/${base_name}.md"
             
             if [ $? -eq 0 ]; then
-              # Clean up the generated markdown
               clean_markdown "output/${base_name}.md"
               
-              # Additional footnote fix for Abstract file
               if [ "$base_name" = "1_Abstract" ]; then
-                # Add the footnote marker in the text where it should be
                 sed -i 's/decades of excess interest\./decades of excess interest.¹/g' "output/${base_name}.md"
               fi
-              
-              # Universal table cleanup for all files
-              python3 << 'EOF'
-import re
-import sys
-
-# Get the filename - use the base_name from shell environment
-filename = "output/${base_name}.md"
-
-try:
-    # Read the file
-    with open(filename, "r") as f:
-        content = f.read()
-
-    # Fix common table issues
-    # Remove malformed table headers
-    content = re.sub(r'\|\s*\*\*[^|]*\*\*\s*\|\s*\|\s*\|\s*\|', '', content)
-    
-    # Fix table alignment markers that are broken
-    content = re.sub(r'\|:\-+\|', '|---|', content)
-    content = re.sub(r'\|:\-+', '|---', content)
-    content = re.sub(r'\-+:\|', '---|', content)
-    
-    # Remove empty table rows
-    content = re.sub(r'\|\s*\|\s*\|\s*\|\s*\|\s*\n', '', content)
-    
-    # Fix table headers with escaped characters
-    content = re.sub(r'\\\*\*([^*]+)\\\*\*', r'**\1**', content)
-    
-    # Clean up table spacing
-    content = re.sub(r'\|\s{2,}', '| ', content)
-    content = re.sub(r'\s{2,}\|', ' |', content)
-
-    # Write back
-    with open(filename, "w") as f:
-        f.write(content)
-
-except Exception as e:
-    print(f"Table cleanup failed for {filename}: {e}")
-    
-EOF
               
               echo "Created clean full document: output/${base_name}.md"
             else
               echo "Failed to convert: $tex_file"
+            fi
+          done
+
+      - name: Create table cleanup script
+        run: |
+          cat > cleanup_tables.py << 'EOF'
+          import re
+          import sys
+          
+          filename = sys.argv[1]
+          
+          try:
+              with open(filename, 'r') as f:
+                  content = f.read()
+          
+              content = re.sub(r'\|\s*\*\*[^|]*\*\*\s*\|\s*\|\s*\|\s*\|', '', content)
+              content = re.sub(r'\|:\-+\|', '|---|', content)
+              content = re.sub(r'\|:\-+', '|---', content)
+              content = re.sub(r'\-+:\|', '---|', content)
+              content = re.sub(r'\|\s*\|\s*\|\s*\|\s*\|\s*\n', '', content)
+              content = re.sub(r'\\\*\*([^*]+)\\\*\*', r'**\1**', content)
+              content = re.sub(r'\|\s{2,}', '| ', content)
+              content = re.sub(r'\s{2,}\|', ' |', content)
+          
+              with open(filename, 'w') as f:
+                  f.write(content)
+                  
+          except Exception as e:
+              print(f'Table cleanup failed for {filename}: {e}')
+          EOF
+
+      - name: Run table cleanup
+        run: |
+          for file in output/*.md; do
+            if [ -f "$file" ]; then
+              python3 cleanup_tables.py "$file"
+              echo "Cleaned tables in: $file"
             fi
           done
 
@@ -154,42 +112,25 @@ EOF
         run: |
           today=$(date +%F)
           
-          # Function to clean up LaTeX artifacts (same as above)
           clean_markdown() {
             local file="$1"
-            
-            # Remove escaped backslashes from headers
             sed -i 's/\\#/#/g' "$file"
             sed -i 's/\\\*/*/g' "$file"
             sed -i 's/\/_/_/g' "$file"
-            
-            # Remove any lines that start with # (all headers)
             sed -i '/^#.*$/d' "$file"
-            
-            # Convert footnotes to proper numbered format
             sed -i 's/\\footnote{[^}]*}/¹/g' "$file"
             sed -i 's/^: /¹/g' "$file"
-            
-            # Fix appendix references
             sed -i 's/\[Appendix \([A-Z0-9]\)\]([^)]*)/Appendix \1/g' "$file"
             sed -i 's/\[Appendix \([A-Z0-9]\)\]/Appendix \1/g' "$file"
-            
-            # Clean up broken table formatting
             sed -i 's/\\\$/$/g' "$file"
             sed -i 's/\\,/,/g' "$file"
             sed -i 's/<div class="center">//g' "$file"
             sed -i 's/<\/div>//g' "$file"
             sed -i '/^|[[:space:]]*|[[:space:]]*|[[:space:]]*|[[:space:]]*|$/d' "$file"
-            
-            # Fix double spaces and improve paragraph spacing
             sed -i 's/  \+/ /g' "$file"
             sed -i 's/\n\n\n\+/\n\n/g' "$file"
-            
-            # Remove leading/trailing whitespace
             sed -i 's/^[[:space:]]*//' "$file"
             sed -i 's/[[:space:]]*$//' "$file"
-            
-            # Clean up any remaining LaTeX commands
             sed -i 's/\\begin{[^}]*}//g' "$file"
             sed -i 's/\\end{[^}]*}//g' "$file"
             sed -i 's/\\center//g' "$file"
@@ -202,12 +143,10 @@ EOF
             echo "Processing $tex_file"
             base_name=$(basename "$tex_file" .tex)
 
-            # Get chapter title
             chapter_title=$(grep '\\chapter{' "$tex_file" | head -1 | sed 's/.*\\chapter{//;s/}.*//')
             chapter_title_clean=$(echo "$chapter_title" | tr -cd '[:alnum:] .:/-' | sed 's/["\\]/ /g')
             slug=$(echo "$chapter_title_clean" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$/-/g')
 
-            # Create intro file
             intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}//' | sed 's/^[[:space:]]*//')
             {
               echo "---"
@@ -228,7 +167,6 @@ EOF
             clean_markdown "output/${base_name}_intro.md"
             echo "[INFO] Created intro: output/${base_name}_intro.md"
 
-            # Split sections
             awk -v base="$base_name" -v parent="$slug" -v chapter="$chapter_title_clean" -v today="$today" '
               BEGIN { filecount = 1; in_section = 0; section_title = ""; section_content = "" }
               /^\\section\{/ {
@@ -284,11 +222,11 @@ EOF
             ' "$tex_file"
           done < tex_list.txt
           
-          # Clean up all generated markdown files
           echo "Cleaning up markdown files..."
           for file in output/*.md; do
             if [ -f "$file" ]; then
               clean_markdown "$file"
+              python3 cleanup_tables.py "$file"
               echo "Cleaned: $file"
             fi
           done
