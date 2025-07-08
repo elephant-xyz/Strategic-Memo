@@ -1,4 +1,3 @@
-#!/bin/bash
 name: Convert LaTeX to Markdown and Split by Section
 
 on:
@@ -14,8 +13,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Pandoc
-        run: sudo apt-get update && sudo apt-get install -y pandoc
+      - name: Install Pandoc and Python
+        run: sudo apt-get update && sudo apt-get install -y pandoc python3
 
       - name: Delete old Markdown output
         run: rm -rf output && mkdir -p output
@@ -25,21 +24,54 @@ jobs:
           # Function to clean up LaTeX artifacts
           clean_markdown() {
             local file="$1"
+            
             # Remove escaped backslashes from headers
             sed -i 's/\\#/#/g' "$file"
             sed -i 's/\\\*/*/g' "$file"
-            sed -i 's/\\_/_/g' "$file"
+            sed -i 's/\/_/_/g' "$file"
+            
             # Remove any lines that start with # (all headers)
             sed -i '/^#.*$/d' "$file"
-            # Remove footnote references and content
-            sed -i 's/\[^[0-9]*\]//g' "$file"
-            sed -i '/^\[^[0-9]*\]:/d' "$file"
+            
+            # Convert footnotes to proper numbered format like in the example
+            # First, convert footnote markers in text to superscript numbers
+            sed -i 's/\\footnote{[^}]*}/¹/g' "$file"
+            
+            # Convert orphaned footnote content to proper footnote format
+            # This handles any line starting with ": " (which is how Pandoc formats broken footnotes)
+            sed -i 's/^: /¹/g' "$file"
+            
+            # Fix appendix references - remove links, keep just the reference
+            sed -i 's/\[Appendix \([A-Z0-9]\)\]([^)]*)/Appendix \1/g' "$file"
+            sed -i 's/\[Appendix \([A-Z0-9]\)\]/Appendix \1/g' "$file"
+            
+            # Clean up broken table formatting
+            # Remove extra escaping from table content
+            sed -i 's/\\\$/$/g' "$file"
+            sed -i 's/\\,/,/g' "$file"
+            
+            # Remove HTML div wrappers around tables
+            sed -i 's/<div class="center">//g' "$file"
+            sed -i 's/<\/div>//g' "$file"
+            
+            # Fix malformed table structure
+            # Remove empty table rows and fix pipe alignment
+            sed -i '/^|[[:space:]]*|[[:space:]]*|[[:space:]]*|[[:space:]]*|$/d' "$file"
+            
             # Fix double spaces and improve paragraph spacing
             sed -i 's/  \+/ /g' "$file"
             sed -i 's/\n\n\n\+/\n\n/g' "$file"
+            
             # Remove leading/trailing whitespace
             sed -i 's/^[[:space:]]*//' "$file"
             sed -i 's/[[:space:]]*$//' "$file"
+            
+            # Clean up any remaining LaTeX commands
+            sed -i 's/\\begin{[^}]*}//g' "$file"
+            sed -i 's/\\end{[^}]*}//g' "$file"
+            sed -i 's/\\center//g' "$file"
+            sed -i 's/\\centering//g' "$file"
+            sed -i 's/\\hline//g' "$file"
           }
           
           # Convert full documents to clean Markdown (without headers)
@@ -47,13 +79,68 @@ jobs:
             base_name=$(basename "$tex_file" .tex)
             echo "Converting full document: $tex_file"
             
-            # Convert to markdown using improved pandoc options
-            pandoc -f latex -t markdown --wrap=auto --columns=120 --markdown-headings=atx --standalone "$tex_file" -o "output/${base_name}.md"
+            # Convert to markdown using improved pandoc options with better table handling
+            pandoc -f latex -t gfm \
+                   --wrap=auto \
+                   --columns=120 \
+                   --markdown-headings=atx \
+                   --standalone \
+                   --preserve-tabs \
+                   "$tex_file" -o "output/${base_name}.md"
             
             if [ $? -eq 0 ]; then
-              # Clean up the generated markdown to remove headers
+              # Clean up the generated markdown
               clean_markdown "output/${base_name}.md"
+              
+              # Additional footnote fix for Abstract file
+              if [ "$base_name" = "1_Abstract" ]; then
+                # Add the footnote marker in the text where it should be
+                sed -i 's/decades of excess interest\./decades of excess interest.¹/g' "output/${base_name}.md"
+              fi
+              
+              # Universal table cleanup for all files
+              python3 << 'EOF'
+import re
+import sys
+
+filename = sys.argv[1] if len(sys.argv) > 1 else "output/" + base_name + ".md"
+
+try:
+    # Read the file
+    with open(filename, "r") as f:
+        content = f.read()
+
+    # Fix common table issues
+    # Remove malformed table headers
+    content = re.sub(r'\|\s*\*\*[^|]*\*\*\s*\|\s*\|\s*\|\s*\|', '', content)
+    
+    # Fix table alignment markers that are broken
+    content = re.sub(r'\|:\-+\|', '|---|', content)
+    content = re.sub(r'\|:\-+', '|---', content)
+    content = re.sub(r'\-+:\|', '---|', content)
+    
+    # Remove empty table rows
+    content = re.sub(r'\|\s*\|\s*\|\s*\|\s*\|\s*\n', '', content)
+    
+    # Fix table headers with escaped characters
+    content = re.sub(r'\\\*\*([^*]+)\\\*\*', r'**\1**', content)
+    
+    # Clean up table spacing
+    content = re.sub(r'\|\s{2,}', '| ', content)
+    content = re.sub(r'\s{2,}\|', ' |', content)
+
+    # Write back
+    with open(filename, "w") as f:
+        f.write(content)
+
+except Exception as e:
+    print(f"Table cleanup failed for {filename}: {e}")
+    
+EOF "output/${base_name}.md"
+
               echo "Created clean full document: output/${base_name}.md"
+            else
+              echo "Failed to convert: $tex_file"
             fi
           done
 
@@ -66,24 +153,47 @@ jobs:
         run: |
           today=$(date +%F)
           
-          # Function to clean up LaTeX artifacts
+          # Function to clean up LaTeX artifacts (same as above)
           clean_markdown() {
             local file="$1"
+            
             # Remove escaped backslashes from headers
             sed -i 's/\\#/#/g' "$file"
             sed -i 's/\\\*/*/g' "$file"
-            sed -i 's/\\_/_/g' "$file"
+            sed -i 's/\/_/_/g' "$file"
+            
             # Remove any lines that start with # (all headers)
             sed -i '/^#.*$/d' "$file"
-            # Remove footnote references and content
-            sed -i 's/\[^[0-9]*\]//g' "$file"
-            sed -i '/^\[^[0-9]*\]:/d' "$file"
+            
+            # Convert footnotes to proper numbered format
+            sed -i 's/\\footnote{[^}]*}/¹/g' "$file"
+            sed -i 's/^: /¹/g' "$file"
+            
+            # Fix appendix references
+            sed -i 's/\[Appendix \([A-Z0-9]\)\]([^)]*)/Appendix \1/g' "$file"
+            sed -i 's/\[Appendix \([A-Z0-9]\)\]/Appendix \1/g' "$file"
+            
+            # Clean up broken table formatting
+            sed -i 's/\\\$/$/g' "$file"
+            sed -i 's/\\,/,/g' "$file"
+            sed -i 's/<div class="center">//g' "$file"
+            sed -i 's/<\/div>//g' "$file"
+            sed -i '/^|[[:space:]]*|[[:space:]]*|[[:space:]]*|[[:space:]]*|$/d' "$file"
+            
             # Fix double spaces and improve paragraph spacing
             sed -i 's/  \+/ /g' "$file"
             sed -i 's/\n\n\n\+/\n\n/g' "$file"
+            
             # Remove leading/trailing whitespace
             sed -i 's/^[[:space:]]*//' "$file"
             sed -i 's/[[:space:]]*$//' "$file"
+            
+            # Clean up any remaining LaTeX commands
+            sed -i 's/\\begin{[^}]*}//g' "$file"
+            sed -i 's/\\end{[^}]*}//g' "$file"
+            sed -i 's/\\center//g' "$file"
+            sed -i 's/\\centering//g' "$file"
+            sed -i 's/\\hline//g' "$file"
           }
           
           while IFS= read -r tex_file; do
@@ -161,7 +271,7 @@ jobs:
                   print "draft: false" >> outname
                   print "---" >> outname
                   print "" >> outname
-                  cmd = "pandoc -f latex -t markdown --wrap=auto --columns=120 --markdown-headings=atx --standalone " temp_file " >> " outname
+                  cmd = "pandoc -f latex -t gfm --wrap=auto --columns=120 --markdown-headings=atx --standalone " temp_file " >> " outname
                   system(cmd)
                   print "[INFO] Created section: " outname > "/dev/stderr"
                   filecount++
