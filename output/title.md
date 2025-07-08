@@ -1,4 +1,4 @@
-<div class="titlepage">
+<div class. titlepage">
 
 **The Elephant Protocol:**
 
@@ -6,6 +6,4 @@ Decentralized Infrastructure for Real Estate Truth
 
 White Paper
 
-2025-07-08
-
-
+2025-07-08 
