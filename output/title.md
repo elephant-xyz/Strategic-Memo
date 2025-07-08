@@ -5,5 +5,5 @@ Decentralized Infrastructure for Real Estate Truth
 
 White Paper
 
-2025-07-07
+2025-07-08
 :::

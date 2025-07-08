@@ -1,7 +1,7 @@
 ---
 title: "Economic Alignment and Incentive Structure"
 slug: "economic-alignment-and-incentive-structure"
-publishDate: "2025-07-07"
+publishDate: "2025-07-08"
 chapter: "Appendix 1: Bitstrapping A Bitcoin-Native Venture Architecture"
 section: "Economic Alignment and Incentive Structure"
 parentSlug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"

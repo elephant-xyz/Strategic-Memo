@@ -2,7 +2,7 @@
 American real estate transactions cost \$234.8 billion annually---not to build homes or improve properties, but to
 repeatedly verify the same information, coordinate between incompatible systems, and pay gatekeepers for accessing what
 should be public data. On a typical \$412,000 home purchase, buyers and sellers pay \$67,155 in transaction costs, with
-42% hidden in mortgage rate manipulations that transform one-time broker fees into decades of excess interest.[^1] Most
+42% hidden in mortgage rate manipulations that transform one-time broker fees into decades of excess interest. Most
 perversely, these costs scale with property values rather than actual work performed, creating a system where
 million-dollar transactions cost five times more than \$200,000 ones despite requiring identical effort.
 
@@ -19,7 +19,7 @@ Buyer Service Provider Fees \$5,984 \$1,500
 Borrower Broker + Lender Commission \$11,124 \$1,645
 Borrower Excess Interest \$28,128 \$0
 Seller Real Estate Agent Fees \$21,918 \$4,000
-**Lifetime Total** **\$67,155** **\$7,145**¬
+**Lifetime Total** **\$67,155** **\$7,145**
 **National Total** **234.8** **29.6**
 :::
 
@@ -35,5 +35,5 @@ immediate scalability. By 2030, we project 50% market share as network effects c
 adapt or obsolete. The Elephant protocol doesn't just digitize existing processes---it reimagines property rights for
 the digital age, creating programmable, divisible, verifiable ownership that serves humanity rather than intermediaries.
 
-[^1]: See Appendix A for a detailed explanation of how "excess interest" is calculated and why rate-embedded commissions
+: See Appendix A for a detailed explanation of how "excess interest" is calculated and why rate-embedded commissions
 create a lifetime tax on borrowers.

@@ -1,7 +1,7 @@
 ---
 title: "Intermediaries and GateKeepers Control"
 slug: "intermediaries-and-gatekeepers-control"
-publishDate: "2025-07-07"
+publishDate: "2025-07-08"
 chapter: "Problem Statement"
 section: "Intermediaries and GateKeepers Control"
 parentSlug: "problem-statement"

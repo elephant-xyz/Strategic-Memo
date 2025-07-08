@@ -1,7 +1,7 @@
 ---
 title: "Building Systemic Trust"
 slug: "building-systemic-trust"
-publishDate: "2025-07-07"
+publishDate: "2025-07-08"
 chapter: "Macro Impact"
 section: "Building Systemic Trust"
 parentSlug: "macro-impact"
