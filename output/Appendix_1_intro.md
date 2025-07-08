@@ -1,3 +1,0 @@
- title: "Appendix 1: Bitstrapping A Bitcoin. Native Venture Architecture" slug: "appendix. bitstrapping a. bitcoin. native. venture. architecture" publishDate: "2025-07-08"
-chapter: "Appendix 1: Bitstrapping A Bitcoin. Native Venture Architecture" section: "Appendix 1: Bitstrapping A Bitcoin. Native Venture Architecture" parentSlug: "appendix. bitstrapping a. bitcoin. native. venture. architecture" order: 0
-toc: true description: "" draft: false
