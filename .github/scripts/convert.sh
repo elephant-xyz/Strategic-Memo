@@ -11,6 +11,9 @@ clean_markdown() {
     sed -i 's/\\_/_/g' "$file"
     # Remove any lines that start with # (all headers)
     sed -i '/^#.*$/d' "$file"
+    # Remove footnote references and content
+    sed -i 's/\[^[0-9]*\]//g' "$file"
+    sed -i '/^\[^[0-9]*\]:/d' "$file"
     # Fix double spaces and improve paragraph spacing
     sed -i 's/  \+/ /g' "$file"
     sed -i 's/\n\n\n\+/\n\n/g' "$file"

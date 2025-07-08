@@ -19,7 +19,7 @@ Buyer Service Provider Fees \$5,984 \$1,500
 Borrower Broker + Lender Commission \$11,124 \$1,645
 Borrower Excess Interest \$28,128 \$0
 Seller Real Estate Agent Fees \$21,918 \$4,000
-**Lifetime Total** **\$67,155** **\$7,145**
+**Lifetime Total** **\$67,155** **\$7,145**¬
 **National Total** **234.8** **29.6**
 :::
 
