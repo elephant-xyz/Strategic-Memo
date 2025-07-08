@@ -17,7 +17,7 @@ equity games to positive-sum ecosystem building where everyone benefits from pro
 
 The mechanism operates with mathematical precision. A protocol deploys a smart contract accepting Bitcoin deposits for a
 fixed period, typically 2-4 years. Depositors receive protocol tokens proportional to their Bitcoin contribution, priced
-at a discount to expected utility value. The protocol commits to repaying a fixed percentage---typically 10-20%---of the
+at a discount to expected utility value. The protocol commits to repaying a fixed percentage—typically 10-20%—of the
 Bitcoin value in stablecoins at maturity. Critically, tokens must encode real utility such as governance rights, fee
 discounts, or network access, not merely speculative upside.
 

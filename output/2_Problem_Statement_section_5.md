@@ -21,7 +21,7 @@ Borrower personal financial data remains off-chain in early protocol phases. Pri
 support borrower data in later phases. Industry memory captures longitudinal asset lifecycle and reputation history.
 Shared data access lowers verification costs, transaction friction, and capital market barriers.
 
-This isn't incremental reform but systematic replacement. Where the current system profits from forgetting, we create
+This isn’t incremental reform but systematic replacement. Where the current system profits from forgetting, we create
 permanent memory. Where gatekeepers control access, we enable permissionless participation. Where opacity enables
 extraction, we enforce transparency. Where misaligned incentives corrupt outcomes, we align rewards with value creation.
-The solution doesn't negotiate with the problem---it obsoletes it entirely.
+The solution doesn’t negotiate with the problem—it obsoletes it entirely.

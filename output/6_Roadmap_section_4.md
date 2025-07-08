@@ -13,7 +13,7 @@ draft: false
 
 The standardized deployment checklist transforms international expansion from adventure to algorithm. Verifier
 onboarding, legal requirement mapping, and localization needs follow predictable patterns with manageable variations.
-Each new market benefits from accumulated experience---the twentieth country launches faster than the second.
+Each new market benefits from accumulated experience—the twentieth country launches faster than the second.
 
 Modularized smart contracts adapt to jurisdiction-specific requirements without fragmenting the core protocol. Property
 rights in Singapore require CPF integration; our contracts accommodate it. Mexican transactions need RFC validation; our
@@ -22,5 +22,5 @@ while local requirements attach as needed.
 
 Local partnerships focus on education and amplification rather than exclusivity. We partner with forward-thinking law
 firms to explain the technology, not to gatekeep it. We work with progressive real estate associations to train members,
-not to limit access. Schedule international rollouts proceed methodically, with each market's success creating pressure
+not to limit access. Schedule international rollouts proceed methodically, with each market’s success creating pressure
 for neighboring jurisdictions to adopt or risk losing competitiveness in the global property market.

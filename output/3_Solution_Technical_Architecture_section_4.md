@@ -17,7 +17,7 @@ off-chain cryptographic signatures for all data contributions. These submissions
 efficient on-chain commitment, creating an audit trail that proves consensus without storing redundant data.
 
 The staking framework functions as live economic attestation, where oracles put capital at risk to vouch for their data
-quality. This creates escalating confidence layers---data verified by more oracles with higher stakes carries greater
+quality. This creates escalating confidence layers—data verified by more oracles with higher stakes carries greater
 trust weight. Unlike traditional systems where reputation is subjective and localized, Elephant creates objective,
 transferable credibility that follows oracles across jurisdictions and time. The economic model transforms verification
 from a cost center into a profit center for accurate participants. Where traditional systems pay repeatedly for data

@@ -12,7 +12,7 @@ draft: false
 ---
 
 Elephant approaches privacy through careful phasing that builds trust while respecting sensitivity. Phase 1 focuses
-exclusively on public data sources---county records, assessor data, and public title information. No private borrower or
+exclusively on public data sources—county records, assessor data, and public title information. No private borrower or
 identity data is collected in initial stages, allowing the protocol to prove its value with non-controversial
 information. Phase 2 introduces privacy-preserving designs for sensitive financial data such as mortgage pre-approvals,
 income verification, and underwriting.

@@ -1,24 +1,24 @@
 
-The 'par' rate is the true mortgage interest rate available to all consumers based on their individual default risk. It
+The ‘par’ rate is the true mortgage interest rate available to all consumers based on their individual default risk. It
 is available when consumers pay the broker/lender sales commissions directly in cash. Since this would highlight how
 large the commissions are (inviting negotiation) and might reduce consumer purchasing power by cannibalizing from the
 downpayment, broker/lenders almost never make consumers aware of the par rate (except for friends and family). Instead,
 broker/lenders choose to have their sales commissions paid by the loan funding source.
 
-Since the funding source must provide $>$`<!-- -->`{=html}100% of the loan value to cover the sales commissions but by
-law the loan principal amount cannot be increased, mechanically the interest rate is the only variable available to
-change within the funding equation.
+Since the funding source must provide $>$<!-- -->100% of the loan value to cover the sales commissions but by law the
+loan principal amount cannot be increased, mechanically the interest rate is the only variable available to change
+within the funding equation.
 
 Empirically, the interest rate increases at a 1:2 ratio, rising by 150 bps on average to accommodate 300 bps of sales
 commissions. This rate increase applies to the entire loan amount over the full mortgage term, inflating lifetime
 interest costs far in excess of the sales commission amount.
 
-We term "excess interest" as the cumulative increase in interest paid over and above the value of the sales commissions
+We term “excess interest” as the cumulative increase in interest paid over and above the value of the sales commissions
 themselves. Excess interest therefore precisely quantifies the tax on the consumer due to embedding the sales
-commissions in the interest rate ("rate-embedding") vs. the consumer paying the sales commissions directly in cash.
+commissions in the interest rate (“rate-embedding”) vs. the consumer paying the sales commissions directly in cash.
 
 Rate-embedded commissions turn a one-time sales fee into a lifetime tax that grows in proportion to the total hold
-period. Excess interest totals 7% and 34% of the home's value over a 7 and 30 year hold period respectively. For most
+period. Excess interest totals 7% and 34% of the home’s value over a 7 and 30 year hold period respectively. For most
 consumers, excess interest is the single largest transaction cost. This enormous tax is entirely eliminated on the
 Elephant protocol.
 

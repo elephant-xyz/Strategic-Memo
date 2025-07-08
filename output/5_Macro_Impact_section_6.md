@@ -11,7 +11,7 @@ description: ""
 draft: false
 ---
 
-Consumers save \$60,010 per transaction---over one year of pre-tax income returned to families. Service providers gain
+Consumers save $60,010 per transaction—over one year of pre-tax income returned to families. Service providers gain
 efficiency-based competition opportunities where merit determines success. Communities gain expanded ownership access,
 with first-generation and underserved populations benefiting most from reduced barriers.
 

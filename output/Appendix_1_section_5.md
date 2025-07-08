@@ -12,7 +12,7 @@ draft: false
 ---
 
 Implementing Bitstrapping requires careful balance between standardization and customization. While core mechanics
-remain consistent---Bitcoin locking, token minting, repayment obligations---specific parameters must match protocol
+remain consistent—Bitcoin locking, token minting, repayment obligations—specific parameters must match protocol
 characteristics and market conditions.
 
 Key parameters for protocol designers include lock period optimization, where 2-4 years typically balances Bitcoin
@@ -21,9 +21,9 @@ early supporters without excessive dilution. Repayment percentages of 10-20% of 
 protocol sustainability with attractive returns.
 
 Contribution caps prevent whale dominance while ensuring sufficient fundraising, with typical ranges of 10-50 BTC
-individual caps and 1000-5000 BTC total raises. Token utility must be clear and enforceable---fee discounts, governance
+individual caps and 1000-5000 BTC total raises. Token utility must be clear and enforceable—fee discounts, governance
 rights, priority access, and revenue sharing create natural demand, while pure governance or speculative tokens violate
-the model's principles.
+the model’s principles.
 
 Launch sequencing follows a proven pattern for market reception. Successful campaigns publish detailed protocol
 documentation demonstrating revenue potential, deploy audited smart contracts with clear terms, open contributions for

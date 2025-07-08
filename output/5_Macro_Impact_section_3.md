@@ -14,7 +14,7 @@ draft: false
 When transaction costs approach 1% of asset value, entirely new financial structures become viable. Property
 tokenization enables fractional ownership for ordinary investors. Secondary markets for property-based instruments
 emerge naturally. Dynamic mortgage products with instant refinancing capability become practical. These innovations
-multiply the economic utility of the \$26.6 trillion US residential real estate market.
+multiply the economic utility of the $26.6 trillion US residential real estate market.
 
 DeFi integration transforms real estate from an isolated asset class to composable financial building blocks. Properties
 serve as collateral for instant loans, generate yield through automated market making, and package into synthetic

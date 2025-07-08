@@ -26,4 +26,4 @@ Every economic mechanism reinforces the core principle: value creation beats val
 All MAHOUT is minted only through active data work using the Proof of Truth mechanism. Genesis token supply starts at
 zero; all tokens are earned by oracles through verified contributions. Proof of Truth requires oracles to submit valid,
 fresh data updates in real time; whoever submits verified truth first earns mining rewards and vMAHOUT. No pre-sale, no
-VC allocations, no passive farming---only verified work earns tokens.
+VC allocations, no passive farming—only verified work earns tokens.

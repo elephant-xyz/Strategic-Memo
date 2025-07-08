@@ -13,12 +13,12 @@ draft: false
 
 The public property record explorer represents our primary assault on incumbent gatekeepers through information
 liberation. Every verified property receives a dedicated page optimized for discovery, with clean URLs, semantic HTML,
-and comprehensive metadata. When verified property data ranks above MLS listings in search results, we don't just win
-traffic---we redefine where property searches begin.
+and comprehensive metadata. When verified property data ranks above MLS listings in search results, we don’t just win
+traffic—we redefine where property searches begin.
 
 Metadata and schema markup transform raw blockchain data into AI-comprehensible knowledge. Search engines and language
 models increasingly prioritize structured, verifiable data over marketing copy. Our schema.org implementations, JSON-LD
-markup, and semantic tagging ensure that when someone asks \"What's the ownership history of 123 Main Street?\" our
+markup, and semantic tagging ensure that when someone asks "What’s the ownership history of 123 Main Street?" our
 verified data provides the authoritative answer.
 
 The web crawler and sitemap infrastructure operates as a perpetual growth engine. Every new property verified, every

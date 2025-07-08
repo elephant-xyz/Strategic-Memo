@@ -17,7 +17,7 @@ their data complexity. However, practical supply remains much lower as not all p
 simultaneously and some fact groups rarely change.
 
 International expansion occurs through governance vote, where the protocol can issue tokens to incentivize verification
-in new markets using the same mechanism. Each country's property count multiplied by locally-appropriate fact groupings
+in new markets using the same mechanism. Each country’s property count multiplied by locally-appropriate fact groupings
 determines the potential token allocation. This ensures consistent economic incentives across jurisdictions while
 allowing flexibility for varying data structures and regulatory requirements.
 

@@ -11,8 +11,8 @@ description: ""
 draft: false
 ---
 
-The protocol's heartbeat begins with verifier staking contracts that transform passive observers into active truth
-miners. These contracts don't merely hold tokens---they create a living accountability system where every oracle's
+The protocol’s heartbeat begins with verifier staking contracts that transform passive observers into active truth
+miners. These contracts don’t merely hold tokens—they create a living accountability system where every oracle’s
 economic fate ties directly to data quality. Slashing mechanisms execute automatically when false data is detected,
 while rewards flow continuously to accurate verifiers.
 
@@ -22,13 +22,12 @@ opportunities, and technology companies with real estate data access. These earl
 technical support, and enhanced rewards during the bootstrap phase.
 
 The oracle submission interface provides these participants with clear workflows: connect data sources, submit
-cryptographic proofs, earn immediate rewards. Training materials walk through specific examples---how to verify a
-property sale, how to confirm permit issuance, how to validate mortgage recordings. Weekly office hours provide direct
-support. Early oracle achievements get highlighted publicly, creating social proof that attracts additional
-participants.
+cryptographic proofs, earn immediate rewards. Training materials walk through specific examples—how to verify a property
+sale, how to confirm permit issuance, how to validate mortgage recordings. Weekly office hours provide direct support.
+Early oracle achievements get highlighted publicly, creating social proof that attracts additional participants.
 
 Dispute resolution and slashing mechanisms provide the final piece of oracle accountability. When conflicting data
-submissions occur, the protocol doesn't defer to authority but to evidence. Cryptographic proofs, timestamped documents,
+submissions occur, the protocol doesn’t defer to authority but to evidence. Cryptographic proofs, timestamped documents,
 and third-party attestations determine truth. Initial markets are selected for their combination of tech-forward
-populations, transparent public records, and significant transaction volume---each serving as a proving ground for the
+populations, transparent public records, and significant transaction volume—each serving as a proving ground for the
 oracle ecosystem.

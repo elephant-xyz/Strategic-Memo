@@ -11,7 +11,7 @@ description: ""
 draft: false
 ---
 
-Elephant's data model achieves true global applicability by making no assumptions about local legal systems while
+Elephant’s data model achieves true global applicability by making no assumptions about local legal systems while
 providing complete flexibility for jurisdiction-specific requirements. This neutrality enables a single protocol to
 handle property transactions from Manhattan skyscrapers to Mumbai apartments to São Paulo favelas without architectural
 changes.

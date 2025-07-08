@@ -12,8 +12,8 @@ draft: false
 ---
 
 Governance in the Elephant protocol flows exclusively to those who build and maintain the network. vMAHOUT tokens,
-earned only through verified data contributions, determine voting power in protocol decisions. This isn't purchasable
-influence---every vMAHOUT represents actual work performed, data verified, and value created.
+earned only through verified data contributions, determine voting power in protocol decisions. This isn’t purchasable
+influence—every vMAHOUT represents actual work performed, data verified, and value created.
 
 The governance model incorporates temporal decay to ensure power remains with active contributors. vMAHOUT voting
 strength decreases by 1-2% weekly for inactive oracles, eventually approaching zero for those who stop contributing. If

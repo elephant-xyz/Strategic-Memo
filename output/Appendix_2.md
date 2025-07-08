@@ -3,20 +3,20 @@ The Elephant protocol transcends simple property tokenization by introducing a r
 treats relationships as first-class cryptographic objects. This framework extends Merkle trees beyond mere data
 integrity into semantically expressive relational structures, creating a universal language for property rights that
 spans jurisdictions, asset types, and time. By anchoring relationships, schemas, and data independently through
-content-addressed storage, the protocol achieves both mathematical verifiability and semantic richness---transforming
-real estate from document repositories into living knowledge graphs.
+content-addressed storage, the protocol achieves both mathematical verifiability and semantic richness—transforming real
+estate from document repositories into living knowledge graphs.
 
-This architectural innovation solves blockchain's fundamental limitation: the inability to represent complex real-world
+This architectural innovation solves blockchain’s fundamental limitation: the inability to represent complex real-world
 relationships without sacrificing decentralization. Traditional smart contracts force developers to choose between
-expressive data models and trustless verification. Elephant's relationship layer eliminates this false dichotomy,
+expressive data models and trustless verification. Elephant’s relationship layer eliminates this false dichotomy,
 enabling property transactions that are simultaneously human-readable, machine-verifiable, and legally compliant across
 global jurisdictions.
 
 
 Merkle trees revolutionized blockchain by enabling efficient cryptographic proofs of data inclusion. Elephant extends
-this primitive into a full relational algebra where trees don't just verify data---they encode meaning. Each
-relationship between entities becomes a cryptographic commitment, transforming static hashes into dynamic knowledge
-graphs that evolve while maintaining complete auditability.
+this primitive into a full relational algebra where trees don’t just verify data—they encode meaning. Each relationship
+between entities becomes a cryptographic commitment, transforming static hashes into dynamic knowledge graphs that
+evolve while maintaining complete auditability.
 
 Consider a simple property ownership relationship. Traditional systems store this as a database entry or document
 paragraph. Elephant encodes it as a Merkle-committed relationship object:
@@ -25,16 +25,16 @@ $$\text{Relationship}_{\text{ownership}} = H(\text{Person}_{\text{root}} || \tex
 
 This structure achieves multiple objectives simultaneously. The relationship exists independently of both entities,
 allowing ownership to transfer without modifying the underlying person or property objects. The schema reference ensures
-semantic consistency---every \"owns\" relationship follows identical validation rules. The Merkle commitment enables
-proof of relationship existence at any historical point without storing complete history.
+semantic consistency—every "owns" relationship follows identical validation rules. The Merkle commitment enables proof
+of relationship existence at any historical point without storing complete history.
 
-The true power emerges from composition. Complex ownership structures---joint tenancy, corporate ownership, trust
-arrangements---become relationship graphs rather than legal documents. A property owned by a trust with three
+The true power emerges from composition. Complex ownership structures—joint tenancy, corporate ownership, trust
+arrangements—become relationship graphs rather than legal documents. A property owned by a trust with three
 beneficiaries encodes as multiple relationships: Trust→Property (owns), Person1→Trust (beneficiary), Person2→Trust
 (beneficiary), Person3→Trust (beneficiary). Each relationship maintains independent verification while the graph
 captures complete ownership semantics.
 
-This approach solves real estate's fundamental data problem: relationships matter more than entities. A property's value
+This approach solves real estate’s fundamental data problem: relationships matter more than entities. A property’s value
 derives not from its physical attributes but from the web of rights, obligations, and restrictions surrounding it. By
 making relationships primary, Elephant captures this reality in computable form. Mortgages become relationships between
 properties and liens. Easements become relationships between properties and usage rights. Leases become time-bound
@@ -43,7 +43,7 @@ relationships with specific permissions.
 The Merkle structure ensures efficient verification at any granularity. Proving ownership requires only the specific
 relationship proof, not the entire property history. Proving a clean title requires showing the absence of certain
 relationships (liens, disputes) through sparse Merkle tree techniques. This selective disclosure enables
-privacy-preserving verification---parties see only relationships relevant to their transaction.
+privacy-preserving verification—parties see only relationships relevant to their transaction.
 
 
 Schemas in Elephant function as the constitutional framework governing all data relationships. Unlike traditional
@@ -51,7 +51,7 @@ database schemas that merely structure data, Elephant schemas encode legal seman
 cross-jurisdictional compatibility into immutable, version-controlled specifications that ensure global coherence while
 allowing local adaptation.
 
-Each schema defines a Group---a semantic container for related interaction patterns. The \"Ownership\" group contains
+Each schema defines a Group—a semantic container for related interaction patterns. The "Ownership" group contains
 schemas for various ownership types: simple ownership, joint tenancy, tenancy in common, corporate ownership, trust
 ownership. Each schema within the group shares common interfaces while implementing specific legal logic:
 
@@ -73,13 +73,13 @@ fields or constraints while maintaining backward compatibility. Relationships ex
 ensuring perpetual interpretability. A relationship created in 2025 remains verifiable in 2050 using its original
 schema, even as newer versions emerge.
 
-This governance model solves the protocol ossification problem plaguing many blockchains. Bitcoin's simplicity ensures
-security but limits expressiveness. Ethereum's complexity enables innovation but complicates verification. Elephant's
+This governance model solves the protocol ossification problem plaguing many blockchains. Bitcoin’s simplicity ensures
+security but limits expressiveness. Ethereum’s complexity enables innovation but complicates verification. Elephant’s
 schema governance achieves both: simple base protocol with complex semantics layered through governed schemas. The
 protocol remains minimal while applications gain unlimited expressiveness.
 
 
-The Relationship class forms Elephant's core innovation---a polymorphic, bidirectional, schema-validated object that can
+The Relationship class forms Elephant’s core innovation—a polymorphic, bidirectional, schema-validated object that can
 represent any connection between entities. This generic abstraction enables the protocol to handle everything from
 simple ownership to complex financial instruments without special-casing each relationship type.
 
@@ -102,7 +102,7 @@ Every Relationship contains essential components:
 - **timestamp**: Block number when relationship was created
 
 This structure enables powerful properties. Bidirectionality ensures relationships are discoverable from either
-entity---finding all properties owned by a person or all owners of a property requires identical queries. Schema
+entity—finding all properties owned by a person or all owners of a property requires identical queries. Schema
 validation happens at relationship creation, preventing invalid connections. Merkle roots enable historical queries
 without storing complete history. Oracle signatures provide graduated trust based on validation thoroughness.
 
@@ -119,8 +119,8 @@ traditional systems.
 
 Oracle consensus in Elephant abandons the problematic requirement for simultaneous agreement, instead embracing
 incremental validation that mirrors how truth emerges in real-world property transactions. This design recognizes that
-perfect information rarely exists at transaction time---truth accumulates through progressive verification by
-independent parties.
+perfect information rarely exists at transaction time—truth accumulates through progressive verification by independent
+parties.
 
 The incremental model works through staged validation. Initial oracles might verify basic ownership documents, adding
 their signatures to create a baseline trust level. Subsequent oracles verify additional aspects: title search results,
@@ -131,17 +131,17 @@ $$\text{Validation}_{\text{tree}} = \text{MerkleTree}([\text{Oracle}_1(\text{own
 
 This structure provides graduated trust levels. A relationship with three oracle signatures offers basic confidence. Ten
 signatures including specialized validators (title companies, attorneys, inspectors) provide high confidence. The market
-determines required validation levels for different transaction types---buying a \$100k property might require fewer
-validations than a \$10M commercial complex.
+determines required validation levels for different transaction types—buying a $100k property might require fewer
+validations than a $10M commercial complex.
 
 Incremental consensus solves the oracle availability problem. Rather than requiring all oracles to be online
 simultaneously, each can contribute asynchronously. This enables global oracle networks spanning time zones and
-jurisdictions. It also allows specialized oracles to focus on their expertise---title researchers validate ownership
+jurisdictions. It also allows specialized oracles to focus on their expertise—title researchers validate ownership
 history, inspectors validate physical condition, attorneys validate legal compliance.
 
 The Merkle structure ensures efficient verification regardless of validation depth. Proving basic ownership requires
 only the first few oracle signatures. Proving institutional-grade verification might require the complete validation
-tree. This selective verification enables privacy-preserving proofs---parties see only the validation level relevant to
+tree. This selective verification enables privacy-preserving proofs—parties see only the validation level relevant to
 their risk tolerance.
 
 
@@ -162,7 +162,7 @@ Schema field definitions include rich semantic annotations:
 - **Oracle requirements**: Which oracle types can verify this field, minimum signature counts
 
 This semantic richness enables powerful automation. Frontend applications generate appropriate UI components
-automatically---address fields render with autocomplete, date fields with calendar widgets, currency fields with proper
+automatically—address fields render with autocomplete, date fields with calendar widgets, currency fields with proper
 formatting. Validation happens client-side before submission, reducing failed transactions. Oracle interfaces know
 exactly which fields require verification and acceptable evidence types.
 
@@ -172,30 +172,30 @@ Consider a property address field specification:
 
 **AddressField Schema Definition:**
 
-- **type**: \"GeoAddress\" (semantic type for geographic addresses)
+- **type**: "GeoAddress" (semantic type for geographic addresses)
 
 - **required**: true (must be present for valid entity)
 
 - **validation**: PostalServiceAPI (external validation service)
 
-- **display**: \"street, city, state postal\" (UI rendering format)
+- **display**: "street, city, state postal" (UI rendering format)
 
-- **oracle**: \[\"County Records\", \"Postal Service\"\] (acceptable validators)
+- **oracle**: \["County Records", "Postal Service"\] (acceptable validators)
 
-- **retention**: \"permanent\" (data retention policy)
+- **retention**: "permanent" (data retention policy)
 
 This single definition enables complete field handling across the entire stack. Smart contracts validate addresses
 against postal service APIs. Oracles know to verify against county records. UIs render appropriate input forms. Archives
-retain address history permanently. No component requires hardcoded knowledge about address handling---the schema
-provides everything needed.
+retain address history permanently. No component requires hardcoded knowledge about address handling—the schema provides
+everything needed.
 
 
 Schemas transcend mere data definitions to become protocol-level primitives that encode legal and business logic into
 immutable, verifiable specifications. This elevation of schemas from implementation details to first-class objects
 enables Elephant to adapt to any jurisdiction, asset type, or transaction pattern without protocol changes.
 
-Each schema undergoes rigorous lifecycle management. Development begins with stakeholder input---lawyers, real estate
-professionals, technologists collaborate on requirements. The schema is drafted using Elephant's Schema Definition
+Each schema undergoes rigorous lifecycle management. Development begins with stakeholder input—lawyers, real estate
+professionals, technologists collaborate on requirements. The schema is drafted using Elephant’s Schema Definition
 Language (SDL), which extends JSON Schema with legal semantics. Community review ensures completeness and compatibility.
 DAO governance approves final schemas through on-chain voting. Approved schemas are published to IPFS, creating
 permanent CIDs. The protocol registry maps semantic names to CIDs for discovery.
@@ -207,12 +207,12 @@ framework that adapts to changing requirements while maintaining historical comp
 
 Schema immutability provides critical legal certainty. A relationship created under a specific schema version remains
 valid indefinitely under those rules. Legal disputes reference the exact schema version used at transaction time. This
-creates unprecedented clarity---the rules governing any historical transaction are permanently accessible and
-unambiguous. Traditional legal systems struggle with changing laws and interpretations. Elephant schemas provide
-mathematical certainty about applicable rules.
+creates unprecedented clarity—the rules governing any historical transaction are permanently accessible and unambiguous.
+Traditional legal systems struggle with changing laws and interpretations. Elephant schemas provide mathematical
+certainty about applicable rules.
 
 
-Elephant's data model achieves true global applicability by making no assumptions about local legal systems while
+Elephant’s data model achieves true global applicability by making no assumptions about local legal systems while
 providing complete flexibility for jurisdiction-specific requirements. This neutrality enables a single protocol to
 handle property transactions from Manhattan skyscrapers to Mumbai apartments to São Paulo favelas without architectural
 changes.
@@ -237,15 +237,15 @@ specific schema versions. Smart contracts can encode choice-of-schema clauses si
 clarity reduces legal uncertainty and enables automated dispute resolution for schema-defined issues.
 
 
-Every component in Elephant's relationship layer---entities, relationships, schemas, validations---achieves independent
+Every component in Elephant’s relationship layer—entities, relationships, schemas, validations—achieves independent
 verifiability through cryptographic commitments. This pervasive verifiability enables trust-minimized interactions where
 parties validate relevant components without accessing complete data.
 
 The verification architecture layers multiple proof systems. Content addressing through IPFS CIDs ensures data
-integrity---any modification changes the CID. Merkle roots enable efficient inclusion proofs---proving a relationship
-exists requires logarithmic rather than linear data. Oracle signatures provide validation attestations---more signatures
-increase confidence. Zero-knowledge proofs enable privacy-preserving verification---proving ownership without revealing
-owner identity.
+integrity—any modification changes the CID. Merkle roots enable efficient inclusion proofs—proving a relationship exists
+requires logarithmic rather than linear data. Oracle signatures provide validation attestations—more signatures increase
+confidence. Zero-knowledge proofs enable privacy-preserving verification—proving ownership without revealing owner
+identity.
 
 This multi-layered approach accommodates varying trust requirements. Public property records might require only CID
 verification. Financial transactions might require complete Merkle proofs. Institutional investments might require
@@ -261,9 +261,9 @@ The decentralized nature ensures no single point of failure or control. IPFS dis
 Multiple oracle networks prevent validation monopolies. Open schema governance prevents definition capture. This
 resilience creates antifragile infrastructure that strengthens through stress rather than breaking.
 
-Real estate's digital transformation requires more than tokenizing existing processes---it demands reimagining how
-property rights are defined, verified, and exchanged. Elephant's relationship layer provides this foundation through
+Real estate’s digital transformation requires more than tokenizing existing processes—it demands reimagining how
+property rights are defined, verified, and exchanged. Elephant’s relationship layer provides this foundation through
 mathematical primitives that are simultaneously more rigorous than legal documents and more flexible than traditional
 databases. By making relationships first-class objects, schemas protocol primitives, and verification pervasive,
-Elephant creates infrastructure for property's next century. The future of ownership isn't written in contracts but
+Elephant creates infrastructure for property’s next century. The future of ownership isn’t written in contracts but
 encoded in cryptographic relationships that span the globe while respecting local sovereignty.
