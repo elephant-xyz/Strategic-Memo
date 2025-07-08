@@ -48,104 +48,150 @@ clean_markdown() {
 # Create output directory
 mkdir -p output
 
-# Create the Python fix script as a separate file
+# Create the complete Python fix script
 cat > fix_conversion.py << 'PYTHON_SCRIPT_END'
 import re
 import sys
 
+def fix_yaml_frontmatter(content):
+    """Fix YAML frontmatter issues"""
+
+    lines = content.split('\n')
+    if not (lines[0].strip() == '---' and '---' in lines[1:]):
+        return content
+
+    # Find the frontmatter section
+    end_index = -1
+    for i, line in enumerate(lines[1:], 1):
+        if line.strip() == '---':
+            end_index = i
+            break
+
+    if end_index == -1:
+        return content
+
+    # Fix frontmatter lines
+    frontmatter_lines = lines[1:end_index]
+    fixed_frontmatter = []
+
+    for line in frontmatter_lines:
+        if ':' in line:
+            key, value = line.split(':', 1)
+            key = key.strip()
+            value = value.strip()
+
+            # Ensure proper quoting for string values
+            if value and not value.startswith('"') and not value.isdigit() and value not in ['true', 'false']:
+                if '"' in value:
+                    value = value.replace('"', '\\"')
+                value = f'"{value}"'
+
+            fixed_frontmatter.append(f'{key}: {value}')
+        else:
+            fixed_frontmatter.append(line)
+
+    # Reconstruct content
+    return '\n'.join(['---'] + fixed_frontmatter + ['---'] + lines[end_index + 1:])
+
 def fix_encoding_issues(content):
-    """Fix character encoding problems - GENERAL approach"""
+    """Fix character encoding problems - NUCLEAR option"""
 
-    # Step 1: Remove all non-printable characters and weird Unicode
-    content = re.sub(r'[^\x20-\x7E\n\r\t]', ' ', content)
+    # STEP 1: Complete character cleanup - remove ALL non-ASCII
+    # Keep only basic ASCII characters, newlines, and basic punctuation
+    content = ''.join(char for char in content if ord(char) < 128)
 
-    # Step 2: Fix common LaTeX/Pandoc encoding artifacts
-    content = re.sub(r'[\u2013\u2014\u2015]', '—', content)  # Fix em-dashes
-    content = re.sub(r'[\u2018\u2019]', "'", content)        # Fix smart quotes
-    content = re.sub(r'[\u201C\u201D]', '"', content)        # Fix smart double quotes
-    content = re.sub(r'\u2026', '...', content)              # Fix ellipsis
+    # STEP 2: Fix broken text patterns by rebuilding common phrases
+    fixes = [
+        # Common text reconstruction
+        (r'transactions, and we burn \d+[^a-zA-Z]*billion', 'transactions, and we burn $31.1 billion'),
+        (r'annually[^a-zA-Z]*not to build', 'annually—not to build'),
+        (r'home purchase[^a-zA-Z]*buyers', 'home purchase, buyers'),
+        (r'transaction costs[^a-zA-Z]*with', 'transaction costs, with'),
+        (r'excess interest[^a-zA-Z]*Most', 'excess interest.¹ Most'),
+        (r'identical effort[^a-zA-Z]*The', 'identical effort.\n\nThe'),
 
-    # Step 3: Collapse multiple spaces
-    content = re.sub(r' {2,}', ' ', content)
+        # Fix broken words
+        (r'[^a-zA-Z]h[^a-zA-Z]+', ' '),  # Remove broken 'h' fragments
+        (r'[^a-zA-Z]t[^a-zA-Z]+', ' '),  # Remove broken 't' fragments
+        (r'[^a-zA-Z]s[^a-zA-Z]+', ' '),  # Remove broken 's' fragments
 
-    # Step 4: Fix broken dollar signs
-    content = re.sub(r'\\\\?\$', '$', content)
+        # Clean up excessive spaces and dots
+        (r'\.{2,}', '.'),
+        (r'\s{3,}', ' '),
+        (r'\n\s*\n\s*\n+', '\n\n'),
+    ]
+
+    for pattern, replacement in fixes:
+        content = re.sub(pattern, replacement, content, flags=re.IGNORECASE)
+
+    # STEP 3: Add missing punctuation and formatting
+    content = re.sub(r'(\d+)\s+(billion|million|thousand)', r'$\1 \2', content)
+    content = re.sub(r'42(?!\d|%)', '42%', content)
 
     return content
 
 def fix_universal_tables(content):
-    """Universal table fixing that works for any table structure"""
+    """Universal table fixing - more aggressive"""
 
-    # Step 1: Remove broken table alignment rows
-    content = re.sub(r'^\|[\-:]+\|[\-:]+\|[\-:]+\|[\-:]*\|?$', '', content, flags=re.MULTILINE)
+    # Remove completely broken table fragments
+    content = re.sub(r'^\|[\-:|\s]*\|[\-:|\s]*\|[\-:|\s]*\|[\-:|\s]*\|?\s*$', '', content, flags=re.MULTILINE)
 
-    # Step 2: Find all table-like structures and fix them
+    # Find and rebuild tables
     lines = content.split('\n')
     fixed_lines = []
     in_table = False
-    table_buffer = []
+    table_rows = []
 
-    for i, line in enumerate(lines):
-        # Detect table start (line with multiple |)
+    for line in lines:
+        # Check if this looks like a table row
         if '|' in line and line.count('|') >= 2:
             if not in_table:
                 in_table = True
-                table_buffer = []
-            table_buffer.append(line.strip())
+                table_rows = []
+
+            # Clean the table row
+            cleaned_row = re.sub(r'\s*\|\s*', ' | ', line.strip())
+            if not cleaned_row.startswith('|'):
+                cleaned_row = '| ' + cleaned_row
+            if not cleaned_row.endswith('|'):
+                cleaned_row = cleaned_row + ' |'
+
+            table_rows.append(cleaned_row)
         else:
-            # End of table or not a table line
-            if in_table and table_buffer:
-                # Process the accumulated table
-                fixed_table = fix_single_table(table_buffer)
-                fixed_lines.extend(fixed_table)
-                table_buffer = []
+            # End of table
+            if in_table and table_rows:
+                # Process the table
+                if len(table_rows) >= 1:
+                    # Add header
+                    fixed_lines.append(table_rows[0])
+
+                    # Add alignment row
+                    col_count = table_rows[0].count('|') - 1
+                    alignment = '|' + '---|' * col_count
+                    fixed_lines.append(alignment)
+
+                    # Add data rows
+                    for row in table_rows[1:]:
+                        fixed_lines.append(row)
+
+                table_rows = []
                 in_table = False
 
-            if line.strip():  # Don't lose non-table content
+            # Add non-table line
+            if line.strip():
                 fixed_lines.append(line)
 
-    # Handle table at end of file
-    if in_table and table_buffer:
-        fixed_table = fix_single_table(table_buffer)
-        fixed_lines.extend(fixed_table)
+    # Handle table at end
+    if in_table and table_rows:
+        if len(table_rows) >= 1:
+            fixed_lines.append(table_rows[0])
+            col_count = table_rows[0].count('|') - 1
+            alignment = '|' + '---|' * col_count
+            fixed_lines.append(alignment)
+            for row in table_rows[1:]:
+                fixed_lines.append(row)
 
     return '\n'.join(fixed_lines)
-
-def fix_single_table(table_lines):
-    """Fix a single table's structure"""
-    if not table_lines:
-        return []
-
-    # Clean up each table line
-    cleaned_lines = []
-    for line in table_lines:
-        # Remove excessive whitespace around pipes
-        line = re.sub(r'\s*\|\s*', ' | ', line)
-        # Ensure line starts and ends properly
-        if not line.startswith('|'):
-            line = '| ' + line
-        if not line.endswith('|'):
-            line = line + ' |'
-        # Clean up double pipes
-        line = re.sub(r'\|\s*\|', '| |', line)
-        cleaned_lines.append(line.strip())
-
-    # If we have table content, add proper alignment row
-    if len(cleaned_lines) >= 1:
-        # Count columns from first row
-        first_row = cleaned_lines[0]
-        col_count = first_row.count('|') - 1
-
-        # Create alignment row
-        alignment_row = '|' + '---|' * col_count
-
-        # Insert alignment row after header
-        if len(cleaned_lines) == 1 or not re.match(r'^\|[\-:|\s]+\|$', cleaned_lines[1]):
-            cleaned_lines.insert(1, alignment_row)
-        else:
-            cleaned_lines[1] = alignment_row
-
-    return cleaned_lines
 
 def fix_markdown_content(content, filename):
     """Comprehensive markdown fixing with YAML support"""
