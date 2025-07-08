@@ -109,21 +109,37 @@ def fix_yaml_frontmatter(content):
 
 def fix_encoding_issues(content):
     """Fix character encoding problems"""
-    # Keep only basic ASCII characters, newlines, and basic punctuation
-    content = ''.join(char for char in content if ord(char) < 128 or char in 'àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ¹²³')
+    # More aggressive character filtering - keep only safe ASCII
+    safe_content = ""
+    for char in content:
+        if ord(char) <= 127:  # Basic ASCII
+            safe_content += char
+        elif char in '¹²³':  # Keep superscript numbers
+            safe_content += char
+        elif char in '—–':  # Keep em/en dashes
+            safe_content += char
+        else:
+            # Replace problematic characters with space
+            safe_content += ' '
+
+    content = safe_content
 
     # General pattern fixes
     fixes = [
+        # Fix word spacing issues
+        (r'([a-z])([A-Z])', r'\1 \2'),  # Add space between lowercase and uppercase
+        (r'(\d+)([a-zA-Z])', r'\1 \2'),  # Add space between numbers and letters
+        (r'([a-zA-Z])(\d+)', r'\1 \2'),  # Add space between letters and numbers
+
         # Fix broken monetary amounts
         (r'(\d+),(\d{3})', r'\1,\2'),
-        (r'\\?\$(\d+)\.(\d+) billion', r'$\1.\2 billion'),
-        (r'\\?\$(\d+) billion', r'$\1 billion'),
-        (r'\\?\$(\d+),(\d{3})', r'$\1,\2'),
+        (r'\\?\$\s*(\d+)\.(\d+)\s*billion', r'$\1.\2 billion'),
+        (r'\\?\$\s*(\d+)\s*billion', r'$\1 billion'),
+        (r'\\?\$\s*(\d+),(\d{3})', r'$\1,\2'),
 
-        # General text cleanup patterns
-        (r'([a-zA-Z])[^a-zA-Z\s]{1,3}([A-Z][a-z])', r'\1. \2'),  # Fix broken sentence boundaries
-        (r'([a-z])[^a-zA-Z\s]{1,3}([a-z])', r'\1 \2'),           # Fix broken word boundaries
-        (r'([.!?])[^a-zA-Z\s]{1,3}([A-Z])', r'\1 \2'),          # Fix punctuation spacing
+        # Fix periods and spacing
+        (r'([a-z])\.\s*([a-z])', r'\1. \2'),  # Fix period spacing
+        (r'([a-z])\s+\.\s*([A-Z])', r'\1. \2'),  # Fix misplaced periods
 
         # Clean up excessive spaces and dots
         (r'\.{2,}', '.'),
@@ -136,6 +152,15 @@ def fix_encoding_issues(content):
         # Fix common LaTeX artifacts
         (r'---', '—'),  # Convert triple dash to em dash
         (r'--', '–'),   # Convert double dash to en dash
+
+        # Fix common word breaks
+        (r'annuallynot', 'annually—not'),
+        (r'one\.\s*time', 'one-time'),
+        (r'million\.\s*dollar', 'million-dollar'),
+        (r'Zero\.\s*knowledge', 'Zero-knowledge'),
+        (r'doesnt', "doesn't"),
+        (r'processesit', 'processes—it'),
+        (r'rate\.\s*embedded', 'rate-embedded'),
     ]
 
     for pattern, replacement in fixes:
@@ -149,11 +174,27 @@ def fix_table_formatting(content):
     fixed_lines = []
     in_table = False
     table_rows = []
+    i = 0
 
-    for line in lines:
+    while i < len(lines):
+        line = lines[i]
         stripped_line = line.strip()
 
-        # Check if this looks like a table row
+        # Skip obviously broken table content that's mixed with text
+        if ('|' in stripped_line and
+            len(stripped_line) > 200 and
+            ('The Elephant protocol' in stripped_line or
+             'This transformation' in stripped_line)):
+            # This is corrupted table content mixed with text - skip and try to extract text
+            text_parts = re.split(r'\|[^|]*\|', stripped_line)
+            for part in text_parts:
+                clean_part = part.strip()
+                if clean_part and len(clean_part) > 20:
+                    fixed_lines.append(clean_part)
+            i += 1
+            continue
+
+        # Check if this looks like a proper table row
         if '|' in stripped_line and stripped_line.count('|') >= 2:
             if not in_table:
                 in_table = True
@@ -162,30 +203,34 @@ def fix_table_formatting(content):
             # Clean the table row
             cleaned_row = re.sub(r'\s*\|\s*', ' | ', stripped_line.strip())
 
-            # Ensure proper table formatting
-            if not cleaned_row.startswith('|'):
-                cleaned_row = '| ' + cleaned_row
-            if not cleaned_row.endswith('|'):
-                cleaned_row = cleaned_row + ' |'
+            # Remove any text that got mixed into table cells
+            cells = cleaned_row.split('|')
+            clean_cells = []
+            for cell in cells:
+                cell = cell.strip()
+                # Skip cells that are obviously corrupted (too long or contain sentences)
+                if len(cell) > 50 or (len(cell.split()) > 6 and any(word in cell.lower() for word in ['the', 'this', 'that', 'which', 'because'])):
+                    continue
+                clean_cells.append(cell)
 
-            # Skip empty or malformed rows
-            if len([cell.strip() for cell in cleaned_row.split('|') if cell.strip()]) >= 2:
+            if len(clean_cells) >= 3:  # Need at least 3 meaningful cells
+                cleaned_row = '| ' + ' | '.join(clean_cells) + ' |'
                 table_rows.append(cleaned_row)
         else:
             # End of table
             if in_table and table_rows:
                 # Process the table
-                if len(table_rows) >= 1:
+                if len(table_rows) >= 2:  # Need at least header + one data row
                     # Add header row
                     fixed_lines.append(table_rows[0])
 
-                    # Add alignment row (determine from first data row)
+                    # Add alignment row
                     col_count = table_rows[0].count('|') - 1
                     if col_count > 0:
                         alignment = '|' + ' --- |' * col_count
                         fixed_lines.append(alignment)
 
-                    # Add data rows (skip the first if it was a header)
+                    # Add data rows
                     for row in table_rows[1:]:
                         fixed_lines.append(row)
 
@@ -195,14 +240,16 @@ def fix_table_formatting(content):
                 in_table = False
 
             # Add non-table line if it's not empty
-            if stripped_line:
+            if stripped_line and not in_table:
                 fixed_lines.append(line)
-            elif not in_table:  # Preserve empty lines outside tables
+            elif not in_table and not stripped_line:  # Preserve empty lines outside tables
                 fixed_lines.append('')
+
+        i += 1
 
     # Handle table at end of content
     if in_table and table_rows:
-        if len(table_rows) >= 1:
+        if len(table_rows) >= 2:
             fixed_lines.append(table_rows[0])
             col_count = table_rows[0].count('|') - 1
             if col_count > 0:
@@ -279,7 +326,7 @@ def fix_markdown_content(content, filename):
 
     # Final cleanup
     content = re.sub(r' {2,}', ' ', content)
-    content = re.sub(r'\n{3,}', '\n\n', content)
+    content = re.sub(r'\n{3,}', '\n\n')
 
     # Remove any remaining LaTeX artifacts
     content = re.sub(r'\\[a-zA-Z]+\{[^}]*\}', '', content)
@@ -305,43 +352,15 @@ if __name__ == "__main__":
         print(f"❌ Error fixing {filename}: {e}")
 PYTHON_SCRIPT_END
 
-# Convert full documents
-echo "🔄 Converting full documents..."
-find . -maxdepth 1 -name "*.tex" -not -name "Full Doc.tex" | while read -r tex_file; do
-    base_name=$(basename "$tex_file" .tex)
-    echo "Converting: $tex_file"
-
-    # Convert with explicit UTF-8 encoding and better table handling
-    LANG=en_US.UTF-8 pandoc -f latex -t gfm \
-           --wrap=preserve \
-           --markdown-headings=atx \
-           --standalone \
-           --preserve-tabs \
-           --table-cellpadding=1 \
-           "$tex_file" -o "output/${base_name}.md"
-
-    if [ $? -eq 0 ]; then
-        # Clean up the generated markdown
-        clean_markdown "output/${base_name}.md"
-
-        # Apply comprehensive fixes
-        python3 fix_conversion.py "output/${base_name}.md"
-
-        echo "✅ Created: output/${base_name}.md"
-    else
-        echo "❌ Failed: $tex_file"
-    fi
-done
-
-# Create intro and section files
-echo "🔄 Creating intro and section files..."
+# Convert documents with frontmatter
+echo "🔄 Converting LaTeX files to Markdown with frontmatter..."
 today=$(date +%F)
 
 find . -maxdepth 1 -name "*.tex" -not -name "Full Doc.tex" > tex_list.txt
 
 while IFS= read -r tex_file; do
     [ ! -f "$tex_file" ] && echo "Skipping: $tex_file" && continue
-    echo "Processing sections: $tex_file"
+    echo "Converting: $tex_file"
     base_name=$(basename "$tex_file" .tex)
 
     # Get chapter title
@@ -349,80 +368,111 @@ while IFS= read -r tex_file; do
     chapter_title_clean=$(echo "$chapter_title" | tr -cd '[:alnum:] .:/-' | sed 's/["\\]/ /g')
     slug=$(echo "$chapter_title_clean" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$//g')
 
-    # Create intro file
-    intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}//' | sed 's/^[[:space:]]*//')
-    {
-        echo "---"
-        echo "title: \"$chapter_title_clean\""
-        echo "slug: \"$slug\""
-        echo "publishDate: \"$today\""
-        echo "chapter: \"$chapter_title_clean\""
-        echo "section: \"$chapter_title_clean\""
-        echo "parentSlug: \"$slug\""
-        echo "order: 0"
-        echo "toc: true"
-        echo "description: \"\""
-        echo "draft: false"
-        echo "---"
-        echo ""
-        echo "$intro_lines" | LANG=en_US.UTF-8 pandoc -f latex -t gfm --wrap=preserve --markdown-headings=atx --standalone --table-cellpadding=1
-    } > "output/${base_name}_intro.md"
+    # Check if file has sections
+    if grep -q '\\section{' "$tex_file"; then
+        echo "File has sections - creating intro + section files"
 
-    clean_markdown "output/${base_name}_intro.md"
-    python3 fix_conversion.py "output/${base_name}_intro.md"
-    echo "📄 Created: output/${base_name}_intro.md"
+        # Create intro file for chapters with sections
+        intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}//' | sed 's/^[[:space:]]*//')
+        {
+            echo "---"
+            echo "title: \"$chapter_title_clean\""
+            echo "slug: \"$slug\""
+            echo "publishDate: \"$today\""
+            echo "chapter: \"$chapter_title_clean\""
+            echo "section: \"$chapter_title_clean\""
+            echo "parentSlug: \"$slug\""
+            echo "order: 0"
+            echo "toc: true"
+            echo "description: \"\""
+            echo "draft: false"
+            echo "---"
+            echo ""
+            echo "$intro_lines" | LANG=en_US.UTF-8 pandoc -f latex -t gfm --wrap=preserve --markdown-headings=atx --standalone
+        } > "output/${base_name}.md"
 
-    # Split sections
-    awk -v base="$base_name" -v parent="$slug" -v chapter="$chapter_title_clean" -v today="$today" '
-        BEGIN { filecount = 1; in_section = 0; section_title = ""; section_content = "" }
-        /^\\section\{/ {
-            if (in_section && section_title != "") { save_section() }
-            in_section = 1
-            section_title = substr($0, 10)
-            section_title = substr(section_title, 1, index(section_title, "}") - 1)
-            section_content = ""
-            next
-        }
-        in_section {
-            if (section_content == "") {
-                section_content = $0
-            } else {
-                section_content = section_content "\n" $0
+        clean_markdown "output/${base_name}.md"
+        python3 fix_conversion.py "output/${base_name}.md"
+        echo "✅ Created intro: output/${base_name}.md"
+
+        # Split sections for files that have them
+        awk -v base="$base_name" -v parent="$slug" -v chapter="$chapter_title_clean" -v today="$today" '
+            BEGIN { filecount = 1; in_section = 0; section_title = ""; section_content = "" }
+            /^\\section\{/ {
+                if (in_section && section_title != "") { save_section() }
+                in_section = 1
+                section_title = substr($0, 10)
+                section_title = substr(section_title, 1, index(section_title, "}") - 1)
+                section_content = ""
+                next
             }
-        }
-        END { if (in_section && section_title != "") { save_section() } }
-        function save_section() {
-            gsub(/[[:space:]]+$/, "", section_title)
-            gsub(/\\\\/, "", section_title)
-            gsub(/"/, "", section_title)
-            gsub(/[^[:alnum:] .:-]/, "", section_title)
-            slugified = tolower(section_title)
-            gsub(/[^a-z0-9]+/, "-", slugified)
-            gsub(/^-|-$/, "", slugified)
-            outname = "output/" base "_section_" filecount ".md"
-            temp_file = "temp_section_" filecount ".tex"
-            print section_content > temp_file
-            if (system("test -s " temp_file) == 0) {
-                print "---" > outname
-                print "title: \"" section_title "\"" >> outname
-                print "slug: \"" slugified "\"" >> outname
-                print "publishDate: \"" today "\"" >> outname
-                print "chapter: \"" chapter "\"" >> outname
-                print "section: \"" section_title "\"" >> outname
-                print "parentSlug: \"" parent "\"" >> outname
-                print "order: " filecount >> outname
-                print "toc: true" >> outname
-                print "description: \"\"" >> outname
-                print "draft: false" >> outname
-                print "---" >> outname
-                print "" >> outname
-                cmd = "LANG=en_US.UTF-8 pandoc -f latex -t gfm --wrap=preserve --markdown-headings=atx --standalone --table-cellpadding=1 " temp_file " >> " outname
-                system(cmd)
-                filecount++
+            in_section {
+                if (section_content == "") {
+                    section_content = $0
+                } else {
+                    section_content = section_content "\n" $0
+                }
             }
-            system("rm -f " temp_file)
-        }
-    ' "$tex_file"
+            END { if (in_section && section_title != "") { save_section() } }
+            function save_section() {
+                gsub(/[[:space:]]+$/, "", section_title)
+                gsub(/\\\\/, "", section_title)
+                gsub(/"/, "", section_title)
+                gsub(/[^[:alnum:] .:-]/, "", section_title)
+                slugified = tolower(section_title)
+                gsub(/[^a-z0-9]+/, "-", slugified)
+                gsub(/^-|-$/, "", slugified)
+                outname = "output/" base "_section_" filecount ".md"
+                temp_file = "temp_section_" filecount ".tex"
+                print section_content > temp_file
+                if (system("test -s " temp_file) == 0) {
+                    print "---" > outname
+                    print "title: \"" section_title "\"" >> outname
+                    print "slug: \"" slugified "\"" >> outname
+                    print "publishDate: \"" today "\"" >> outname
+                    print "chapter: \"" chapter "\"" >> outname
+                    print "section: \"" section_title "\"" >> outname
+                    print "parentSlug: \"" parent "\"" >> outname
+                    print "order: " filecount >> outname
+                    print "toc: true" >> outname
+                    print "description: \"\"" >> outname
+                    print "draft: false" >> outname
+                    print "---" >> outname
+                    print "" >> outname
+                    cmd = "LANG=en_US.UTF-8 pandoc -f latex -t gfm --wrap=preserve --markdown-headings=atx --standalone " temp_file " >> " outname
+                    system(cmd)
+                    filecount++
+                    print "✅ Created section: " outname
+                }
+                system("rm -f " temp_file)
+            }
+        ' "$tex_file"
+    else
+        echo "File has no sections - creating single file"
+
+        # Create single file for chapters without sections (like Abstract)
+        all_content=$(sed 's/\\chapter{.*}//' "$tex_file" | sed 's/^[[:space:]]*//')
+        {
+            echo "---"
+            echo "title: \"$chapter_title_clean\""
+            echo "slug: \"$slug\""
+            echo "publishDate: \"$today\""
+            echo "chapter: \"$chapter_title_clean\""
+            echo "section: \"$chapter_title_clean\""
+            echo "parentSlug: \"$slug\""
+            echo "order: 0"
+            echo "toc: true"
+            echo "description: \"\""
+            echo "draft: false"
+            echo "---"
+            echo ""
+            echo "$all_content" | LANG=en_US.UTF-8 pandoc -f latex -t gfm --wrap=preserve --markdown-headings=atx --standalone
+        } > "output/${base_name}.md"
+
+        clean_markdown "output/${base_name}.md"
+        python3 fix_conversion.py "output/${base_name}.md"
+        echo "✅ Created: output/${base_name}.md"
+    fi
 done < tex_list.txt
 
 # Final cleanup
