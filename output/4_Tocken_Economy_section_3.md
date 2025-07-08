@@ -1,9 +1,9 @@
 ---
-title: "Service Provider Economics: Competing on Merit"
-slug: "service-provider-economics-competing-on-merit"
+title: "Truth Maintenance"
+slug: "truth-maintenance"
 publishDate: "2025-07-08"
 chapter: "Token Economy"
-section: "Service Provider Economics: Competing on Merit"
+section: "Truth Maintenance"
 parentSlug: "token-economy"
 order: 3
 toc: true
@@ -11,8 +11,8 @@ description: ""
 draft: false
 ---
 
-Real estate professionals face a fundamental shift in the Elephant economy: from gatekeeping to genuine service competition. The protocol automatically generates SEO-optimized fact sheets for every verified property, designed to rank highly in search results and attract millions of property researchers. These fact sheets become premium advertising real estate where professionals compete for visibility. (See Section 6.2 for detailed explanation of why Elephant fact sheets naturally achieve superior search rankings through verified data, structured markup, and continuous updates.)
+Oracles are responsible for keeping their data groups current at all times. Live data integrity is enforced through responsiveness and continuous re-verification, with economic incentives that reward active maintenance while penalizing neglect. Only oracles who currently hold vMAHOUT receive gas fees and ad revenue, creating a direct incentive for continuous data maintenance.
 
-Service providers—agents, lenders, inspectors, attorneys—stake MAHOUT tokens to secure advertising positions on relevant fact sheets. Higher stakes win more prominent placement, creating a pure market for attention. But unlike traditional advertising where money alone determines position, the Elephant protocol incorporates performance metrics. Service providers who generate positive outcomes maintain their positions with lower stakes, while those with poor reviews require increasingly higher stakes to remain visible.
+vMAHOUT is reassigned if a fresher, validated data submission is made, ensuring that only the oracle maintaining the freshest truth receives rewards. vMAHOUT decays weekly by 1% if the oracle becomes inactive, eventually approaching zero for those who abandon their responsibilities. Eligibility for rewards depends entirely on maintaining vMAHOUT through active data stewardship.
 
-This staking mechanism generates continuous demand for MAHOUT tokens while funding the oracles who maintain the underlying data. A portion of all staking fees flows back to the oracles responsible for each property’s fact groups, creating recursive incentives for data quality. Better data attracts more users, driving more advertising value, increasing staking competition, rewarding better oracles, who create better data.
+This ongoing accountability ensures that the network’s truth layer remains reliable over time. When data becomes stale or incorrect, the oracle loses both governance power and economic rewards, aligning individual incentives with network reliability. The system rewards oracles who maintain accurate, current data while creating natural pressure for those who let their contributions deteriorate.

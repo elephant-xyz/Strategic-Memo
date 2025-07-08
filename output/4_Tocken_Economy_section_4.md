@@ -1,9 +1,9 @@
 ---
-title: "Transaction Participant Economics: Sustainable Fee Structure"
-slug: "transaction-participant-economics-sustainable-fee-structure"
+title: "Staking Logic"
+slug: "staking-logic"
 publishDate: "2025-07-08"
 chapter: "Token Economy"
-section: "Transaction Participant Economics: Sustainable Fee Structure"
+section: "Staking Logic"
 parentSlug: "token-economy"
 order: 4
 toc: true
@@ -11,6 +11,10 @@ description: ""
 draft: false
 ---
 
-Every real estate transaction conducted through the Elephant platform generates native fees that sustain the ecosystem without extracting value. These fees, totaling approximately \$700 per transaction, fund both oracle rewards and DAO operational costs. Compared to the current \$67,155 average transaction cost, this represents a 99% reduction in direct transaction fees while still maintaining robust economics for all participants.
+Earned MAHOUT tokens remain locked until two conditions are met: the oracle holds vMAHOUT and a service provider stakes advertisements on that Fact Sheet. This creates natural unlock mechanics tied to network utility rather than arbitrary time locks, ensuring that token releases correlate with actual network value creation.
 
-The fee structure breaks down into specific allocations: oracle rewards for maintaining property data, DAO treasury for development and operations, and system maintenance including gas cost subsidies. This transparent allocation ensures every dollar serves a specific purpose rather than disappearing into opaque "processing" or "administrative" fees. Transaction fees also create natural token demand as they must be paid in MAHOUT, establishing a consumption mechanism that balances token emission from oracle rewards.
+Service providers must stake MAHOUT tokens to advertise on the platform, with competitive ad placement prioritized by stake size. Each day, 1% of each provider’s ad stake is slashed and redirected to the maintaining oracle, ensuring continuous incentives for data freshness. This daily slash mechanism creates continuous demand for MAHOUT while funding the oracles who maintain data quality.
+
+Fact Sheets consist of 20 validated data groups, optimized for SEO and AI discovery to increase data utility and discoverability. These comprehensive property records become the foundation for organic discovery, with consumers finding verified information through search engines and increasingly through AI assistants. The monetization model transforms property data from a gatekept commodity into a public good that generates revenue through transparent, competitive advertising.
+
+If a property owner assumes the oracle role, the original oracle’s MAHOUT stake is released back to them, ensuring that property owners can always claim control over their own data while compensating previous contributors fairly.

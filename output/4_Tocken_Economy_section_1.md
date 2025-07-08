@@ -1,9 +1,9 @@
 ---
-title: "Economic Architecture Overview"
-slug: "economic-architecture-overview"
+title: "Truth Mining"
+slug: "truth-mining"
 publishDate: "2025-07-08"
 chapter: "Token Economy"
-section: "Economic Architecture Overview"
+section: "Truth Mining"
 parentSlug: "token-economy"
 order: 1
 toc: true
@@ -11,8 +11,8 @@ description: ""
 draft: false
 ---
 
-Three distinct participant roles drive the Elephant economy, each with aligned incentives that reinforce system integrity. Oracles earn MAHOUT tokens by bringing verified property data on-chain and maintaining its accuracy over time. Service providers stake MAHOUT to advertise on property fact sheets, creating a competitive marketplace for professional services. Transaction participants pay modest fees that fund ongoing operations and reward contributors. This triangular economy ensures sustainable growth: more properties create more fact sheets, attracting more service providers, generating more fees, incentivizing more oracles, who verify more properties.
+All MAHOUT is minted through verified oracle contributions using the Proof of Truth mechanism. The genesis supply starts at zero with no pre-sale, no VC allocation, and no passive farming—only validated data earns tokens. The total supply is fixed at 150 million tokens, matching the estimated number of properties in the United States.
 
-The system makes honesty more profitable than deception at every level. Oracles who submit accurate data earn tokens and governance power. Those who submit false data lose their stakes and reputation. Service providers who deliver quality attract clients through prominent placement. Those who disappoint see their staked positions challenged by competitors. Every economic mechanism reinforces the core principle: value creation beats value extraction.
+Each property can mint exactly one MAHOUT token once all 20 fact groups are submitted and validated. These 20 data groups contain everything from ownership records and mortgage details to permits and environmental characteristics, each with predetermined allocation weights. The County data group receives the largest allocation at 60% of the property’s MAHOUT, reflecting its foundational importance. The Root data group receives 8%, Photo Metadata receives 15%, and HOA receives 1%. The remaining 16 data groups each receive 1% allocations.
 
-All MAHOUT is minted only through active data work using the Proof of Truth mechanism. Genesis token supply starts at zero; all tokens are earned by oracles through verified contributions. Proof of Truth requires oracles to submit valid, fresh data updates in real time; whoever submits verified truth first earns mining rewards and vMAHOUT. No pre-sale, no VC allocations, no passive farming—only verified work earns tokens.
+MAHOUT issuance serves a critical bootstrapping function: accelerating data density creation across the network. As properties become comprehensively verified through all 20 fact groups, the network flywheel begins spinning, attracting service providers and generating the economic activity that sustains long-term protocol operations.
