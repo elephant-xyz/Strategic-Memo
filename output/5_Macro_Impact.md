@@ -6,6 +6,7 @@ chapter: "Macro Impact"
 section: "Macro Impact"
 parentSlug: "macro-impact"
 order: 0
+has_sections: true
 toc: true
 description: ""
 draft: false

@@ -6,6 +6,7 @@ chapter: ""
 section: ""
 parentSlug: ""
 order: 0
+has_sections: false
 toc: true
 description: ""
 draft: false

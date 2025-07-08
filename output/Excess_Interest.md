@@ -6,6 +6,7 @@ chapter: "Excess Interest"
 section: "Excess Interest"
 parentSlug: "excess-interest"
 order: 0
+has_sections: false
 toc: true
 description: ""
 draft: false

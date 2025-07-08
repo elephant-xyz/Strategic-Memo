@@ -6,6 +6,7 @@ chapter: "Permissionless Implementation"
 section: "Permissionless Implementation"
 parentSlug: "permissionless-implementation"
 order: 0
+has_sections: true
 toc: true
 description: ""
 draft: false

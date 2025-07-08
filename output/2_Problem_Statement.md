@@ -6,6 +6,7 @@ chapter: "Problem Statement"
 section: "Problem Statement"
 parentSlug: "problem-statement"
 order: 0
+has_sections: true
 toc: true
 description: ""
 draft: false
