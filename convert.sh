@@ -148,9 +148,12 @@ def fix_single_table(table_lines):
     return cleaned_lines
 
 def fix_markdown_content(content, filename):
-    """Comprehensive markdown fixing"""
+    """Comprehensive markdown fixing with YAML support"""
 
-    # Fix encoding issues FIRST
+    # Fix YAML frontmatter FIRST (before any other processing)
+    content = fix_yaml_frontmatter(content)
+
+    # Fix encoding issues with nuclear approach
     content = fix_encoding_issues(content)
 
     # Fix footnote format issues
@@ -162,19 +165,34 @@ def fix_markdown_content(content, filename):
     if 'Abstract' in filename:
         content = re.sub(r'excess interest\.([^¹])', r'excess interest.¹\1', content)
 
-    # UNIVERSAL TABLE FIXING
+    # UNIVERSAL TABLE FIXING with aggressive approach
     content = fix_universal_tables(content)
 
     # Fix tables that appear mid-sentence
     content = re.sub(r'(\w\.)\s*(\|[^|]*\|)', r'\1\n\n\2', content)
 
-    # Fix line wrapping issues (preserve table lines)
+    # Fix line wrapping issues (preserve table lines and frontmatter)
     lines = content.split('\n')
     fixed_lines = []
+    in_frontmatter = False
     i = 0
+
     while i < len(lines):
         line = lines[i]
-        # Skip table lines and headers
+
+        # Handle frontmatter
+        if line.strip() == '---':
+            in_frontmatter = not in_frontmatter
+            fixed_lines.append(line)
+            i += 1
+            continue
+
+        if in_frontmatter:
+            fixed_lines.append(line)
+            i += 1
+            continue
+
+        # Skip table lines and headers for line joining
         if (i + 1 < len(lines) and
             line and not line.startswith('|') and not line.startswith('#') and
             not line.startswith('---') and
@@ -189,7 +207,7 @@ def fix_markdown_content(content, filename):
 
     content = '\n'.join(fixed_lines)
 
-    # Clean up excessive whitespace
+    # Final cleanup
     content = re.sub(r' {2,}', ' ', content)
     content = re.sub(r'\n{3,}', '\n\n', content)
 
