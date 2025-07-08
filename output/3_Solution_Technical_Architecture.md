@@ -6,6 +6,7 @@ chapter: "Solution Architecture Key Innovations"
 section: "Solution Architecture Key Innovations"
 parentSlug: "solution-architecture-key-innovations"
 order: 0
+has_sections: true
 toc: true
 description: ""
 draft: false

@@ -6,6 +6,7 @@ chapter: "Token Economy"
 section: "Token Economy"
 parentSlug: "token-economy"
 order: 0
+has_sections: true
 toc: true
 description: ""
 draft: false

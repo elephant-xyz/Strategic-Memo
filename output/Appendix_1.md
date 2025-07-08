@@ -6,6 +6,7 @@ chapter: "Appendix 1: Bitstrapping A Bitcoin-Native Venture Architecture"
 section: "Appendix 1: Bitstrapping A Bitcoin-Native Venture Architecture"
 parentSlug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"
 order: 0
+has_sections: true
 toc: true
 description: ""
 draft: false

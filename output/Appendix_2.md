@@ -6,6 +6,7 @@ chapter: "Appendix: Elephant Framework Data Relationship Layer"
 section: "Appendix: Elephant Framework Data Relationship Layer"
 parentSlug: "appendix-elephant-framework-data-relationship-layer"
 order: 0
+has_sections: true
 toc: true
 description: ""
 draft: false

@@ -6,6 +6,7 @@ chapter: "Abstract"
 section: "Abstract"
 parentSlug: "abstract"
 order: 0
+has_sections: false
 toc: true
 description: ""
 draft: false

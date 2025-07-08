@@ -6,6 +6,7 @@ chapter: "Conclusion"
 section: "Conclusion"
 parentSlug: "conclusion"
 order: 0
+has_sections: false
 toc: true
 description: ""
 draft: false
