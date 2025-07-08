@@ -1,4 +1,4 @@
-name: Convert LaTeX to Markdown and Split by Section
+name: Convert LaTeX to Markdown
 
 on:
   push:
@@ -13,231 +13,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Pandoc and Python
+      - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y pandoc python3
 
-      - name: Delete old Markdown output
-        run: rm -rf output && mkdir -p output
+      - name: Make script executable
+        run: chmod +x convert.sh
 
-      - name: Convert full documents to clean Markdown
-        run: |
-          clean_markdown() {
-            local file="$1"
-            sed -i 's/\\#/#/g' "$file"
-            sed -i 's/\\\*/*/g' "$file"
-            sed -i 's/\/_/_/g' "$file"
-            sed -i '/^#.*$/d' "$file"
-            sed -i 's/\\footnote{[^}]*}/¹/g' "$file"
-            sed -i 's/^: /¹/g' "$file"
-            sed -i 's/\[Appendix \([A-Z0-9]\)\]([^)]*)/Appendix \1/g' "$file"
-            sed -i 's/\[Appendix \([A-Z0-9]\)\]/Appendix \1/g' "$file"
-            sed -i 's/\\\$/$/g' "$file"
-            sed -i 's/\\,/,/g' "$file"
-            sed -i 's/<div class="center">//g' "$file"
-            sed -i 's/<\/div>//g' "$file"
-            sed -i '/^|[[:space:]]*|[[:space:]]*|[[:space:]]*|[[:space:]]*|$/d' "$file"
-            sed -i 's/  \+/ /g' "$file"
-            sed -i 's/\n\n\n\+/\n\n/g' "$file"
-            sed -i 's/^[[:space:]]*//' "$file"
-            sed -i 's/[[:space:]]*$//' "$file"
-            sed -i 's/\\begin{[^}]*}//g' "$file"
-            sed -i 's/\\end{[^}]*}//g' "$file"
-            sed -i 's/\\center//g' "$file"
-            sed -i 's/\\centering//g' "$file"
-            sed -i 's/\\hline//g' "$file"
-          }
-          
-          find . -maxdepth 1 -name "*.tex" -not -name "Full Doc.tex" | while read -r tex_file; do
-            base_name=$(basename "$tex_file" .tex)
-            echo "Converting full document: $tex_file"
-            
-            pandoc -f latex -t gfm --wrap=auto --columns=120 --markdown-headings=atx --standalone --preserve-tabs "$tex_file" -o "output/${base_name}.md"
-            
-            if [ $? -eq 0 ]; then
-              clean_markdown "output/${base_name}.md"
-              
-              if [ "$base_name" = "1_Abstract" ]; then
-                sed -i 's/decades of excess interest\./decades of excess interest.¹/g' "output/${base_name}.md"
-              fi
-              
-              echo "Created clean full document: output/${base_name}.md"
-            else
-              echo "Failed to convert: $tex_file"
-            fi
-          done
-
-      - name: Create table cleanup script
-        run: |
-          cat > cleanup_tables.py << 'EOF'
-          import re
-          import sys
-          
-          filename = sys.argv[1]
-          
-          try:
-              with open(filename, 'r') as f:
-                  content = f.read()
-          
-              content = re.sub(r'\|\s*\*\*[^|]*\*\*\s*\|\s*\|\s*\|\s*\|', '', content)
-              content = re.sub(r'\|:\-+\|', '|---|', content)
-              content = re.sub(r'\|:\-+', '|---', content)
-              content = re.sub(r'\-+:\|', '---|', content)
-              content = re.sub(r'\|\s*\|\s*\|\s*\|\s*\|\s*\n', '', content)
-              content = re.sub(r'\\\*\*([^*]+)\\\*\*', r'**\1**', content)
-              content = re.sub(r'\|\s{2,}', '| ', content)
-              content = re.sub(r'\s{2,}\|', ' |', content)
-          
-              with open(filename, 'w') as f:
-                  f.write(content)
-                  
-          except Exception as e:
-              print(f'Table cleanup failed for {filename}: {e}')
-          EOF
-
-      - name: Run table cleanup
-        run: |
-          for file in output/*.md; do
-            if [ -f "$file" ]; then
-              python3 cleanup_tables.py "$file"
-              echo "Cleaned tables in: $file"
-            fi
-          done
-
-      - name: Find TeX files
-        run: |
-          find . -maxdepth 1 -name "*.tex" -not -name "Full Doc.tex" > tex_list.txt
-          cat tex_list.txt
-
-      - name: Convert TeX files to Markdown and split by section
-        run: |
-          today=$(date +%F)
-          
-          clean_markdown() {
-            local file="$1"
-            sed -i 's/\\#/#/g' "$file"
-            sed -i 's/\\\*/*/g' "$file"
-            sed -i 's/\/_/_/g' "$file"
-            sed -i '/^#.*$/d' "$file"
-            sed -i 's/\\footnote{[^}]*}/¹/g' "$file"
-            sed -i 's/^: /¹/g' "$file"
-            sed -i 's/\[Appendix \([A-Z0-9]\)\]([^)]*)/Appendix \1/g' "$file"
-            sed -i 's/\[Appendix \([A-Z0-9]\)\]/Appendix \1/g' "$file"
-            sed -i 's/\\\$/$/g' "$file"
-            sed -i 's/\\,/,/g' "$file"
-            sed -i 's/<div class="center">//g' "$file"
-            sed -i 's/<\/div>//g' "$file"
-            sed -i '/^|[[:space:]]*|[[:space:]]*|[[:space:]]*|[[:space:]]*|$/d' "$file"
-            sed -i 's/  \+/ /g' "$file"
-            sed -i 's/\n\n\n\+/\n\n/g' "$file"
-            sed -i 's/^[[:space:]]*//' "$file"
-            sed -i 's/[[:space:]]*$//' "$file"
-            sed -i 's/\\begin{[^}]*}//g' "$file"
-            sed -i 's/\\end{[^}]*}//g' "$file"
-            sed -i 's/\\center//g' "$file"
-            sed -i 's/\\centering//g' "$file"
-            sed -i 's/\\hline//g' "$file"
-          }
-          
-          while IFS= read -r tex_file; do
-            [ ! -f "$tex_file" ] && echo "Skipping invalid file: $tex_file" && continue
-            echo "Processing $tex_file"
-            base_name=$(basename "$tex_file" .tex)
-
-            chapter_title=$(grep '\\chapter{' "$tex_file" | head -1 | sed 's/.*\\chapter{//;s/}.*//')
-            chapter_title_clean=$(echo "$chapter_title" | tr -cd '[:alnum:] .:/-' | sed 's/["\\]/ /g')
-            slug=$(echo "$chapter_title_clean" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$/-/g')
-
-            intro_lines=$(awk '/\\section\{/{exit} {print}' "$tex_file" | sed 's/\\chapter{.*}//' | sed 's/^[[:space:]]*//')
-            {
-              echo "---"
-              echo "title: \"$chapter_title_clean\""
-              echo "slug: \"$slug\""
-              echo "publishDate: \"$today\""
-              echo "chapter: \"$chapter_title_clean\""
-              echo "section: \"$chapter_title_clean\""
-              echo "parentSlug: \"$slug\""
-              echo "order: 0"
-              echo "toc: true"
-              echo "description: \"\""
-              echo "draft: false"
-              echo "---"
-              echo ""
-              echo "$intro_lines" | pandoc -f latex -t gfm --wrap=none --markdown-headings=atx --standalone
-            } > "output/${base_name}_intro.md"
-            clean_markdown "output/${base_name}_intro.md"
-            echo "[INFO] Created intro: output/${base_name}_intro.md"
-
-            awk -v base="$base_name" -v parent="$slug" -v chapter="$chapter_title_clean" -v today="$today" '
-              BEGIN { filecount = 1; in_section = 0; section_title = ""; section_content = "" }
-              /^\\section\{/ {
-                if (in_section && section_title != "") { save_section() }
-                in_section = 1
-                section_title = substr($0, 10)
-                section_title = substr(section_title, 1, index(section_title, "}") - 1)
-                section_content = ""
-                next
-              }
-              in_section {
-                if (section_content == "") {
-                  section_content = $0
-                } else {
-                  section_content = section_content "\n" $0
-                }
-              }
-              END { if (in_section && section_title != "") { save_section() } }
-              function save_section() {
-                gsub(/[[:space:]]+$/, "", section_title)
-                gsub(/\\\\/, "", section_title)
-                gsub(/"/, "", section_title)
-                gsub(/[^[:alnum:] .:-]/, "", section_title)
-                slugified = tolower(section_title)
-                gsub(/[^a-z0-9]+/, "-", slugified)
-                gsub(/^-|-$/, "", slugified)
-                outname = "output/" base "_section_" filecount ".md"
-                temp_file = "temp_section_" filecount ".tex"
-                print section_content > temp_file
-                if (system("test -s " temp_file) == 0) {
-                  print "---" > outname
-                  print "title: \"" section_title "\"" >> outname
-                  print "slug: \"" slugified "\"" >> outname
-                  print "publishDate: \"" today "\"" >> outname
-                  print "chapter: \"" chapter "\"" >> outname
-                  print "section: \"" section_title "\"" >> outname
-                  print "parentSlug: \"" parent "\"" >> outname
-                  print "order: " filecount >> outname
-                  print "toc: true" >> outname
-                  print "description: \"\"" >> outname
-                  print "draft: false" >> outname
-                  print "---" >> outname
-                  print "" >> outname
-                  cmd = "pandoc -f latex -t gfm --wrap=auto --columns=120 --markdown-headings=atx --standalone " temp_file " >> " outname
-                  system(cmd)
-                  print "[INFO] Created section: " outname > "/dev/stderr"
-                  filecount++
-                } else {
-                  print "[WARN] Skipping empty section for: " section_title > "/dev/stderr"
-                }
-                system("rm -f " temp_file)
-              }
-            ' "$tex_file"
-          done < tex_list.txt
-          
-          echo "Cleaning up markdown files..."
-          for file in output/*.md; do
-            if [ -f "$file" ]; then
-              clean_markdown "$file"
-              python3 cleanup_tables.py "$file"
-              echo "Cleaned: $file"
-            fi
-          done
+      - name: Run conversion script
+        run: ./convert.sh
 
       - name: List output files
-        run: ls -la output/ || echo "No output directory found"
+        run: ls -la output/
 
       - name: Commit and push results
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add output/*.md
-          git commit -m "Auto-convert LaTeX to Markdown and split by section" || echo "Nothing to commit"
+          git commit -m "Auto-convert LaTeX to Markdown" || echo "Nothing to commit"
           git push
