@@ -11,7 +11,7 @@ description: ""
 draft: false
 ---
 
-Agent and broker fees are tied to the house price---a fundamental misalignment where compensation scales with asset value instead of work performed. Fees are expertly designed to feel less painful since the seller pays both the buy and sell side commission, which eliminates any pain the buyer feels. The seller pays real estate commissions off the top, which minimizes the pain because they never have to actually send a wire for the true amount.
+Agent and broker fees are tied to the house price—a fundamental misalignment where compensation scales with asset value instead of work performed. Fees are expertly designed to feel less painful since the seller pays both the buy and sell side commission, which eliminates any pain the buyer feels. The seller pays real estate commissions off the top, which minimizes the pain because they never have to actually send a wire for the true amount.
 
 The result is that real estate agent fees are 2x other developed countries as a percentage of house price. Real estate agents tell the consumer that all of these transaction costs are normal. Lending structures embed commissions inside the interest rate via pricing spreads that inflate borrowing costs and cause excess interest. The result is that excess interest is the single largest transaction cost but the one that is the most expertly concealed.
 

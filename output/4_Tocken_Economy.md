@@ -1,45 +1,17 @@
+---
+title: "Token Economy"
+slug: "token-economy"
+publishDate: "2025-07-08"
+chapter: "Token Economy"
+section: "Token Economy"
+parentSlug: "token-economy"
+order: 0
+has_sections: true
+toc: true
+description: ""
+draft: false
+---
 
-MAHOUT is the protocol's native currency---a language of value that bootstraps the network by incentivizing oracles to submit verified property data across 20 fact groups. vMAHOUT is a non-transferable governance and gas-fee rights token that grants ongoing economic participation and decision-making power to oracles maintaining the freshest data. Together, these tokens create an economy where truth pays better than lies, contribution earns more than extraction, and governance flows to those who build rather than those who buy.
+MAHOUT is the protocol’s native currency—a language of value that bootstraps the network by incentivizing oracles to submit verified property data across 20 fact groups. vMAHOUT is a non-transferable governance and gas-fee rights token that grants ongoing economic participation and decision-making power to oracles maintaining the freshest data. Together, these tokens create an economy where truth pays better than lies, contribution earns more than extraction, and governance flows to those who build rather than those who buy.
 
-The purpose of MAHOUT issuance is to accelerate the creation of data density, catalyzing the network flywheel during the bootstrapping phase. After MAHOUT issuance ends, vMAHOUT becomes the sole access key to protocol rewards, aligning long-term incentives with protocol integrity and participation. This dual-token structure transforms real estate's current extraction paradigm into a contribution paradigm where participants profit from reducing friction rather than creating it.
-
-
-All MAHOUT is minted through verified oracle contributions using the Proof of Truth mechanism. The genesis supply starts at zero with no pre-sale, no VC allocation, and no passive farming---only validated data earns tokens. The total supply is fixed at 150 million tokens, matching the estimated number of properties in the United States.
-
-Each property can mint exactly one MAHOUT token once all 20 fact groups are submitted and validated. These 20 data groups contain everything from ownership records and mortgage details to permits and environmental characteristics, each with predetermined allocation weights. The County data group receives the largest allocation at 60% of the property's MAHOUT, reflecting its foundational importance. The Root data group receives 8%, Photo Metadata receives 15%, and HOA receives 1%. The remaining 16 data groups each receive 1% allocations.
-
-MAHOUT issuance serves a critical bootstrapping function: accelerating data density creation across the network. As properties become comprehensively verified through all 20 fact groups, the network flywheel begins spinning, attracting service providers and generating the economic activity that sustains long-term protocol operations.
-
-
-The protocol distinguishes between consensus-based groups and reputation-based groups, each reflecting different approaches to truth verification. Consensus-based groups require three unique oracle submissions to validate objective, verifiable facts that multiple parties can independently confirm from the same sources. These groups distribute MAHOUT according to submission order: 80% to the first oracle, 15% to the second oracle, and 5% to the third oracle.
-
-Three vMAHOUT tokens are minted per consensus group submission cycle, one for each of the three oracles. This design ensures that governance power flows from verified contributions rather than economic stakes, creating alignment between network utility and decision-making authority.
-
-Reputation-based groups such as Photo Metadata and HOA award 100% of their MAHOUT allocation to a single oracle. Oracles must stake reputation to contribute to these groups, which involve subjective assessment or specialized access rather than objective verification. Non-consensus groups do not mint any vMAHOUT tokens, focusing purely on MAHOUT rewards for data contribution.
-
-This dual structure prevents the system from falling into either extreme: pure consensus would paralyze subjective assessments, while pure reputation would enable manipulation of objective facts. The protocol recognizes that different types of truth require different verification mechanisms---a design principle that scales from individual properties to entire markets.
-
-
-Oracles are responsible for keeping their data groups current at all times. Live data integrity is enforced through responsiveness and continuous re-verification, with economic incentives that reward active maintenance while penalizing neglect. Only oracles who currently hold vMAHOUT receive gas fees and ad revenue, creating a direct incentive for continuous data maintenance.
-
-vMAHOUT is reassigned if a fresher, validated data submission is made, ensuring that only the oracle maintaining the freshest truth receives rewards. vMAHOUT decays weekly by 1% if the oracle becomes inactive, eventually approaching zero for those who abandon their responsibilities. Eligibility for rewards depends entirely on maintaining vMAHOUT through active data stewardship.
-
-This ongoing accountability ensures that the network's truth layer remains reliable over time. When data becomes stale or incorrect, the oracle loses both governance power and economic rewards, aligning individual incentives with network reliability. The system rewards oracles who maintain accurate, current data while creating natural pressure for those who let their contributions deteriorate.
-
-
-Earned MAHOUT tokens remain locked until two conditions are met: the oracle holds vMAHOUT and a service provider stakes advertisements on that Fact Sheet. This creates natural unlock mechanics tied to network utility rather than arbitrary time locks, ensuring that token releases correlate with actual network value creation.
-
-Service providers must stake MAHOUT tokens to advertise on the platform, with competitive ad placement prioritized by stake size. Each day, 1% of each provider's ad stake is slashed and redirected to the maintaining oracle, ensuring continuous incentives for data freshness. This daily slash mechanism creates continuous demand for MAHOUT while funding the oracles who maintain data quality.
-
-Fact Sheets consist of 20 validated data groups, optimized for SEO and AI discovery to increase data utility and discoverability. These comprehensive property records become the foundation for organic discovery, with consumers finding verified information through search engines and increasingly through AI assistants. The monetization model transforms property data from a gatekept commodity into a public good that generates revenue through transparent, competitive advertising.
-
-If a property owner assumes the oracle role, the original oracle's MAHOUT stake is released back to them, ensuring that property owners can always claim control over their own data while compensating previous contributors fairly.
-
-
-vMAHOUT is earned, not bought or transferred freely---it represents real contribution to network maintenance. Governance voting power is retained only through active data maintenance and participation, creating a system where decision-making authority flows to those who understand the network's operational requirements through direct experience.
-
-Transfers of vMAHOUT between verified oracles incur a 10% burn penalty, allowing necessary operational transitions while preventing speculative governance markets. An oracle can transfer responsibilities when retiring or selling their business, but the burn ensures commitment to long-term participation rather than short-term governance arbitrage.
-
-All governance and protocol logic is managed by DUNA, including token issuance, staking rules, and reputation slashing. This governance structure enables decision-making and protocol evolution, while vMAHOUT holders maintain influence over key network parameters.
-
-The governance model incorporates temporal decay to ensure power remains with active contributors. After MAHOUT issuance ends, vMAHOUT becomes the sole access key to protocol rewards, creating a sustainable long-term economy where network participants are rewarded for maintaining data integrity rather than speculation. This transition from MAHOUT bootstrapping to vMAHOUT sustainability ensures that the protocol serves human needs rather than extractive interests throughout its evolution.
+The purpose of MAHOUT issuance is to accelerate the creation of data density, catalyzing the network flywheel during the bootstrapping phase. After MAHOUT issuance ends, vMAHOUT becomes the sole access key to protocol rewards, aligning long-term incentives with protocol integrity and participation. This dual-token structure transforms real estate’s current extraction paradigm into a contribution paradigm where participants profit from reducing friction rather than creating it.

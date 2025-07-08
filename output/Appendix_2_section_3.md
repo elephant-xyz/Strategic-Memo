@@ -11,7 +11,7 @@ description: ""
 draft: false
 ---
 
-The Relationship class forms Elephant's core innovation---a polymorphic, bidirectional, schema-validated object that can represent any connection between entities. This generic abstraction enables the protocol to handle everything from simple ownership to complex financial instruments without special-casing each relationship type.
+The Relationship class forms Elephant’s core innovation—a polymorphic, bidirectional, schema-validated object that can represent any connection between entities. This generic abstraction enables the protocol to handle everything from simple ownership to complex financial instruments without special-casing each relationship type.
 
 Every Relationship contains essential components that ensure both flexibility and verifiability:
 
@@ -31,7 +31,7 @@ Every Relationship contains essential components:
 
 - **timestamp**: Block number when relationship was created
 
-This structure enables powerful properties. Bidirectionality ensures relationships are discoverable from either entity---finding all properties owned by a person or all owners of a property requires identical queries. Schema validation happens at relationship creation, preventing invalid connections. Merkle roots enable historical queries without storing complete history. Oracle signatures provide graduated trust based on validation thoroughness.
+This structure enables powerful properties. Bidirectionality ensures relationships are discoverable from either entity—finding all properties owned by a person or all owners of a property requires identical queries. Schema validation happens at relationship creation, preventing invalid connections. Merkle roots enable historical queries without storing complete history. Oracle signatures provide graduated trust based on validation thoroughness.
 
 The metadata field enables relationship-specific data without modifying schemas. An ownership relationship might include purchase price, transfer date, and deed reference. A mortgage relationship includes principal amount, interest rate, and payment schedule. This flexibility allows schemas to remain simple while relationships capture full complexity.
 

@@ -11,7 +11,7 @@ description: ""
 draft: false
 ---
 
-Elephant's data model achieves true global applicability by making no assumptions about local legal systems while providing complete flexibility for jurisdiction-specific requirements. This neutrality enables a single protocol to handle property transactions from Manhattan skyscrapers to Mumbai apartments to São Paulo favelas without architectural changes.
+Elephant’s data model achieves true global applicability by making no assumptions about local legal systems while providing complete flexibility for jurisdiction-specific requirements. This neutrality enables a single protocol to handle property transactions from Manhattan skyscrapers to Mumbai apartments to São Paulo favelas without architectural changes.
 
 The key insight: legal differences are schema variations, not protocol modifications. US property ownership differs from UK leasehold systems in schema definitions, not fundamental architecture. Islamic finance prohibitions on interest require different mortgage schemas, not different protocols. Community land trusts, indigenous property rights, and socialist property models become schema variations rather than incompatible systems.
 

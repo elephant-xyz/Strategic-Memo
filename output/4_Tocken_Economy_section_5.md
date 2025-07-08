@@ -11,7 +11,7 @@ description: ""
 draft: false
 ---
 
-vMAHOUT is earned, not bought or transferred freely---it represents real contribution to network maintenance. Governance voting power is retained only through active data maintenance and participation, creating a system where decision-making authority flows to those who understand the network's operational requirements through direct experience.
+vMAHOUT is earned, not bought or transferred freely—it represents real contribution to network maintenance. Governance voting power is retained only through active data maintenance and participation, creating a system where decision-making authority flows to those who understand the network’s operational requirements through direct experience.
 
 Transfers of vMAHOUT between verified oracles incur a 10% burn penalty, allowing necessary operational transitions while preventing speculative governance markets. An oracle can transfer responsibilities when retiring or selling their business, but the burn ensures commitment to long-term participation rather than short-term governance arbitrage.
 

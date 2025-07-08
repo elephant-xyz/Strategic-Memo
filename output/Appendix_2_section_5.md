@@ -25,7 +25,7 @@ Schema field definitions include rich semantic annotations:
 
 - **Oracle requirements**: Which oracle types can verify this field, minimum signature counts
 
-This semantic richness enables powerful automation. Frontend applications generate appropriate UI components automatically---address fields render with autocomplete, date fields with calendar widgets, currency fields with proper formatting. Validation happens client-side before submission, reducing failed transactions. Oracle interfaces know exactly which fields require verification and acceptable evidence types.
+This semantic richness enables powerful automation. Frontend applications generate appropriate UI components automatically—address fields render with autocomplete, date fields with calendar widgets, currency fields with proper formatting. Validation happens client-side before submission, reducing failed transactions. Oracle interfaces know exactly which fields require verification and acceptable evidence types.
 
 Consider a property address field:
 
@@ -33,16 +33,16 @@ Consider a property address field specification:
 
 **AddressField Schema Definition:**
 
-- **type**: \"GeoAddress\" (semantic type for geographic addresses)
+- **type**: "GeoAddress" (semantic type for geographic addresses)
 
 - **required**: true (must be present for valid entity)
 
 - **validation**: PostalServiceAPI (external validation service)
 
-- **display**: \"street, city, state postal\" (UI rendering format)
+- **display**: "street, city, state postal" (UI rendering format)
 
-- **oracle**: \[\"County Records\", \"Postal Service\"\] (acceptable validators)
+- **oracle**: \["County Records", "Postal Service"\] (acceptable validators)
 
-- **retention**: \"permanent\" (data retention policy)
+- **retention**: "permanent" (data retention policy)
 
-This single definition enables complete field handling across the entire stack. Smart contracts validate addresses against postal service APIs. Oracles know to verify against county records. UIs render appropriate input forms. Archives retain address history permanently. No component requires hardcoded knowledge about address handling---the schema provides everything needed.
+This single definition enables complete field handling across the entire stack. Smart contracts validate addresses against postal service APIs. Oracles know to verify against county records. UIs render appropriate input forms. Archives retain address history permanently. No component requires hardcoded knowledge about address handling—the schema provides everything needed.
