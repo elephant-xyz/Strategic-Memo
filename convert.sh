@@ -14,20 +14,29 @@ clean_markdown() {
     # Remove any lines that start with # (all headers)
     sed -i '/^#.*$/d' "$file"
 
-    # Fix footnote format - convert [^1]: to ¹
+    # Fix footnote format - convert [^1]: to ¹ and [^1] to ¹
     sed -i 's/\[^1\]:/¹/g' "$file"
     sed -i 's/\[^1\]/¹/g' "$file"
+    sed -i 's/\[^2\]:/²/g' "$file"
+    sed -i 's/\[^2\]/²/g' "$file"
+    sed -i 's/\[^3\]:/³/g' "$file"
+    sed -i 's/\[^3\]/³/g' "$file"
 
     # Fix appendix references
     sed -i 's/\[Appendix \([A-Z0-9]\)\]([^)]*)/Appendix \1/g' "$file"
     sed -i 's/\[Appendix \([A-Z0-9]\)\]/Appendix \1/g' "$file"
 
-    # Clean up broken table formatting
+    # Clean up broken table formatting and empty table rows
     sed -i 's/\\\$/$/g' "$file"
     sed -i 's/\\,/,/g' "$file"
     sed -i 's/<div class="center">//g' "$file"
     sed -i 's/<\/div>//g' "$file"
     sed -i '/^|[[:space:]]*|[[:space:]]*|[[:space:]]*|[[:space:]]*|$/d' "$file"
+    sed -i '/^|[[:space:]]*-*[[:space:]]*|[[:space:]]*-*[[:space:]]*|[[:space:]]*-*[[:space:]]*|[[:space:]]*-*[[:space:]]*|$/d' "$file"
+
+    # Fix dollar signs and currency formatting
+    sed -i 's/\\\$/$$/g' "$file"
+    sed -i 's/\\$/$/g' "$file"
 
     # Fix double spaces and improve paragraph spacing
     sed -i 's/  \+/ /g' "$file"
@@ -43,6 +52,12 @@ clean_markdown() {
     sed -i 's/\\center//g' "$file"
     sed -i 's/\\centering//g' "$file"
     sed -i 's/\\hline//g' "$file"
+    sed -i 's/\\multicolumn{[^}]*}{[^}]*}{[^}]*}//g' "$file"
+    sed -i 's/\\textbf{//g' "$file"
+    sed -i 's/}//g' "$file"
+
+    # Remove empty lines at the beginning of the file
+    sed -i '/./,$!d' "$file"
 }
 
 # Create output directory
@@ -55,7 +70,6 @@ import sys
 
 def fix_yaml_frontmatter(content):
     """Fix YAML frontmatter issues"""
-
     lines = content.split('\n')
     if not (lines[0].strip() == '---' and '---' in lines[1:]):
         return content
@@ -94,128 +108,138 @@ def fix_yaml_frontmatter(content):
     return '\n'.join(['---'] + fixed_frontmatter + ['---'] + lines[end_index + 1:])
 
 def fix_encoding_issues(content):
-    """Fix character encoding problems - NUCLEAR option"""
-
-    # STEP 1: Complete character cleanup - remove ALL non-ASCII
+    """Fix character encoding problems"""
     # Keep only basic ASCII characters, newlines, and basic punctuation
-    content = ''.join(char for char in content if ord(char) < 128)
+    content = ''.join(char for char in content if ord(char) < 128 or char in 'àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ¹²³')
 
-    # STEP 2: Fix broken text patterns by rebuilding common phrases
+    # General pattern fixes
     fixes = [
-        # Common text reconstruction
-        (r'transactions, and we burn \d+[^a-zA-Z]*billion', 'transactions, and we burn $31.1 billion'),
-        (r'annually[^a-zA-Z]*not to build', 'annually—not to build'),
-        (r'home purchase[^a-zA-Z]*buyers', 'home purchase, buyers'),
-        (r'transaction costs[^a-zA-Z]*with', 'transaction costs, with'),
-        (r'excess interest[^a-zA-Z]*Most', 'excess interest.¹ Most'),
-        (r'identical effort[^a-zA-Z]*The', 'identical effort.\n\nThe'),
+        # Fix broken monetary amounts
+        (r'(\d+),(\d{3})', r'\1,\2'),
+        (r'\\?\$(\d+)\.(\d+) billion', r'$\1.\2 billion'),
+        (r'\\?\$(\d+) billion', r'$\1 billion'),
+        (r'\\?\$(\d+),(\d{3})', r'$\1,\2'),
 
-        # Fix broken words
-        (r'[^a-zA-Z]h[^a-zA-Z]+', ' '),  # Remove broken 'h' fragments
-        (r'[^a-zA-Z]t[^a-zA-Z]+', ' '),  # Remove broken 't' fragments
-        (r'[^a-zA-Z]s[^a-zA-Z]+', ' '),  # Remove broken 's' fragments
+        # General text cleanup patterns
+        (r'([a-zA-Z])[^a-zA-Z\s]{1,3}([A-Z][a-z])', r'\1. \2'),  # Fix broken sentence boundaries
+        (r'([a-z])[^a-zA-Z\s]{1,3}([a-z])', r'\1 \2'),           # Fix broken word boundaries
+        (r'([.!?])[^a-zA-Z\s]{1,3}([A-Z])', r'\1 \2'),          # Fix punctuation spacing
 
         # Clean up excessive spaces and dots
         (r'\.{2,}', '.'),
         (r'\s{3,}', ' '),
         (r'\n\s*\n\s*\n+', '\n\n'),
+
+        # Fix percentage formatting
+        (r'(\d+)\s*%', r'\1%'),
+
+        # Fix common LaTeX artifacts
+        (r'---', '—'),  # Convert triple dash to em dash
+        (r'--', '–'),   # Convert double dash to en dash
     ]
 
     for pattern, replacement in fixes:
         content = re.sub(pattern, replacement, content, flags=re.IGNORECASE)
 
-    # STEP 3: Add missing punctuation and formatting
-    content = re.sub(r'(\d+)\s+(billion|million|thousand)', r'$\1 \2', content)
-    content = re.sub(r'42(?!\d|%)', '42%', content)
-
     return content
 
-def fix_universal_tables(content):
-    """Universal table fixing - more aggressive"""
-
-    # Remove completely broken table fragments
-    content = re.sub(r'^\|[\-:|\s]*\|[\-:|\s]*\|[\-:|\s]*\|[\-:|\s]*\|?\s*$', '', content, flags=re.MULTILINE)
-
-    # Find and rebuild tables
+def fix_table_formatting(content):
+    """Fix table formatting issues"""
     lines = content.split('\n')
     fixed_lines = []
     in_table = False
     table_rows = []
 
     for line in lines:
+        stripped_line = line.strip()
+
         # Check if this looks like a table row
-        if '|' in line and line.count('|') >= 2:
+        if '|' in stripped_line and stripped_line.count('|') >= 2:
             if not in_table:
                 in_table = True
                 table_rows = []
 
             # Clean the table row
-            cleaned_row = re.sub(r'\s*\|\s*', ' | ', line.strip())
+            cleaned_row = re.sub(r'\s*\|\s*', ' | ', stripped_line.strip())
+
+            # Ensure proper table formatting
             if not cleaned_row.startswith('|'):
                 cleaned_row = '| ' + cleaned_row
             if not cleaned_row.endswith('|'):
                 cleaned_row = cleaned_row + ' |'
 
-            table_rows.append(cleaned_row)
+            # Skip empty or malformed rows
+            if len([cell.strip() for cell in cleaned_row.split('|') if cell.strip()]) >= 2:
+                table_rows.append(cleaned_row)
         else:
             # End of table
             if in_table and table_rows:
                 # Process the table
                 if len(table_rows) >= 1:
-                    # Add header
+                    # Add header row
                     fixed_lines.append(table_rows[0])
 
-                    # Add alignment row
+                    # Add alignment row (determine from first data row)
                     col_count = table_rows[0].count('|') - 1
-                    alignment = '|' + '---|' * col_count
-                    fixed_lines.append(alignment)
+                    if col_count > 0:
+                        alignment = '|' + ' --- |' * col_count
+                        fixed_lines.append(alignment)
 
-                    # Add data rows
+                    # Add data rows (skip the first if it was a header)
                     for row in table_rows[1:]:
                         fixed_lines.append(row)
 
+                # Add spacing after table
+                fixed_lines.append('')
                 table_rows = []
                 in_table = False
 
-            # Add non-table line
-            if line.strip():
+            # Add non-table line if it's not empty
+            if stripped_line:
                 fixed_lines.append(line)
+            elif not in_table:  # Preserve empty lines outside tables
+                fixed_lines.append('')
 
-    # Handle table at end
+    # Handle table at end of content
     if in_table and table_rows:
         if len(table_rows) >= 1:
             fixed_lines.append(table_rows[0])
             col_count = table_rows[0].count('|') - 1
-            alignment = '|' + '---|' * col_count
-            fixed_lines.append(alignment)
+            if col_count > 0:
+                alignment = '|' + ' --- |' * col_count
+                fixed_lines.append(alignment)
             for row in table_rows[1:]:
                 fixed_lines.append(row)
 
     return '\n'.join(fixed_lines)
 
+def fix_footnotes(content):
+    """Fix footnote formatting"""
+    # Convert LaTeX footnotes to superscript numbers
+    footnote_patterns = [
+        (r'\\footnote\{([^}]+)\}', r'¹'),  # Convert \footnote{text} to ¹
+        (r'\[(\d+)\]', r'¹'),  # Convert [1] to ¹
+        (r'\[\^(\d+)\]', r'¹'),  # Convert [^1] to ¹
+    ]
+
+    for pattern, replacement in footnote_patterns:
+        content = re.sub(pattern, replacement, content)
+
+    return content
+
 def fix_markdown_content(content, filename):
     """Comprehensive markdown fixing with YAML support"""
-
     # Fix YAML frontmatter FIRST (before any other processing)
     content = fix_yaml_frontmatter(content)
 
-    # Fix encoding issues with nuclear approach
+    # Fix encoding issues
     content = fix_encoding_issues(content)
 
-    # Fix footnote format issues
-    content = re.sub(r'\[^1\]:', '¹', content)  # [^1]: becomes ¹
-    content = re.sub(r'\[^1\]', '¹', content)   # [^1] becomes ¹
-    content = re.sub(r'¹¹+', '¹', content)      # Remove duplicate ¹¹ -> ¹
+    # Fix footnotes
+    content = fix_footnotes(content)
 
-    # Add footnote marker in Abstract specifically
-    if 'Abstract' in filename:
-        content = re.sub(r'excess interest\.([^¹])', r'excess interest.¹\1', content)
-
-    # UNIVERSAL TABLE FIXING with aggressive approach
-    content = fix_universal_tables(content)
-
-    # Fix tables that appear mid-sentence
-    content = re.sub(r'(\w\.)\s*(\|[^|]*\|)', r'\1\n\n\2', content)
+    # Fix table formatting
+    content = fix_table_formatting(content)
 
     # Fix line wrapping issues (preserve table lines and frontmatter)
     lines = content.split('\n')
@@ -257,6 +281,10 @@ def fix_markdown_content(content, filename):
     content = re.sub(r' {2,}', ' ', content)
     content = re.sub(r'\n{3,}', '\n\n', content)
 
+    # Remove any remaining LaTeX artifacts
+    content = re.sub(r'\\[a-zA-Z]+\{[^}]*\}', '', content)
+    content = re.sub(r'\\[a-zA-Z]+', '', content)
+
     return content
 
 if __name__ == "__main__":
@@ -283,12 +311,13 @@ find . -maxdepth 1 -name "*.tex" -not -name "Full Doc.tex" | while read -r tex_f
     base_name=$(basename "$tex_file" .tex)
     echo "Converting: $tex_file"
 
-    # Convert with explicit UTF-8 encoding and better options
+    # Convert with explicit UTF-8 encoding and better table handling
     LANG=en_US.UTF-8 pandoc -f latex -t gfm \
            --wrap=preserve \
            --markdown-headings=atx \
            --standalone \
            --preserve-tabs \
+           --table-cellpadding=1 \
            "$tex_file" -o "output/${base_name}.md"
 
     if [ $? -eq 0 ]; then
@@ -336,7 +365,7 @@ while IFS= read -r tex_file; do
         echo "draft: false"
         echo "---"
         echo ""
-        echo "$intro_lines" | LANG=en_US.UTF-8 pandoc -f latex -t gfm --wrap=preserve --markdown-headings=atx --standalone
+        echo "$intro_lines" | LANG=en_US.UTF-8 pandoc -f latex -t gfm --wrap=preserve --markdown-headings=atx --standalone --table-cellpadding=1
     } > "output/${base_name}_intro.md"
 
     clean_markdown "output/${base_name}_intro.md"
@@ -387,7 +416,7 @@ while IFS= read -r tex_file; do
                 print "draft: false" >> outname
                 print "---" >> outname
                 print "" >> outname
-                cmd = "LANG=en_US.UTF-8 pandoc -f latex -t gfm --wrap=preserve --markdown-headings=atx --standalone " temp_file " >> " outname
+                cmd = "LANG=en_US.UTF-8 pandoc -f latex -t gfm --wrap=preserve --markdown-headings=atx --standalone --table-cellpadding=1 " temp_file " >> " outname
                 system(cmd)
                 filecount++
             }
