@@ -103,7 +103,8 @@ jobs:
 import re
 import sys
 
-filename = sys.argv[1] if len(sys.argv) > 1 else "output/" + base_name + ".md"
+# Get the filename - use the base_name from shell environment
+filename = "output/${base_name}.md"
 
 try:
     # Read the file
@@ -136,8 +137,8 @@ try:
 except Exception as e:
     print(f"Table cleanup failed for {filename}: {e}")
     
-EOF "output/${base_name}.md"
-
+EOF
+              
               echo "Created clean full document: output/${base_name}.md"
             else
               echo "Failed to convert: $tex_file"
