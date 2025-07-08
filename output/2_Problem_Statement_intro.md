@@ -1,7 +1,7 @@
 ---
 title: "Problem Statement"
 slug: "problem-statement"
-publishDate: "2025-07-07"
+publishDate: "2025-07-08"
 chapter: "Problem Statement"
 section: "Problem Statement"
 parentSlug: "problem-statement"

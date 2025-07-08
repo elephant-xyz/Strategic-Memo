@@ -1,9 +1,9 @@
 ---
-title: "Oracle Network Bootstrapping"
-slug: "oracle-network-bootstrapping"
-publishDate: "2025-07-07"
+title: "Oracle Bootstrapping"
+slug: "oracle-bootstrapping"
+publishDate: "2025-07-08"
 chapter: "Permissionless Implementation"
-section: "Oracle Network Bootstrapping"
+section: "Oracle Bootstrapping"
 parentSlug: "permissionless-implementation"
 order: 1
 toc: true
