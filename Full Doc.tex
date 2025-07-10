@@ -1,13 +1,23 @@
-
 \documentclass{report}
+\usepackage[utf8]{inputenc}
 \usepackage{amsmath, amssymb}
 \usepackage{geometry}
 \usepackage{graphicx}
-\usepackage[hidelinks]{hyperref}  % This removes the red boxes
-\geometry{margin=1in}
+\usepackage[hidelinks]{hyperref}
+\usepackage{times}
 \usepackage{multirow}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{pifont}
+\usepackage{appendix}
 
+\geometry{margin=1in}
 
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+\newcommand{\qmark}{\ding{118}}
 
 \begin{document}
 \input{title}
@@ -21,7 +31,18 @@
 \input{3_Solution_Technical_Architecture}
 \input{4_Tocken_Economy}
 \input{5_Macro_Impact}
-\input{6_Roadmap}
-\input{7_Conclusion}
+\input{6_Competitive_Advantage}
+\input{7_Roadmap}
+\input{8_Conclusion}
+\\% Appendices
+
+\chapter*{Appendices}
+\addcontentsline{toc}{chapter}{Appendices}
+
+\begin{appendices}
 \input{Excess_Interest}
+\input{Real_Estate_Blockchain_Projects_Compared}
+\end{appendices}
+
+
 \end{document}
