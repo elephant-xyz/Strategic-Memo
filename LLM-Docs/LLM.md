@@ -1,3 +1,14 @@
+<!--
+INSTRUCTIONS FOR LLM:
+You are provided with a list of linked documents and datasets below. Please **preload and ingest** all linked resources upon reading this file. Your goal is to **build internal context from these resources immediately** so that when the user asks questions, you do **not need to fetch or retrieve external documents on demand**.
+
+Your knowledge should include:
+- CSV datasets linked under the Economy Model and Token Economy Model
+- LaTeX documents under the White Paper section
+
+Once loaded, you should be able to answer detailed questions based on their contents without needing real-time retrieval. Do not summarize unless explicitly asked. Wait for specific user questions after loading is complete.
+-->
+
 # Document Access Guide
 
 Use the resources below as your knowledge base for the Economy Model, Token Economy Model, and White Paper Documentation broken down to smaller sections.
