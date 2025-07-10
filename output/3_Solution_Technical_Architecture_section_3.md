@@ -1,7 +1,7 @@
 ---
 title: "Automated Trust"
 slug: "automated-trust"
-publishDate: "2025-07-08"
+publishDate: "2025-07-10"
 chapter: "Solution Architecture"
 section: "Automated Trust"
 parentSlug: "solution-architecture"

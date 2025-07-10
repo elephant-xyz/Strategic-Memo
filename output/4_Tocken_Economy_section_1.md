@@ -1,7 +1,7 @@
 ---
 title: "Truth Mining"
 slug: "truth-mining"
-publishDate: "2025-07-08"
+publishDate: "2025-07-10"
 chapter: "Token Economy"
 section: "Truth Mining"
 parentSlug: "token-economy"
@@ -15,4 +15,4 @@ All MAHOUT is minted through verified oracle contributions using the Proof of Tr
 
 Each property can mint exactly one MAHOUT token once all 20 fact groups are submitted and validated. These 20 data groups contain everything from ownership records and mortgage details to permits and environmental characteristics, each with predetermined allocation weights. The County data group receives the largest allocation at 60% of the property’s MAHOUT, reflecting its foundational importance. The Root data group receives 8%, Photo Metadata receives 15%, and HOA receives 1%. The remaining 16 data groups each receive 1% allocations.
 
-MAHOUT issuance serves a critical bootstrapping function: accelerating data density creation across the network. As properties become comprehensively verified through all 20 fact groups, the network flywheel begins spinning, attracting service providers and generating the economic activity that sustains long-term protocol operations.
+MAHOUT issuance serves a critical bootstrapping function: accelerating data density creation across the network. This represents the first true ’mining’ process for real estate data, where computational work and time investment create permanent, verifiable value rather than repeated verification costs. As properties become comprehensively verified through all 20 fact groups, the network flywheel begins spinning, attracting service providers and generating the economic activity that sustains long-term protocol operations.

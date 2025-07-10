@@ -1,7 +1,7 @@
 ---
 title: "Centralized Control"
 slug: "centralized-control"
-publishDate: "2025-07-08"
+publishDate: "2025-07-10"
 chapter: "Problem Statement"
 section: "Centralized Control"
 parentSlug: "problem-statement"
@@ -11,10 +11,10 @@ description: ""
 draft: false
 ---
 
-The names themselves clearly signal intermediary roles—broker, agent—with the inevitable principal-agent problem. These administrators, bureaucrats, brokers, and agents, all of whom are non-technical, have built systems that reflect their limitations. Manual processes become non-linearly complex and expensive to operate as both regulation and data requirements increase.
+Real estate’s fundamental design principle centers on intermediation. The names themselves clearly signal this intent: broker, agent—roles that exist to position themselves between parties who could otherwise transact directly. These intermediaries, largely non-technical administrators and bureaucrats, have constructed manual systems that reflect their own limitations rather than market needs. As regulation expands and data requirements multiply, these analog processes scale exponentially in complexity and cost, creating ever-more-lucrative opportunities for gatekeeping.
 
-MLS and GSE gatekeepers control data and enforce mandated transaction pathways with limited consumer choice. By controlling access to property listings and transaction infrastructure, they guarantee their position in every deal. Multiple separate counterparties maintain partial, incompatible records. Each charges for their fragment of truth. None communicate effectively with others. The absence of interoperability isn’t a technical limitation—it’s a business model. Fragmentation ensures repeated work, repeated fees, and repeated opportunities for extraction.
+The MLS and GSE gatekeepers control data access and enforce mandated transaction pathways with severely limited consumer choice. By controlling property listings and transaction infrastructure, they guarantee their position in every deal. Multiple separate counterparties maintain partial, incompatible records across America’s 3,500 counties, each charging for their fragment of truth. None communicate effectively with others. The absence of interoperability represents a deliberate business model feature rather than a technical limitation.
 
-However, the central authorities intentionally do not publish data about themselves—service provider quality, average fees, closed volumes—which allows low-quality vendors to remain in the market and service unwitting customers without any consequence. Given the protected position of the gatekeepers, there are no market forces to incentivize providing a better product at a lower cost.
+What makes this system particularly insidious is its opacity regarding itself. The central authorities intentionally publish no data about service provider quality, average fees, or closed volumes. This allows low-quality vendors to remain in the market and service unwitting customers without consequence. A bad title agent can operate for decades without market discipline because performance data never surfaces. Given the protected position of these gatekeepers, market forces cannot incentivize better products at lower costs.
 
-Blocking open competition through licensing requirements, wasteful 99-hour continuing education mandates, ethics pledges enforced by the NAR, overtly signaled price collusion maintaining 6% commissions, and heavy-handed competitive restrictions as seen in battles between Rocket Mortgage and UWM—these mechanisms entrench the status quo. The system works exactly as designed, extracting maximum value while providing minimum service.
+The gatekeeping apparatus maintains its position through multiple defensive mechanisms. Licensing requirements block open competition. Wasteful 99-hour continuing education mandates create artificial barriers to entry. Ethics pledges enforced by the NAR provide moral cover for systematic extraction. Overtly signaled price collusion maintains 6% commissions across markets. Heavy-handed competitive restrictions, as seen in battles between Rocket Mortgage and UWM, demonstrate the lengths to which incumbents will go to preserve their positions.
