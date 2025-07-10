@@ -1,0 +1,176 @@
+,,,,,Notes
+Macro,,,,,
+,2024 National,,,,
+,,"2024 US GDP, $bn","$29,180",,U.S. Bureau of Economic Analysis
+,,"2024 Market Value Residential US Real Estate, $bn","$49,700",,"Federal Reserve's Financial Accounts of the United States, specifically the Z.1 Financial Accounts, Table B.101: Balance Sheet of Households and Nonprofit Organizations, for Q4 202"
+,,"2024 Market Value Residential US Mortgage Debt, $bn","$12,500",,"Federal Reserve's Financial Accounts of the United States, specifically the Z.1 Financial Accounts, Table B.101: Balance Sheet of Households and Nonprofit Organizations, for Q4 202"
+,,"2024 Market Value Residential US Mortgage Debt, $bn","$37,200",,"Federal Reserve's Financial Accounts of the United States, specifically the Z.1 Financial Accounts, Table B.101: Balance Sheet of Households and Nonprofit Organizations, for Q4 202"
+,,,,,
+Scenario Assumptions,,,,,
+,,Average Home Price,"$412,000",,National Association of Realtors
+,,Median Salary,"$63,000",,Bureau of Labor Statistics
+,,,,,
+,Real Estate Commissions,,,,
+,,"Buyer, national avg.",2.58%,,National Association of Realtors
+,,"Seller, national avg.",2.74%,,National Association of Realtors
+,,,,,
+,Mortgage,,,,
+,,Loan-to-Value,90%,,
+,,Loan Amount:,"$370,800",,
+,,Duration,30,,
+,,"Commission : Rate Increase, Ratio",2.0x,,Empirical ratio that can be found by toggling commissions on/off in any broker/lender pricing system. Can vary over time due to market competitive dynamics.
+,,Lender Commission,2.00%,,"Baseline retail lender commission is 2.00%. When both lender and broker, lender commission is reduced to 1.00% and broker commission is 2.00%. So represented here as baseline commission of 2.00% with incremental 1.00% added when broker is used in addition to lender."
+,,Broker Commission,1.00%,,"Baseline retail lender commission is 2.00%. When both lender and broker, lender commission is reduced to 1.00% and broker commission is 2.00%. So represented here as baseline commission of 2.00% with incremental 1.00% added when broker is used in addition to lender."
+,,,,,
+,,"No Commission Mortgage Rate (""Par Rate"")",6.25%,,
+,,With Lender Rate-Embedded Commission,7.25%,,
+,,With Broker Rate-Embedded Commission,7.75%,,
+,,,,,
+,,Average Hold Period,7,,Fannie Mae Research (link)
+,,,,,
+,Title Insurance,,,,
+,,Title Insurance as % House Price,0.70%,,"ALTA (American Land Title Association) and regional data confirm 0.5–0.7% as common for standard policies, with higher rates (up to 1%) in high-cost states like NY or CA or for complex transactions. Fed uses .70%"
+,,,,,
+US National Transaction Volumes,,,,,
+,,Total Transactions,"5,000,000",,"Federal Reserve includes existing home sales, new home sales, muti-family, condos, forclosure, secondary sales. NAR reports 4.7m but excludes 300k condos, mult-family."
+,,% with Buyers Agent,88%,,National Association of Realtors
+,,% with Sellers Agent,89%,,National Association of Realtors
+,,% with Mortgage Broker,33%,,HMDA
+,,% with Lender,66%,,HMDA
+,,% with Appraiser,100%,,
+,,% with Inspector,100%,,
+,,% with Title Agent,100%,,
+,,% with Escrow Agent,100%,,
+,,% with Title Insurance,100%,,
+,,,,,
+Buyer Agent,,,,,
+,Centralized,,,,
+,,Data,"$2,500",,Lead platforms like Zillow Premier Agent
+,,Tech,"$1,270",,"MLS access $720 per year; $200 NAR fee per year, $150 licensing fee, $200 Continuing Education"
+,,Net Commission,"$6,860",,
+,,Excess Interest,$0,,
+,Decentralized,,,,
+,,Data,$750,,Oracle-driven targeting
+,,Tech,$100,,"eflects execution and infrastructure costs of smart contracts, including storage, computation, and user interface upkeep across decentralized chains (e.g., Ethereum L2s or Polygon).” Source: Ethereum Gas Tracker, Polygon Fees"
+,,Net Commission,"$1,150",,Advising and showing support
+,,Excess Interest,$0,,
+,,,,,
+Seller Agent,,,,,
+,Centralized,,,,
+,,Data,"$2,500",,
+,,Tech,"$1,250",,"MLS access $720 per year; $200 NAR fee per year, $150 licensing fee, $200 Continuing Education"
+,,Net Commission,"$7,539",,
+,,Excess Interest,$0,,
+,Decentralized,,,,
+,,Data,$750,,
+,,Tech,$100,,
+,,Net Commission,"$1,150",,
+,,Excess Interest,$0,,
+,,,,,
+Mortgage Broker,,,,,
+,Centralized,,,,
+,,Data,"$2,500",,Lead platforms
+,,Tech,$500,,"LOS, CRM, pricing tools"
+,,Net Commission,$708,,
+,,Excess Interest,"$9,421",,
+,,Total Interest Delta,"$13,129",,Includes both cost of sales commissions and excess interest.
+$0,,,,,
+,,30-Year Excess Interest,"$41,993",,
+,,30-Year Total Interest Delta,"$45,701",,Includes both cost of sales commissions and excess interest.
+,Decentralized,,,,
+,,Data,$250,,"eflects high-trust data delivery from decentralized oracles, including credit verification, VOE, and fraud screening using privacy-preserving or zero-knowledge protocols."
+,,Tech,$100,,"Core infrastructure for decentralized smart contract execution, NFT/SBT tokenization, dApp interface, and off-chain compute (e.g., ZK rollups, IPFS, Arweave)."
+,,Net Commission,$270,,
+,,Excess Interest,$0,,
+,,,,,
+Lender,,,,,
+,Centralized,,,,
+,,Data,$400,,"Credit report, VOE, fraud check)"
+,,Tech,$300,,Core origination + doc systems)
+,,Net Commission,"$6,716",,
+,,Excess Interest,"$18,708",,
+,,7-Year Total Interest Delta,"$26,124",,Includes both cost of sales commissions and excess interest.
+$0,,,,,
+,,30-Year Excess Interest,"$81,299",,
+,,30-Year Total Interest Delta,"$88,715",,Includes both cost of sales commissions and excess interest.
+,,,,,
+,Decentralized,,,,
+,,Data,$300,,
+,,Tech,$200,,
+,,Net Commission,$525,,
+,,Excess Interest,$0,,
+,,,,,
+Appraiser,,,,,
+,Centralized,,,,
+,,Data,$0,,"reflects that data needed for appraisal (sales comps, zoning, tax) is provided via centralized MLS or public portals at no marginal cost to appraiser or lender."
+,,Tech,$100,,reflects per-loan cost of tools like Alamode or ACI and lender review systems for managing appraisal submissions and compliance.
+,,Net Commission,$500,,"represents typical compensation to the licensed appraiser in a traditional setting after AMC processing fees. Appraiser performs onsite or desktop inspection, valuation, and USPAP-compliant report."
+,,Excess Interest,$0,,
+,Decentralized,,,,
+,,Data,$0,,"reflects that data needed for appraisal (sales comps, zoning, tax) is provided via centralized MLS or public portals at no marginal cost to appraiser or lender."
+,,Tech,$50,," represents decentralized execution and storage costs for appraisal proofs, including smart contract triggers and valuation NFT minting"
+,,Net Commission,$150,,"is the reward to decentralized validators or appraisers, who contribute to the protocol with either full valuation work or lightweight attestations."
+,,Excess Interest,$0,,
+,,,,,
+Inspector,,,,,
+,Centralized,,,,
+,,Data,0,,
+,,Tech,$100,,Reflects amortized tech costs including digital inspection software and reporting portals used in traditional home inspection.
+,,Net Commission,$400,,Standard home inspection fee paid to licensed inspector; includes visual check and formal PDF report for lender and buye
+,,Excess Interest,0,,
+,Decentralized,,,,
+,,Data,0,,
+,,Tech,50,,Captures minimal execution cost of submitting reports on decentralized mobile apps with timestamped evidence.
+,,Net Commission,150,,"Incentive paid to contributor for validated inspection work, submitted via smart contract"
+,,Excess Interest,0,,
+,,,,,
+Title Agent,,,,,
+,Centralized,,,,
+,,Data,200,,"Record searches, title exams"
+,,Tech,150,,"Software, e-closing"
+,,Net Commission,650,,
+,,Excess Interest,0,,
+,Decentralized,,,,
+,,Data,0,,
+,,Tech,50,,
+,,Net Commission,150,,
+,,Excess Interest,0,,
+,,,,,
+Escrow,,,,,
+,Centralized,,,,
+,,Data,100,,"Transaction records, compliance checks"
+,,Tech,150,,Escrow management platforms
+,,Net Commission,750,,
+,,Excess Interest,0,,
+,Decentralized,,,,
+,,Data,0,,
+,,Tech,50,,
+,,Net Commission,150,,
+,,Excess Interest,0,,
+,,,,,
+Title Insurance,,,,,
+,Centralized,,,,
+,,Data,400,,"Record pull, search fees"
+,,Tech,0,,
+,,Net Commission,"$2,484",,
+,,Excess Interest,0,,
+,Decentralized,,,,
+,,Data,0,,
+,,Tech,0,,
+,,Net Commission,0,,
+,,Excess Interest,0,,
+,,,,,
+App System,,,,,
+,Centralized,,,,
+,,Data,0,,
+,,Tech,0,,
+,,Net Commission,0,,
+,,Excess Interest,0,,
+,Decentralized,,,,
+,,Data,350,,
+,,Tech,150,,
+,,Net Commission,200,,
+,,Excess Interest,0,,
+,,,,,
+,,,,,
+"Note: All aggregate numbers tie to Federal Reserve (2025, “Commissions and Omissions”). Fed includes taxes which are excluded in Elephant analyses as not addressable.",,,,,
