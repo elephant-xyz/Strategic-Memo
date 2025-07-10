@@ -1,7 +1,7 @@
 ---
 title: "Integration with Protocol Architecture"
 slug: "integration-with-protocol-architecture"
-publishDate: "2025-07-08"
+publishDate: "2025-07-10"
 chapter: "Appendix 1: Bitstrapping  A Bitcoin-Native Venture Architecture"
 section: "Integration with Protocol Architecture"
 parentSlug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"
