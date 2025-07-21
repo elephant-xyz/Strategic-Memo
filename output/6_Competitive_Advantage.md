@@ -1,7 +1,7 @@
 ---
 title: "Competitive Advantage"
 slug: "competitive-advantage"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Competitive Advantage"
 section: "Competitive Advantage"
 parentSlug: "competitive-advantage"

@@ -1,7 +1,7 @@
 ---
 title: "Private Integrity"
 slug: "private-integrity"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Solution Architecture"
 section: "Private Integrity"
 parentSlug: "solution-architecture"

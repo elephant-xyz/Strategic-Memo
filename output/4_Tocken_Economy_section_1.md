@@ -1,7 +1,7 @@
 ---
 title: "Truth Mining"
 slug: "truth-mining"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Token Economy"
 section: "Truth Mining"
 parentSlug: "token-economy"

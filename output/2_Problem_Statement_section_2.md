@@ -1,7 +1,7 @@
 ---
 title: "Misaligned Incentives"
 slug: "misaligned-incentives"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Problem Statement"
 section: "Misaligned Incentives"
 parentSlug: "problem-statement"

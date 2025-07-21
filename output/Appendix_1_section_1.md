@@ -1,7 +1,7 @@
 ---
 title: "The Problem: Misaligned Incentives in Web3 Funding"
 slug: "the-problem-misaligned-incentives-in-web3-funding"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Appendix 1: Bitstrapping  A Bitcoin-Native Venture Architecture"
 section: "The Problem: Misaligned Incentives in Web3 Funding"
 parentSlug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"

@@ -1,7 +1,7 @@
 ---
 title: "Appendix: Elephant Framework Data Relationship Layer"
 slug: "appendix-elephant-framework-data-relationship-layer"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Appendix: Elephant Framework Data Relationship Layer"
 section: "Appendix: Elephant Framework Data Relationship Layer"
 parentSlug: "appendix-elephant-framework-data-relationship-layer"

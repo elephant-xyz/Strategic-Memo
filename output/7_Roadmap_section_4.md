@@ -1,7 +1,7 @@
 ---
 title: "Global Expansion"
 slug: "global-expansion"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Permissionless Implementation"
 section: "Global Expansion"
 parentSlug: "permissionless-implementation"

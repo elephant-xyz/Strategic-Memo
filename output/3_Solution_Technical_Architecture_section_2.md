@@ -1,7 +1,7 @@
 ---
 title: "Digital Deeds"
 slug: "digital-deeds"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Solution Architecture"
 section: "Digital Deeds"
 parentSlug: "solution-architecture"

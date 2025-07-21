@@ -1,7 +1,7 @@
 ---
 title: "Incumbent Mindset"
 slug: "incumbent-mindset"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Competitive Advantage"
 section: "Incumbent Mindset"
 parentSlug: "competitive-advantage"

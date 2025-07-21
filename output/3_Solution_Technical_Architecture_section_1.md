@@ -1,7 +1,7 @@
 ---
 title: "Protocol Foundation"
 slug: "protocol-foundation"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Solution Architecture"
 section: "Protocol Foundation"
 parentSlug: "solution-architecture"

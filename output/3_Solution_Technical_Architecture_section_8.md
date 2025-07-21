@@ -1,7 +1,7 @@
 ---
 title: "Memory Infrastructure"
 slug: "memory-infrastructure"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Solution Architecture"
 section: "Memory Infrastructure"
 parentSlug: "solution-architecture"

@@ -1,7 +1,7 @@
 ---
 title: "Fractional Liquidity"
 slug: "fractional-liquidity"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Macro Impact"
 section: "Fractional Liquidity"
 parentSlug: "macro-impact"

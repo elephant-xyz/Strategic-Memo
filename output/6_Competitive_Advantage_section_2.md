@@ -1,7 +1,7 @@
 ---
 title: "Margin Bloat"
 slug: "margin-bloat"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Competitive Advantage"
 section: "Margin Bloat"
 parentSlug: "competitive-advantage"

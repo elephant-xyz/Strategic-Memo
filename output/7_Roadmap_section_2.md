@@ -1,7 +1,7 @@
 ---
 title: "SEO Infrastructure"
 slug: "seo-infrastructure"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Permissionless Implementation"
 section: "SEO Infrastructure"
 parentSlug: "permissionless-implementation"

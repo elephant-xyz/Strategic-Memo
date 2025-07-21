@@ -1,7 +1,7 @@
 ---
 title: "Stakeholder Reach"
 slug: "stakeholder-reach"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Macro Impact"
 section: "Stakeholder Reach"
 parentSlug: "macro-impact"
@@ -21,4 +21,4 @@ The transition creates winners and losers based on value creation rather than ma
 
 The overall effect is a more efficient, fair, and accessible real estate market that serves human needs rather than institutional interests. When systems reward contribution over extraction, human potential flourishes in ways that benefit everyone who participates honestly in the market. Market forces accomplish what regulations struggle to enforce—consistent, high-quality service delivered through transparent, verifiable mechanisms that protect all participants.
 
-This transformation represents more than technological upgrade—it constitutes a fundamental shift in economic power from institutions to individuals, from gatekeepers to value creators, from opacity to transparency. The \$205.2 billion in annual savings approaches the economic impact of revolutionary financial innovations like the credit card, but with benefits flowing to consumers rather than financial intermediaries. This transformation from extractive to productive markets creates sustainable competitive advantages that benefit society as a whole rather than privileged gatekeepers.
+This transformation represents more than technological upgrade—it constitutes a fundamental shift in economic power from institutions to individuals, from gatekeepers to value creators, from opacity to transparency. The \$205.1 billion in annual savings approaches the economic impact of revolutionary financial innovations like the credit card, but with benefits flowing to consumers rather than financial intermediaries. This transformation from extractive to productive markets creates sustainable competitive advantages that benefit society as a whole rather than privileged gatekeepers.

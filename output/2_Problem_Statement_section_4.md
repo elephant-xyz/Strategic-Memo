@@ -1,7 +1,7 @@
 ---
 title: "Price Inflation"
 slug: "price-inflation"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Problem Statement"
 section: "Price Inflation"
 parentSlug: "problem-statement"

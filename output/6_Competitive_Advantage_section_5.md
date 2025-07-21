@@ -1,7 +1,7 @@
 ---
 title: "Knowledge Fragmentation"
 slug: "knowledge-fragmentation"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Competitive Advantage"
 section: "Knowledge Fragmentation"
 parentSlug: "competitive-advantage"

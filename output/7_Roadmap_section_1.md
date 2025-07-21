@@ -1,7 +1,7 @@
 ---
 title: "Oracle Bootstrapping"
 slug: "oracle-bootstrapping"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Permissionless Implementation"
 section: "Oracle Bootstrapping"
 parentSlug: "permissionless-implementation"

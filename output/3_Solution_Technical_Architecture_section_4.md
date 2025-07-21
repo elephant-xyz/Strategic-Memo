@@ -1,7 +1,7 @@
 ---
 title: "Trustless Oracles"
 slug: "trustless-oracles"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Solution Architecture"
 section: "Trustless Oracles"
 parentSlug: "solution-architecture"

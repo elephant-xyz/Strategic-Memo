@@ -1,7 +1,7 @@
 ---
 title: "Game Theory"
 slug: "game-theory"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Competitive Advantage"
 section: "Game Theory"
 parentSlug: "competitive-advantage"

@@ -1,7 +1,7 @@
 ---
 title: "The Concept: Collateralized Protocol Bootstrapping"
 slug: "the-concept-collateralized-protocol-bootstrapping"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Appendix 1: Bitstrapping  A Bitcoin-Native Venture Architecture"
 section: "The Concept: Collateralized Protocol Bootstrapping"
 parentSlug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"

@@ -1,7 +1,7 @@
 ---
 title: "Solution Architecture"
 slug: "solution-architecture"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Solution Architecture"
 section: "Solution Architecture"
 parentSlug: "solution-architecture"

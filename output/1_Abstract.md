@@ -1,7 +1,7 @@
 ---
 title: "Abstract"
 slug: "abstract"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Abstract"
 section: "Abstract"
 parentSlug: "abstract"
@@ -21,12 +21,12 @@ Elephant Protocol² replaces this extractive architecture with transparent infra
 | **Transaction Costs** | | | |
 |:------------------------------|:---------------------------|:---------------:|:-----------------:|
 | **Paid By** | **Description** | **Centralized** | **Decentralized** |
-| Buyer | Service Provider Fees | $5,984 | $1,500 |
+| Buyer | Service Provider Fees | $5,984 | $1,700 |
 | Borrower | Broker & Lender Commission | $11,124 | $1,645 |
 | Borrower | Excess Interest | $28,128 | $0 |
-| Seller | Real Estate Agent Fees | $21,918 | $4,000 |
+| Seller | Real Estate Agent Fees | $21,918 | $3,800 |
 | **Per Transaction Total, $** | | **$67,155** | **$7,145** |
-| **National Total, $bn** | | **$234.8** | **$29.6** |
+| **National Total, $bn** | | **$234.8** | **$29.7** |
 
 
 

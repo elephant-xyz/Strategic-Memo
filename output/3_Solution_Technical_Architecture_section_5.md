@@ -1,7 +1,7 @@
 ---
 title: "Lexicon Layer"
 slug: "lexicon-layer"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Solution Architecture"
 section: "Lexicon Layer"
 parentSlug: "solution-architecture"

@@ -1,7 +1,7 @@
 ---
 title: "Truth Maintenance"
 slug: "truth-maintenance"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Token Economy"
 section: "Truth Maintenance"
 parentSlug: "token-economy"

@@ -1,7 +1,7 @@
 ---
 title: "Generic Relationship Objects: Universal Property Semantics"
 slug: "generic-relationship-objects-universal-property-semantics"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Appendix: Elephant Framework Data Relationship Layer"
 section: "Generic Relationship Objects: Universal Property Semantics"
 parentSlug: "appendix-elephant-framework-data-relationship-layer"

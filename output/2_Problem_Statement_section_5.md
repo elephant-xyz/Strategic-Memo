@@ -1,7 +1,7 @@
 ---
 title: "Decentralized Remedy"
 slug: "decentralized-remedy"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Problem Statement"
 section: "Decentralized Remedy"
 parentSlug: "problem-statement"

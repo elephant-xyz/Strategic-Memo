@@ -1,7 +1,7 @@
 ---
 title: "Governance Flow"
 slug: "governance-flow"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Token Economy"
 section: "Governance Flow"
 parentSlug: "token-economy"

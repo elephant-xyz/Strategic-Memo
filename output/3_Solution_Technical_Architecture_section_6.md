@@ -1,7 +1,7 @@
 ---
 title: "Discovery Engine"
 slug: "discovery-engine"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Solution Architecture"
 section: "Discovery Engine"
 parentSlug: "solution-architecture"

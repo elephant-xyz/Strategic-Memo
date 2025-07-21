@@ -1,7 +1,7 @@
 ---
 title: "Talent Allocation"
 slug: "talent-allocation"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Macro Impact"
 section: "Talent Allocation"
 parentSlug: "macro-impact"

@@ -1,7 +1,7 @@
 ---
 title: "Case Study: Elephant Protocol Implementation"
 slug: "case-study-elephant-protocol-implementation"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Appendix 1: Bitstrapping  A Bitcoin-Native Venture Architecture"
 section: "Case Study: Elephant Protocol Implementation"
 parentSlug: "appendix-1-bitstrapping-a-bitcoin-native-venture-architecture"

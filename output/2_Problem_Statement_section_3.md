@@ -1,7 +1,7 @@
 ---
 title: "Rent-Seeking"
 slug: "rent-seeking"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Problem Statement"
 section: "Rent-Seeking"
 parentSlug: "problem-statement"

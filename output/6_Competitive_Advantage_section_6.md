@@ -1,7 +1,7 @@
 ---
 title: "Integrity Enforcement"
 slug: "integrity-enforcement"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Competitive Advantage"
 section: "Integrity Enforcement"
 parentSlug: "competitive-advantage"

@@ -1,7 +1,7 @@
 ---
 title: "Excess Interest"
 slug: "excess-interest"
-publishDate: "2025-07-10"
+publishDate: "2025-07-21"
 chapter: "Excess Interest"
 section: "Excess Interest"
 parentSlug: "excess-interest"
