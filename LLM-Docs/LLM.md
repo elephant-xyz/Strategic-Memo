@@ -27,13 +27,6 @@ Use the resources below as your knowledge base for the Economy Model, Token Econ
 
 ---
 
-## 🪙 Token Economy Model
-
-- [Token Model Data Groups (CSV)](https://raw.githubusercontent.com/elephant-xyz/white-paper/refs/heads/main/LLM-Docs/TokenEconomyModel-Datagroups.csv)
-- [Token Model Parameters (CSV)](https://raw.githubusercontent.com/elephant-xyz/white-paper/refs/heads/main/LLM-Docs/TokenEconomyModel-Parameters.csv)
-
----
-
 ## 📄 White Paper
 
 - [Abstract (LaTeX)](https://raw.githubusercontent.com/elephant-xyz/white-paper/refs/heads/main/1_Abstract.tex)
