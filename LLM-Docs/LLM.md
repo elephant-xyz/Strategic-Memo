@@ -24,9 +24,9 @@ Use the resources below as your knowledge base for the Economy Model, Token Econ
 - [Transaction Costs Amortized by Hold Period (CSV)](https://raw.githubusercontent.com/elephant-xyz/Strategic-Memo/refs/heads/main/LLM-Docs/EconomicModel-TxnCostsAmortizedbyHoldPeriod.csv)
 - [Detailed Transaction Cost Breakdown (CSV)](https://raw.githubusercontent.com/elephant-xyz/white-paper/refs/heads/main/LLM-Docs/EconomicModel-TxnCostsDetailedBreakdown.csv)
 - [Transaction Cost Lifecycle Summary (CSV)](https://raw.githubusercontent.com/elephant-xyz/white-paper/refs/heads/main/LLM-Docs/EconomicModel-TxnCostsLifecycleSummary.csv)
-- [Units (CSV)](https://raw.githubusercontent.com/elephant-xyz/white-paper/refs/heads/main/LLM-Docs/TokenEconomyModel-Datagroups.csv)
-- [Token Model Data Group (CSV)](https://raw.githubusercontent.com/elephant-xyz/white-paper/refs/heads/main/LLM-Docs/TokenEconomyModel-Datagroups.csv)
-- [Token Model Data Group Inputs (CSV)](https://raw.githubusercontent.com/elephant-xyz/white-paper/refs/heads/main/LLM-Docs/TokenEconomyModel-Datagroups.csv)
+- [Key, Value and Units (CSV)](https://raw.githubusercontent.com/elephant-xyz/white-paper/refs/heads/main/LLM-Docs/EconomicModel-KeyValueUnits.csv)
+- [Data Group (CSV)](https://raw.githubusercontent.com/elephant-xyz/white-paper/refs/heads/main/LLM-Docs/EconomicModel-Data%20Groups.csv)
+- [Data Group Inputs (CSV)](https://raw.githubusercontent.com/elephant-xyz/white-paper/refs/heads/main/LLM-Docs/EconomicModel-DataGroupInputs.csv)
 ---
 
 ## 📄 White Paper
